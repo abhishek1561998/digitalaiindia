@@ -22,48 +22,30 @@ export default function FuturisticHeader() {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         scrolled
-          ? "bg-black/80 backdrop-blur-xl border-b border-cyan-500/20"
+          ? "bg-gradient-to-r from-yellow-900/20 via-orange-900/20 to-yellow-800/20 backdrop-blur-xl border-b border-yellow-400/30 shadow-lg shadow-yellow-500/10"
           : "bg-transparent"
       }`}
     >
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
           {/* Enhanced Futuristic Logo */}
-          <Link href="/" className="flex items-center space-x-4 group relative z-20">
+          <Link
+            href="/"
+            className="flex items-center space-x-4 group relative z-20"
+          >
             <div className="relative">
               {/* Main logo container with multiple layers */}
-              <div className="relative w-12 h-12 group-hover:scale-110 transition-all duration-500">
-                {/* Outer glow ring */}
-                <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500 rounded-xl opacity-20 group-hover:opacity-40 transition-opacity duration-300 blur-sm"></div>
-
-                {/* Middle ring */}
-                <div className="absolute inset-1 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-lg opacity-60 group-hover:opacity-80 transition-opacity duration-300"></div>
+              <div className="relative w-12 h-12 group-hover:scale-105 transition-all duration-300">
+                {/* Clean logo container */}
+                <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-xl opacity-80 group-hover:opacity-100 transition-opacity duration-300"></div>
 
                 {/* Inner core */}
-                <div className="absolute inset-2 bg-gradient-to-br from-gray-900 to-black rounded-md flex items-center justify-center">
-                  {/* AI Symbol - Custom designed */}
-                  <div className="relative">
-                    {/* Central brain/AI icon */}
-                    <Brain className="w-5 h-5 text-cyan-400 group-hover:text-white transition-colors duration-300" />
-
-                    {/* Orbiting particles */}
-                    <div className="absolute -inset-2">
-                      <div className="absolute top-0 left-1/2 w-1 h-1 bg-cyan-400 rounded-full animate-spin origin-bottom transform -translate-x-1/2"></div>
-                      <div className="absolute bottom-0 right-0 w-1 h-1 bg-purple-400 rounded-full animate-spin origin-top-left" style={{animationDelay: '0.5s'}}></div>
-                      <div className="absolute top-1/2 left-0 w-1 h-1 bg-pink-400 rounded-full animate-spin origin-right transform -translate-y-1/2" style={{animationDelay: '1s'}}></div>
-                    </div>
-                  </div>
+                <div className="absolute inset-1 bg-gradient-to-br from-gray-900 to-black rounded-lg flex items-center justify-center">
+                  <Brain className="w-6 h-6 text-yellow-400 group-hover:text-orange-300 transition-colors duration-300" />
                 </div>
 
-                {/* Status indicator */}
-                <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full flex items-center justify-center z-20 group-hover:scale-125 transition-transform duration-300">
-                  <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
-                </div>
-
-                {/* Scanning line effect */}
-                <div className="absolute inset-0 rounded-xl overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-cyan-400/30 to-transparent transform -skew-x-12 animate-pulse group-hover:animate-none"></div>
-                </div>
+                {/* Subtle glow effect */}
+                <div className="absolute -inset-1 bg-gradient-to-r from-yellow-400/20 to-orange-500/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-sm"></div>
               </div>
             </div>
 
@@ -71,31 +53,23 @@ export default function FuturisticHeader() {
               {/* Company name with enhanced typography */}
               <div className="relative">
                 <h1 className="text-xl xl:text-2xl font-bold leading-tight">
-                  {/* Main text with gradient */}
-                  <span className="bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500 bg-clip-text text-transparent group-hover:from-cyan-300 group-hover:via-purple-400 group-hover:to-pink-400 transition-all duration-300">
-                    Digital
+                  <span className="bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent group-hover:from-yellow-300 group-hover:to-orange-400 transition-all duration-300">
+                    Digitalai
                   </span>
-                  <span className="bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 bg-clip-text text-transparent group-hover:from-purple-400 group-hover:via-pink-400 group-hover:to-red-400 transition-all duration-300">
-                    ai
-                  </span>
-                  <span className="bg-gradient-to-r from-pink-500 via-red-500 to-orange-500 bg-clip-text text-transparent group-hover:from-pink-400 group-hover:via-red-400 group-hover:to-orange-400 transition-all duration-300">
-                    india
-                  </span>
-                  <span className="text-gray-400 group-hover:text-gray-300 transition-colors duration-300">
-                    .com
+                  <span className="text-gray-400 group-hover:text-yellow-300 transition-colors duration-300">
+                    india.com
                   </span>
                 </h1>
 
-                {/* Tagline with typing effect */}
+                {/* Clean tagline */}
                 <div className="flex items-center space-x-1 -mt-1">
-                  <p className="text-xs text-gray-400 group-hover:text-cyan-400 transition-colors duration-300 font-medium">
+                  <p className="text-xs text-gray-400 group-hover:text-yellow-400 transition-colors duration-300 font-medium">
                     Future of AI
                   </p>
-                  <div className="w-1 h-3 bg-cyan-400 animate-pulse"></div>
                 </div>
 
-                {/* Underline effect */}
-                <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-cyan-400 to-purple-500 group-hover:w-full transition-all duration-500"></div>
+                {/* Subtle underline effect */}
+                <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-yellow-400 to-orange-500 group-hover:w-full transition-all duration-300"></div>
               </div>
             </div>
           </Link>
@@ -103,33 +77,50 @@ export default function FuturisticHeader() {
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center space-x-8">
             <Link
+              href="/ai-machine-agent"
+              className="relative text-gray-300 hover:text-yellow-400 transition-colors duration-300 group"
+            >
+              Machine Agent AI
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-400 group-hover:w-full transition-all duration-300"></span>
+              {/* Clean "new" badge */}
+              <span className="absolute -top-1 -right-2 w-2 h-2 bg-yellow-500 rounded-full"></span>
+            </Link>
+
+            <Link
               href="#features"
-              className="text-gray-300 hover:text-cyan-400 transition-colors duration-300 relative group"
+              className="text-gray-300 hover:text-yellow-400 transition-colors duration-300 relative group"
             >
               Features
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-cyan-400 group-hover:w-full transition-all duration-300"></span>
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-400 group-hover:w-full transition-all duration-300"></span>
             </Link>
             <Link
               href="#solutions"
-              className="text-gray-300 hover:text-cyan-400 transition-colors duration-300 relative group"
+              className="text-gray-300 hover:text-yellow-400 transition-colors duration-300 relative group"
             >
               Solutions
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-cyan-400 group-hover:w-full transition-all duration-300"></span>
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-400 group-hover:w-full transition-all duration-300"></span>
             </Link>
             <Link
               href="#about"
-              className="text-gray-300 hover:text-cyan-400 transition-colors duration-300 relative group"
+              className="text-gray-300 hover:text-yellow-400 transition-colors duration-300 relative group"
             >
               About
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-cyan-400 group-hover:w-full transition-all duration-300"></span>
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-400 group-hover:w-full transition-all duration-300"></span>
             </Link>
-            <Link
-              href="#contact"
-              className="text-gray-300 hover:text-cyan-400 transition-colors duration-300 relative group"
-            >
-              Contact
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-cyan-400 group-hover:w-full transition-all duration-300"></span>
-            </Link>
+              <Link
+                href="/blog"
+                className="text-gray-300 hover:text-yellow-400 transition-colors duration-300 relative group"
+              >
+                Blog
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-400 group-hover:w-full transition-all duration-300"></span>
+              </Link>
+              <Link
+                href="/contact"
+                className="text-gray-300 hover:text-yellow-400 transition-colors duration-300 relative group"
+              >
+                Contact
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-400 group-hover:w-full transition-all duration-300"></span>
+              </Link>
           </nav>
 
           {/* CTA Buttons */}
@@ -142,7 +133,7 @@ export default function FuturisticHeader() {
               >
                 <Button
                   variant="outline"
-                  className="border-cyan-400/50 text-cyan-400 hover:bg-cyan-400/10 hover:border-cyan-400"
+                  className="border-yellow-400/50 text-yellow-400 hover:bg-yellow-400/10 hover:border-yellow-400"
                 >
                   Sign In
                 </Button>
@@ -152,7 +143,7 @@ export default function FuturisticHeader() {
                 fallbackRedirectUrl="/dashboard"
                 forceRedirectUrl="/dashboard"
               >
-                <Button className="bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white border-0 shadow-lg hover:shadow-cyan-500/25 group">
+                <Button className="bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-400 hover:to-orange-500 text-white border-0 shadow-lg hover:shadow-yellow-500/25 group">
                   Get Started
                   <Sparkles className="ml-2 w-4 h-4 group-hover:rotate-12 transition-transform duration-300" />
                 </Button>
@@ -160,7 +151,7 @@ export default function FuturisticHeader() {
             </SignedOut>
             <SignedIn>
               <Link href="/dashboard">
-                <Button className="bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white border-0 shadow-lg hover:shadow-cyan-500/25 group">
+                <Button className="bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-400 hover:to-orange-500 text-white border-0 shadow-lg hover:shadow-yellow-500/25 group">
                   Dashboard
                   <Zap className="ml-2 w-4 h-4 group-hover:scale-110 transition-transform duration-300" />
                 </Button>
@@ -171,40 +162,61 @@ export default function FuturisticHeader() {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="lg:hidden p-2 text-gray-300 hover:text-cyan-400 transition-colors duration-300"
+            className="lg:hidden p-2 text-gray-300 hover:text-yellow-400 transition-colors duration-300"
           >
-            {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            {isMenuOpen ? (
+              <X className="w-6 h-6" />
+            ) : (
+              <Menu className="w-6 h-6" />
+            )}
           </button>
         </div>
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="lg:hidden absolute top-full left-0 right-0 bg-black/95 backdrop-blur-xl border-b border-cyan-500/20 z-40">
+          <div className="lg:hidden absolute top-full left-0 right-0 bg-gradient-to-r from-yellow-900/20 via-orange-900/20 to-yellow-800/20 backdrop-blur-xl border-b border-yellow-400/30 z-40">
             <nav className="flex flex-col space-y-4 p-6">
               <Link
+                href="/ai-machine-agent"
+                className="relative text-gray-300 hover:text-yellow-400 transition-colors duration-300"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Machine Agent AI
+                {/* Clean badge */}
+                <span className="absolute -top-1 left-28 w-2 h-2 bg-yellow-500 rounded-full"></span>
+              </Link>
+
+              <Link
                 href="#features"
-                className="text-gray-300 hover:text-cyan-400 transition-colors duration-300"
+                className="text-gray-300 hover:text-yellow-400 transition-colors duration-300"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Features
               </Link>
               <Link
                 href="#solutions"
-                className="text-gray-300 hover:text-cyan-400 transition-colors duration-300"
+                className="text-gray-300 hover:text-yellow-400 transition-colors duration-300"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Solutions
               </Link>
               <Link
                 href="#about"
-                className="text-gray-300 hover:text-cyan-400 transition-colors duration-300"
+                className="text-gray-300 hover:text-yellow-400 transition-colors duration-300"
                 onClick={() => setIsMenuOpen(false)}
               >
                 About
               </Link>
               <Link
-                href="#contact"
-                className="text-gray-300 hover:text-cyan-400 transition-colors duration-300"
+                href="/blog"
+                className="text-gray-300 hover:text-yellow-400 transition-colors duration-300"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Blog
+              </Link>
+              <Link
+                href="/contact"
+                className="text-gray-300 hover:text-yellow-400 transition-colors duration-300"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Contact
@@ -218,7 +230,7 @@ export default function FuturisticHeader() {
                   >
                     <Button
                       variant="outline"
-                      className="border-cyan-400/50 text-cyan-400 hover:bg-cyan-400/10 hover:border-cyan-400 w-full"
+                      className="border-yellow-400/50 text-yellow-400 hover:bg-yellow-400/10 hover:border-yellow-400 w-full"
                     >
                       Sign In
                     </Button>
@@ -228,14 +240,14 @@ export default function FuturisticHeader() {
                     fallbackRedirectUrl="/dashboard"
                     forceRedirectUrl="/dashboard"
                   >
-                    <Button className="bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white border-0 w-full">
+                    <Button className="bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-400 hover:to-orange-500 text-white border-0 w-full">
                       Get Started
                     </Button>
                   </SignInButton>
                 </SignedOut>
                 <SignedIn>
                   <Link href="/dashboard">
-                    <Button className="bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white border-0 w-full">
+                    <Button className="bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-400 hover:to-orange-500 text-white border-0 w-full">
                       Dashboard
                     </Button>
                   </Link>

@@ -48,27 +48,27 @@ export default function HeroBanner() {
         </div>
         
         {/* Gradient orbs */}
-        <div className="absolute top-20 left-10 md:left-20 w-72 h-72 bg-gradient-to-r from-purple-600/30 to-pink-600/30 rounded-full mix-blend-screen filter blur-3xl animate-blob"></div>
-        <div className="absolute top-40 right-10 md:right-20 w-72 h-72 bg-gradient-to-r from-cyan-600/30 to-blue-600/30 rounded-full mix-blend-screen filter blur-3xl animate-blob animation-delay-2000"></div>
-        <div className="absolute bottom-20 left-1/2 -translate-x-1/2 w-72 h-72 bg-gradient-to-r from-teal-600/30 to-green-600/30 rounded-full mix-blend-screen filter blur-3xl animate-blob animation-delay-4000"></div>
+        <div className="absolute top-20 left-10 md:left-20 w-72 h-72 bg-gradient-to-r from-orange-600/30 to-red-600/30 rounded-full mix-blend-screen filter blur-3xl animate-blob"></div>
+        <div className="absolute top-40 right-10 md:right-20 w-72 h-72 bg-gradient-to-r from-yellow-600/30 to-orange-600/30 rounded-full mix-blend-screen filter blur-3xl animate-blob animation-delay-2000"></div>
+        <div className="absolute bottom-20 left-1/2 -translate-x-1/2 w-72 h-72 bg-gradient-to-r from-orange-600/30 to-yellow-600/30 rounded-full mix-blend-screen filter blur-3xl animate-blob animation-delay-4000"></div>
         
         {/* Grid pattern */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(6,182,212,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(6,182,212,0.1)_1px,transparent_1px)] bg-[size:50px_50px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)]"></div>
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(251,146,60,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(251,146,60,0.1)_1px,transparent_1px)] bg-[size:50px_50px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)]"></div>
       </div>
 
       {/* Main Content */}
       <div className="relative z-10 container mx-auto px-4 py-8 text-center">
         <div className="max-w-5xl mx-auto">
-          <div className="absolute -top-10 right-20 animate-bounce delay-2000">
-            <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-600 rounded-xl flex items-center justify-center shadow-lg shadow-purple-500/25">
+          {/* <div className="absolute -top-10 right-20 animate-bounce delay-2000">
+            <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-red-600 rounded-xl flex items-center justify-center shadow-lg shadow-orange-500/25">
               <Cpu className="w-6 h-6 text-white" />
             </div>
           </div>
           <div className="absolute top-20 -left-10 animate-bounce delay-3000">
-            <div className="w-14 h-14 bg-gradient-to-r from-teal-500 to-cyan-600 rounded-2xl flex items-center justify-center shadow-lg shadow-teal-500/25">
+            <div className="w-14 h-14 bg-gradient-to-r from-yellow-500 to-orange-600 rounded-2xl flex items-center justify-center shadow-lg shadow-yellow-500/25">
               <Zap className="w-7 h-7 text-white" />
             </div>
-          </div>
+          </div> */}
 
           {/* Main heading */}
           <div className="mb-8 mt-15">
@@ -79,7 +79,7 @@ export default function HeroBanner() {
               <br />
               <div className="relative h-24 md:h-32 lg:h-40 overflow-hidden">
                 <span
-                  className={`absolute inset-0 bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500 bg-clip-text text-transparent transition-all duration-1000 ease-in-out ${
+                  className={`absolute inset-0 bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 bg-clip-text text-transparent transition-all duration-1000 ease-in-out ${
                     isAnimating
                       ? 'transform translate-y-full opacity-0'
                       : 'transform translate-y-0 opacity-100'
@@ -89,13 +89,13 @@ export default function HeroBanner() {
                 </span>
               </div>
             </h1>
-            <div className="w-32 h-1 bg-gradient-to-r from-cyan-400 to-purple-600 mx-auto rounded-full"></div>
+            <div className="w-32 h-1 bg-gradient-to-r from-yellow-400 to-orange-600 mx-auto rounded-full"></div>
           </div>
 
           {/* Subtitle */}
           <p className="text-xl md:text-2xl text-gray-300 mb-12 leading-relaxed max-w-3xl mx-auto">
             Experience the next generation of artificial intelligence with{" "}
-            <span className="text-cyan-400 font-semibold">Digitalaiindia.com</span>.
+            <span className="text-orange-400 font-semibold">Digitalaiindia.com</span>.
             Transform your business with cutting-edge AI solutions designed for the digital future.
           </p>
 
@@ -109,7 +109,7 @@ export default function HeroBanner() {
               >
                 <Button
                   size="lg"
-                  className="group relative px-8 py-4 text-lg font-semibold bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 border-0 shadow-2xl hover:shadow-cyan-500/25 transform hover:scale-105 transition-all duration-300"
+                  className="group relative px-8 py-4 text-lg font-semibold bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-400 hover:to-red-500 border-0 shadow-2xl hover:shadow-orange-500/25 transform hover:scale-105 transition-all duration-300"
                 >
                   <Sparkles className="mr-3 w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
                   Start Your AI Journey
@@ -119,7 +119,7 @@ export default function HeroBanner() {
               {/* <Button
                 variant="outline"
                 size="lg"
-                className="group px-8 py-4 text-lg font-semibold border-2 border-cyan-400/50 text-cyan-400 hover:bg-cyan-400/10 hover:border-cyan-400 backdrop-blur-sm transform hover:scale-105 transition-all duration-300"
+                className="group px-8 py-4 text-lg font-semibold border-2 border-orange-400/50 text-orange-400 hover:bg-orange-400/10 hover:border-orange-400 backdrop-blur-sm transform hover:scale-105 transition-all duration-300"
               >
                 <Play className="mr-3 w-5 h-5 group-hover:scale-110 transition-transform duration-300" />
                 Watch Demo
@@ -129,7 +129,7 @@ export default function HeroBanner() {
               <Link href="/dashboard">
                 <Button
                   size="lg"
-                  className="group relative px-8 py-4 text-lg font-semibold bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 border-0 shadow-2xl hover:shadow-cyan-500/25 transform hover:scale-105 transition-all duration-300"
+                  className="group relative px-8 py-4 text-lg font-semibold bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-400 hover:to-red-500 border-0 shadow-2xl hover:shadow-orange-500/25 transform hover:scale-105 transition-all duration-300"
                 >
                   <Zap className="mr-3 w-5 h-5 group-hover:scale-110 transition-transform duration-300" />
                   Access Dashboard
@@ -139,7 +139,7 @@ export default function HeroBanner() {
               <Button
                 variant="outline"
                 size="lg"
-                className="group px-8 py-4 text-lg font-semibold border-2 border-cyan-400/50 text-cyan-400 hover:bg-cyan-400/10 hover:border-cyan-400 backdrop-blur-sm transform hover:scale-105 transition-all duration-300"
+                className="group px-8 py-4 text-lg font-semibold border-2 border-orange-400/50 text-orange-400 hover:bg-orange-400/10 hover:border-orange-400 backdrop-blur-sm transform hover:scale-105 transition-all duration-300"
               >
                 <Play className="mr-3 w-5 h-5 group-hover:scale-110 transition-transform duration-300" />
                 Watch Demo
