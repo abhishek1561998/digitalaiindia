@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { api } from '@/convex/_generated/api';
-import { ConvexHttpClient } from 'convex/browser';
+import { getConvexClient } from '@/lib/convex';
 
-const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
+const convex = getConvexClient();
 
 interface ContactFormData {
   name: string;

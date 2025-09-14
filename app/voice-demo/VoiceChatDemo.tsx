@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import VoiceAvatarChat from "@/components/VoiceAvatarChat";
 import { avatars } from "@/app/ai-machine-agent/avatars";
-import { ConvexClientProvider } from "@/components/ConvexClientProvider";
+import ConvexClientProvider from "@/components/ConvexClientProvider";
 import { api } from "@/convex/_generated/api";
 import { useMutation } from "convex/react";
 import { Id } from "@/convex/_generated/dataModel";
@@ -107,7 +107,7 @@ export default function VoiceChatDemo() {
         <div className="relative z-10 flex-1 h-[calc(100vh-80px)] p-6">
           <VoiceAvatarChat 
             chatId={chatId}
-            avatars={avatars}
+            avatars={[...avatars]}
             className="h-full" 
           />
         </div>

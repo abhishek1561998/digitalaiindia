@@ -13,7 +13,7 @@ type Avatar = {
   audio: string;    // /audio/*.mp3
 };
 
-export default function TalkAvatar({ initialAvatars }: { initialAvatars: Avatar[] }) {
+export default function TalkAvatar({ initialAvatars }: { initialAvatars: readonly Avatar[] }) {
   const [active, setActive] = useState<Avatar>(initialAvatars[0]);
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);

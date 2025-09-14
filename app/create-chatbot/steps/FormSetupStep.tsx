@@ -17,7 +17,7 @@ import {
   Mail,
   Phone,
   List,
-  Textarea as TextareaIcon,
+  FileText as TextareaIcon,
   ToggleLeft,
   ToggleRight
 } from "lucide-react";
