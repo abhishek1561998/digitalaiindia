@@ -3,7 +3,7 @@
 import { useState } from "react";
 import VoiceAvatarChat from "@/components/VoiceAvatarChat";
 import { avatars } from "@/app/ai-machine-agent/avatars";
-import { ConvexClientProvider } from "@/components/ConvexClientProvider";
+import ConvexClientProvider from "@/components/ConvexClientProvider";
 import { api } from "@/convex/_generated/api";
 import { useMutation } from "convex/react";
 import { Id } from "@/convex/_generated/dataModel";

@@ -175,7 +175,10 @@ export default function VoiceSystemOptimizer({ className }: VoiceSystemOptimizer
           const result = check.check();
           newResults.push({
             category: category.category,
-            ...result
+            status: result.status as "optimized" | "warning" | "needs_attention",
+            message: result.message,
+            impact: result.impact as "high" | "medium" | "low",
+            action: result.action
           });
         } catch (error) {
           newResults.push({

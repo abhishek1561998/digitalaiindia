@@ -1,6 +1,6 @@
 # 🎤 AI Voice Agent System
 
-A **production-ready AI voice conversation system** that rivals the best voice AI platforms in the market, including [Machine Agents](https://machineagents.ai/). Built with Next.js, ElevenLabs, LangGraph, and Convex.
+A **production-ready AI voice conversation system** that rivals the best voice AI platforms in the market, including [Machine Agents](https://digitalaiindia.com/). Built with Next.js, ElevenLabs, LangGraph, and Convex.
 
 ## 🚀 **Live Demo**
 

@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Activity, Zap, Clock, AlertTriangle, CheckCircle } from "lucide-react";
+import { Activity, Zap, Clock, AlertTriangle, CheckCircle, Mic, Volume2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface PerformanceMetrics {

@@ -89,7 +89,7 @@ function insertAfterFirstParagraph(content: string, insertHtml: string): string 
   }
   
   // Find the first paragraph and insert after it
-  const firstParagraphMatch = content.match(/<p[^>]*>.*?<\/p>/s);
+  const firstParagraphMatch = content.match(/<p[^>]*>.*?<\/p>/);
   if (firstParagraphMatch) {
     const insertIndex = firstParagraphMatch.index! + firstParagraphMatch[0].length;
     return content.slice(0, insertIndex) + insertHtml + content.slice(insertIndex);

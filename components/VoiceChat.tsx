@@ -3,6 +3,7 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { Mic, MicOff, Volume2, VolumeX, Loader2, MessageSquare, Send } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Id } from "@/convex/_generated/dataModel";
@@ -505,10 +506,10 @@ export default function VoiceChat({
         <div className="flex items-center space-x-3">
           <Input
             value={inputText}
-            onChange={(e) => setInputText(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInputText(e.target.value)}
             placeholder="Type your message..."
             className="flex-1 bg-white/10 border-white/20 text-white placeholder:text-slate-400 focus:border-cyan-400"
-            onKeyPress={(e) => e.key === "Enter" && handleSendText()}
+            onKeyPress={(e: React.KeyboardEvent<HTMLInputElement>) => e.key === "Enter" && handleSendText()}
             disabled={isProcessing}
           />
           <Button
