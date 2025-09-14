@@ -67,7 +67,7 @@ export default function TestimonialsSection() {
 
       <div className="relative container mx-auto px-4">
         {/* Stats Section */}
-        <div className="mb-20">
+        {/* <div className="mb-20">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-6">
               <span className="bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
@@ -104,7 +104,7 @@ export default function TestimonialsSection() {
               );
             })}
           </div>
-        </div>
+        </div> */}
 
         {/* Testimonials Section */}
         <div>
@@ -116,7 +116,7 @@ export default function TestimonialsSection() {
               <span className="bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
                 What Our
               </span>
-              <br />
+             {" "}
               <span className="bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 bg-clip-text text-transparent">
                 Clients Say
               </span>
@@ -173,26 +173,6 @@ export default function TestimonialsSection() {
                 </div>
               </div>
             ))}
-          </div>
-        </div>
-
-        {/* Bottom CTA */}
-        <div className="mt-20 text-center">
-          <div className="max-w-4xl mx-auto p-8 bg-gradient-to-r from-cyan-900/20 to-purple-900/20 backdrop-blur-xl rounded-3xl border border-cyan-500/20">
-            <h3 className="text-3xl font-bold text-white mb-4">
-              Ready to join thousands of satisfied customers?
-            </h3>
-            <p className="text-gray-400 mb-8 leading-relaxed">
-              Experience the future of AI technology and transform your business today.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="group px-8 py-4 bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white font-semibold rounded-xl shadow-2xl hover:shadow-cyan-500/25 transform hover:scale-105 transition-all duration-300">
-                <span className="relative z-10">Start Free Trial</span>
-              </button>
-              <button className="group px-8 py-4 border-2 border-cyan-400/50 text-cyan-400 hover:bg-cyan-400/10 hover:border-cyan-400 backdrop-blur-sm font-semibold rounded-xl transform hover:scale-105 transition-all duration-300">
-                Schedule Demo
-              </button>
-            </div>
           </div>
         </div>
       </div>

@@ -1,0 +1,183 @@
+/* Blog-specific styles for better content rendering */
+
+.prose {
+  color: #d1d5db;
+  line-height: 1.7;
+}
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  color: #fbbf24;
+  font-weight: 700;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.prose h1 {
+  font-size: 2.25rem;
+  line-height: 1.2;
+}
+
+.prose h2 {
+  font-size: 1.875rem;
+  line-height: 1.3;
+}
+
+.prose h3 {
+  font-size: 1.5rem;
+  line-height: 1.4;
+}
+
+.prose p {
+  margin-bottom: 1.5rem;
+  color: #d1d5db;
+}
+
+.prose strong {
+  color: #fbbf24;
+  font-weight: 600;
+}
+
+.prose blockquote {
+  border-left: 4px solid #f59e0b;
+  background: rgba(245, 158, 11, 0.1);
+  padding: 1.5rem;
+  margin: 2rem 0;
+  border-radius: 0.5rem;
+  font-style: italic;
+}
+
+.prose blockquote p {
+  margin-bottom: 0.5rem;
+  color: #e5e7eb;
+}
+
+.prose blockquote cite {
+  color: #fbbf24;
+  font-size: 0.875rem;
+  font-style: normal;
+}
+
+.prose ol,
+.prose ul {
+  margin-bottom: 1.5rem;
+  padding-left: 1.5rem;
+}
+
+.prose li {
+  margin-bottom: 0.5rem;
+  color: #d1d5db;
+}
+
+.prose li strong {
+  color: #fbbf24;
+}
+
+.prose a {
+  color: #f59e0b;
+  text-decoration: underline;
+  text-decoration-color: rgba(245, 158, 11, 0.3);
+  transition: all 0.3s ease;
+}
+
+.prose a:hover {
+  color: #fbbf24;
+  text-decoration-color: #fbbf24;
+}
+
+/* Code blocks */
+.prose pre {
+  background: #1f2937;
+  border: 1px solid #374151;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
+.prose code {
+  background: rgba(245, 158, 11, 0.1);
+  color: #fbbf24;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+}
+
+.prose pre code {
+  background: transparent;
+  color: #e5e7eb;
+  padding: 0;
+}
+
+/* Images */
+.prose img {
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.3);
+  margin: 2rem 0;
+}
+
+/* Tables */
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 2rem 0;
+}
+
+.prose th,
+.prose td {
+  border: 1px solid #374151;
+  padding: 0.75rem;
+  text-align: left;
+}
+
+.prose th {
+  background: rgba(245, 158, 11, 0.1);
+  color: #fbbf24;
+  font-weight: 600;
+}
+
+.prose td {
+  color: #d1d5db;
+}
+
+/* Line clamp utilities */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1f2937;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #f59e0b;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #fbbf24;
+}
