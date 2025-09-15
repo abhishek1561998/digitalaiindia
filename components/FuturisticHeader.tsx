@@ -85,14 +85,6 @@ export default function FuturisticHeader() {
               {/* Clean "new" badge */}
               <span className="absolute -top-1 -right-2 w-2 h-2 bg-yellow-500 rounded-full"></span>
             </Link>
-
-            <Link
-              href="#features"
-              className="text-gray-300 hover:text-yellow-400 transition-colors duration-300 relative group"
-            >
-              Features
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-400 group-hover:w-full transition-all duration-300"></span>
-            </Link>
             <Link
               href="#solutions"
               className="text-gray-300 hover:text-yellow-400 transition-colors duration-300 relative group"

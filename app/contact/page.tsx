@@ -205,8 +205,8 @@ export default function ContactPage() {
                   <div>
                     <h3 className="text-lg font-semibold text-white mb-1">Call Us</h3>
                     <p className="text-gray-400 mb-2">24/7 AI support line</p>
-                    <a href="tel:+91-9876543210" className="text-yellow-400 hover:text-yellow-300 transition-colors duration-300">
-                      +91-9876543210
+                    <a href="tel:+91-9516018508" className="text-yellow-400 hover:text-yellow-300 transition-colors duration-300">
+                      +91-9516018508
                     </a>
                   </div>
                 </div>
