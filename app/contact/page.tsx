@@ -14,6 +14,7 @@ import {
   Bot,
   Sparkles
 } from "lucide-react";
+import FuturisticHeader from "@/components/FuturisticHeader";
 
 interface ContactFormData {
   name: string;
@@ -119,6 +120,11 @@ export default function ContactPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-black to-gray-900 pt-20">
+
+      <FuturisticHeader />
+            <br/>
+            <br/>
+   
       {/* Background effects */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-yellow-600/5 rounded-full mix-blend-screen filter blur-3xl animate-pulse"></div>
@@ -137,7 +143,7 @@ export default function ContactPage() {
             </span>
             <br />
             <span className="bg-gradient-to-r from-yellow-400 via-orange-500 to-amber-500 bg-clip-text text-transparent">
-              Digitalai India
+              Digitalaiindia
             </span>
           </h1>
           <p className="text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed">

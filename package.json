@@ -21,7 +21,6 @@
     "@wxflows/sdk": "^2.0.0-beta.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "convex": "^1.19.3",
     "elevenlabs": "^1.59.0",
     "init": "^0.1.2",
     "langchain": "^0.3.19",
@@ -39,6 +38,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/react-timeago": "^4.1.7",
+    "convex": "^1.27.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

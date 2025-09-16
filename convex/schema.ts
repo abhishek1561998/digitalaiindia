@@ -16,7 +16,7 @@ export default defineSchema({
     createdAt: v.number(),
   }).index("by_chat", ["chatId"]),
 
-  contact: defineTable({
+  contactMessages: defineTable({
     name: v.string(),
     email: v.string(),
     phone: v.optional(v.string()),
@@ -24,10 +24,7 @@ export default defineSchema({
     subject: v.string(),
     message: v.string(),
     service: v.optional(v.string()),
-    status: v.union(v.literal("new"), v.literal("read"), v.literal("replied"), v.literal("closed")),
     createdAt: v.number(),
-    updatedAt: v.number(),
-    ipAddress: v.optional(v.string()),
-    userAgent: v.optional(v.string()),
-  }).index("by_status", ["status"]).index("by_created", ["createdAt"]),
+    status: v.optional(v.string()), // e.g. "new"
+  }),
 });
