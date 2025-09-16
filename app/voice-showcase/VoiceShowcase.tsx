@@ -9,7 +9,17 @@ import { useMutation } from "convex/react";
 import { Id } from "@/convex/_generated/dataModel";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Mic, Volume2, Zap, Globe2, Settings, MessageSquare } from "lucide-react";
+import {
+  Mic,
+  Volume2,
+  Zap,
+  Globe2,
+  Settings,
+  MessageSquare,
+  RotateCcw,
+} from "lucide-react";
+import ThemeBackdrop from "../ai-machine-agent/ThemeBackdrop";
+import FuturisticHeader from "@/components/FuturisticHeader";
 
 export default function VoiceShowcase() {
   const [chatId, setChatId] = useState<Id<"chats"> | null>(null);
@@ -19,9 +29,7 @@ export default function VoiceShowcase() {
   const handleCreateChat = async () => {
     setIsCreatingChat(true);
     try {
-      const newChatId = await createChat({
-        title: "Voice Showcase Chat",
-      });
+      const newChatId = await createChat({ title: "Voice Showcase Chat" });
       setChatId(newChatId);
     } catch (error) {
       console.error("Error creating chat:", error);
@@ -32,89 +40,53 @@ export default function VoiceShowcase() {
 
   if (!chatId) {
     return (
-      <main className="min-h-screen bg-black text-white">
-        {/* Background effects */}
-        <div className="absolute inset-0 bg-gradient-to-br from-orange-900/20 via-yellow-900/20 to-red-900/20" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(251,146,60,0.1),transparent_50%)]" />
-        
+      <main className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white relative overflow-hidden">
+      <FuturisticHeader />
+      <br/>
+      <br/>
+   
+        <ThemeBackdrop />
+
         <div className="relative z-10 min-h-screen flex flex-col">
           {/* Header */}
-          <div className="border-b border-white/10">
-            <div className="max-w-7xl mx-auto px-6 py-8">
-              <div className="text-center">
-                <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent mb-4">
-                  AI Voice Showcase
-                </h1>
-                <p className="text-xl text-slate-400 max-w-3xl mx-auto">
-                  Experience the complete voice AI system with avatars, real-time conversation, 
-                  and advanced voice settings powered by ElevenLabs and LangGraph.
-                </p>
-              </div>
+          <div className="max-w-6xl mx-auto px-8 py-12 text-center space-y-6">
+              <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-amber-200 via-amber-300 to-orange-400 bg-clip-text text-transparent tracking-tight">
+                AI Voice Showcase
+              </h1>
+              <p className="text-lg md:text-xl text-amber-50/90 max-w-2xl mx-auto leading-relaxed">
+                Experience natural voice conversations with AI avatars powered by ElevenLabs & LangGraph
+              </p>
             </div>
-          </div>
 
-          {/* Features Grid */}
-          <div className="flex-1 py-12">
-            <div className="max-w-7xl mx-auto px-6">
-              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-                <Card className="p-6 bg-white/5 border-white/10 hover:bg-white/10 transition-all">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-r from-cyan-500 to-purple-600 flex items-center justify-center mb-4">
-                    <Mic className="w-6 h-6 text-white" />
-                  </div>
-                  <h3 className="text-lg font-semibold text-white mb-2">Real-time Voice</h3>
-                  <p className="text-slate-400 text-sm">
-                    Natural speech-to-text and text-to-speech with live audio visualization
-                  </p>
-                </Card>
-
-                <Card className="p-6 bg-white/5 border-white/10 hover:bg-white/10 transition-all">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-r from-cyan-500 to-purple-600 flex items-center justify-center mb-4">
-                    <MessageSquare className="w-6 h-6 text-white" />
-                  </div>
-                  <h3 className="text-lg font-semibold text-white mb-2">AI Conversation</h3>
-                  <p className="text-slate-400 text-sm">
-                    Powered by LangGraph with tool integration and conversation memory
-                  </p>
-                </Card>
-
-                <Card className="p-6 bg-white/5 border-white/10 hover:bg-white/10 transition-all">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-r from-cyan-500 to-purple-600 flex items-center justify-center mb-4">
-                    <Settings className="w-6 h-6 text-white" />
-                  </div>
-                  <h3 className="text-lg font-semibold text-white mb-2">Voice Settings</h3>
-                  <p className="text-slate-400 text-sm">
-                    Customize voice parameters, stability, and similarity boost
-                  </p>
-                </Card>
-
-                <Card className="p-6 bg-white/5 border-white/10 hover:bg-white/10 transition-all">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-r from-cyan-500 to-purple-600 flex items-center justify-center mb-4">
-                    <Globe2 className="w-6 h-6 text-white" />
-                  </div>
-                  <h3 className="text-lg font-semibold text-white mb-2">Multilingual</h3>
-                  <p className="text-slate-400 text-sm">
-                    Support for multiple languages and regional accents
-                  </p>
-                </Card>
-              </div>
-
-              {/* Avatar Preview */}
-              <div className="mb-12">
-                <h2 className="text-2xl font-semibold text-white mb-6 text-center">Choose Your AI Avatar</h2>
-                <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+          <div className="flex-1 py-16">
+            <div className="max-w-6xl mx-auto px-8">
+              {/* Avatars */}
+              <div className="mb-14">
+                <h2 className="text-2xl font-bold text-white mb-6 text-center">Choose Your AI Avatar</h2>
+                <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
                   {avatars.map((avatar) => (
-                    <Card key={avatar.id} className="p-6 bg-white/5 border-white/10 hover:bg-white/10 transition-all text-center">
-                      <div className="w-20 h-20 mx-auto mb-4 rounded-full overflow-hidden border-2 border-cyan-400/30">
-                        <img
-                          src={avatar.src}
-                          alt={avatar.name}
-                          className="w-full h-full object-cover"
-                        />
+                    <Card
+                      key={avatar.id}
+                      className="group relative p-8 bg-gradient-to-br from-white/5 to-white/3 border-2 border-amber-600/40 hover:border-amber-500/60 hover:bg-amber-500/10 transition-all duration-300 text-center backdrop-blur-sm shadow-lg shadow-amber-500/10"
+                    >
+                      <div className="relative mb-5">
+                        <div className="w-24 h-24 mx-auto rounded-full overflow-hidden border-4 border-amber-500/50 group-hover:border-amber-400 transition-colors">
+                          <img
+                            src={avatar.src}
+                            alt={avatar.name}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                        <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-gradient-to-r from-amber-500 to-orange-500 rounded-full flex items-center justify-center shadow-xl shadow-amber-500/30 ring-2 ring-white/20">
+                          <Volume2 className="w-4 h-4 text-white" />
+                        </div>
                       </div>
-                      <h3 className="text-lg font-semibold text-white mb-1">{avatar.name}</h3>
-                      <p className="text-slate-400 text-sm mb-2">{avatar.language}</p>
-                      <div className="flex items-center justify-center space-x-2 text-xs text-cyan-400">
-                        <Volume2 className="w-3 h-3" />
+
+                      <h3 className="text-lg font-semibold text-white">{avatar.name}</h3>
+                      <p className="text-slate-400 text-sm uppercase tracking-wide">{avatar.language}</p>
+
+                      <div className="mt-4 inline-flex items-center gap-2 text-xs text-amber-300/90">
+                        <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
                         <span>Voice Ready</span>
                       </div>
                     </Card>
@@ -122,12 +94,12 @@ export default function VoiceShowcase() {
                 </div>
               </div>
 
-              {/* Start Button */}
+              {/* CTA */}
               <div className="text-center">
                 <Button
                   onClick={handleCreateChat}
                   disabled={isCreatingChat}
-                  className="bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white px-12 py-6 text-xl font-semibold rounded-full shadow-2xl hover:shadow-cyan-500/25 transform hover:scale-105 transition-all duration-300"
+                  className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-white px-12 py-6 text-xl font-semibold rounded-xl shadow-2xl hover:shadow-amber-500/30 transform hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed ring-2 ring-amber-400/20 hover:ring-amber-400/40"
                 >
                   {isCreatingChat ? (
                     <>
@@ -141,11 +113,41 @@ export default function VoiceShowcase() {
                     </>
                   )}
                 </Button>
-                
-                <div className="mt-6 text-sm text-slate-500">
-                  <p>Make sure your microphone is enabled for voice input.</p>
-                  <p>This demo uses ElevenLabs for high-quality voice synthesis.</p>
-                </div>
+              </div>
+                <br/>
+                <br/>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-14">
+                <Card className="p-6 bg-white/5 border border-amber-600/20 hover:bg-amber-500/10 transition-all group">
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-amber-500 to-orange-500 flex items-center justify-center mb-3 group-hover:scale-105 transition-transform">
+                    <Mic className="w-5 h-5 text-white" />
+                  </div>
+                  <h3 className="text-base font-semibold text-white mb-1">Real-time Voice</h3>
+                  <p className="text-amber-100/80 text-sm">Low-latency STT & TTS</p>
+                </Card>
+
+                <Card className="p-6 bg-white/5 border border-amber-600/20 hover:bg-amber-500/10 transition-all group">
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-yellow-500 to-amber-500 flex items-center justify-center mb-3 group-hover:scale-105 transition-transform">
+                    <MessageSquare className="w-5 h-5 text-white" />
+                  </div>
+                  <h3 className="text-base font-semibold text-white mb-1">AI Conversation</h3>
+                  <p className="text-amber-100/80 text-sm">Tool-use & memory</p>
+                </Card>
+
+                <Card className="p-6 bg-white/5 border border-amber-600/20 hover:bg-amber-500/10 transition-all group">
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-orange-500 to-red-500 flex items-center justify-center mb-3 group-hover:scale-105 transition-transform">
+                    <Settings className="w-5 h-5 text-white" />
+                  </div>
+                  <h3 className="text-base font-semibold text-white mb-1">Voice Settings</h3>
+                  <p className="text-amber-100/80 text-sm">Timbre & stability</p>
+                </Card>
+
+                <Card className="p-6 bg-white/5 border border-amber-600/20 hover:bg-amber-500/10 transition-all group">
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-amber-600 to-orange-600 flex items-center justify-center mb-3 group-hover:scale-105 transition-transform">
+                    <Globe2 className="w-5 h-5 text-white" />
+                  </div>
+                  <h3 className="text-base font-semibold text-white mb-1">Multilingual</h3>
+                  <p className="text-amber-100/80 text-sm">Global accents</p>
+                </Card>
               </div>
             </div>
           </div>
@@ -154,52 +156,64 @@ export default function VoiceShowcase() {
     );
   }
 
+  /* ------------------------------ CHAT VIEW ------------------------------- */
   return (
     <ConvexClientProvider>
-      <main className="min-h-screen bg-black text-white">
-        {/* Background effects */}
-        <div className="absolute inset-0 bg-gradient-to-br from-orange-900/20 via-yellow-900/20 to-red-900/20" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(251,146,60,0.1),transparent_50%)]" />
-        
+      <main className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white relative overflow-hidden">
+        {/* Dark base */}
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900" />
+
+        {/* Subtle AI glow effects */}
+        <div className="absolute inset-0 opacity-30 pointer-events-none">
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl" />
+          <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-orange-500/10 rounded-full blur-3xl" />
+          <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-yellow-500/5 rounded-full blur-2xl" />
+        </div>
+
+        {/* Soft radial overlays */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_25%,rgba(251,191,36,0.15),transparent_50%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_75%,rgba(249,115,22,0.15),transparent_50%)]" />
+
         {/* Header */}
-        <div className="relative z-10 border-b border-white/10">
-          <div className="max-w-7xl mx-auto px-6 py-4">
+        <div className="relative z-10 border-b border-amber-500/20">
+          <div className="max-w-6xl mx-auto px-8 py-6">
             <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-2xl font-bold bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">
-                  AI Voice Showcase
-                </h1>
-                <p className="text-slate-400 mt-1">
-                  Complete voice AI experience with avatars and real-time conversation
-                </p>
+              <div className="flex items-center space-x-4">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 flex items-center justify-center shadow-lg shadow-amber-500/25">
+                  <Mic className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <h1 className="text-2xl font-bold text-white">AI Voice Showcase</h1>
+                  <p className="text-amber-100/90 text-sm">Live voice conversation with AI avatars</p>
+                </div>
               </div>
-              <div className="flex items-center space-x-2 text-sm text-slate-400">
-                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                <span>Live Voice Chat</span>
+
+              <div className="flex items-center space-x-3">
+                <div className="flex items-center space-x-2 text-sm text-amber-200">
+                  <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+                  <span>Live Voice Chat</span>
+                </div>
+                <Button
+                  onClick={() => setChatId(null)}
+                  variant="outline"
+                  className="border-amber-600/50 text-amber-200 hover:bg-amber-500/10 hover:border-amber-500"
+                >
+                  <RotateCcw className="w-4 h-4 mr-2" />
+                  Back to Demo
+                </Button>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Main content */}
-        <div className="relative z-10 flex-1 h-[calc(100vh-80px)] p-6">
-          <VoiceAvatarChat 
-            chatId={chatId}
-            avatars={[...avatars]}
-            className="h-full" 
-          />
-        </div>
-
-        {/* Footer info */}
-        <div className="relative z-10 border-t border-white/10">
-          <div className="max-w-7xl mx-auto px-6 py-4">
-            <div className="text-center text-sm text-slate-400">
-              <p>
-                Powered by ElevenLabs voice AI, LangGraph conversation flow, and Convex database.
-                <br />
-                Experience natural voice conversation with customizable avatars and settings.
-              </p>
-            </div>
+        {/* Chat body */}
+        <div className="relative z-10 flex-1 h-[calc(100vh-88px)] p-8">
+          <div className="h-full max-w-6xl mx-auto">
+            <VoiceAvatarChat
+              chatId={chatId}
+              avatars={[...avatars]}
+              className="h-full rounded-xl border border-amber-500/20 bg-slate-800/30 backdrop-blur-sm"
+            />
           </div>
         </div>
       </main>

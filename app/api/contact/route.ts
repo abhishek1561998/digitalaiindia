@@ -1,85 +1,33 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { api } from '@/convex/_generated/api';
-import { getConvexClient } from '@/lib/convex';
+import { NextResponse } from "next/server";
+import { ConvexHttpClient } from "convex/browser"; // works in Node/Edge
+import { api } from "@/convex/_generated/api";
 
-const convex = getConvexClient();
+const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
 
-interface ContactFormData {
-  name: string;
-  email: string;
-  phone?: string;
-  company?: string;
-  subject: string;
-  message: string;
-  service?: string;
-}
-
-export async function POST(request: NextRequest) {
+export async function POST(req: Request) {
   try {
-    const body: ContactFormData = await request.json();
-    
-    // Validate required fields
-    if (!body.name || !body.email || !body.subject || !body.message) {
-      return NextResponse.json(
-        { success: false, error: 'Missing required fields' },
-        { status: 400 }
-      );
-    }
+    const body = await req.json();
 
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(body.email)) {
-      return NextResponse.json(
-        { success: false, error: 'Invalid email format' },
-        { status: 400 }
-      );
-    }
-
-    // Get client IP and user agent for tracking
-    const ipAddress = request.headers.get('x-forwarded-for') || 
-                     request.headers.get('x-real-ip') || 
-                     'unknown';
-    const userAgent = request.headers.get('user-agent') || 'unknown';
-
-    // Create contact message in Convex
-    const contactId = await convex.mutation(api.contact.createContactMessage, {
-      name: body.name.trim(),
-      email: body.email.trim().toLowerCase(),
-      phone: body.phone?.trim() || undefined,
-      company: body.company?.trim() || undefined,
-      subject: body.subject.trim(),
-      message: body.message.trim(),
-      service: body.service || undefined,
-      ipAddress,
-      userAgent,
+    // (Basic required-field safety)
+    ["name", "email", "subject", "message"].forEach((k) => {
+      if (!body?.[k] || String(body[k]).trim() === "") {
+        throw new Error(`Missing required field: ${k}`);
+      }
     });
 
-    // Log successful submission (optional)
-    console.log(`New contact message received: ${contactId} from ${body.email}`);
-
-    return NextResponse.json({
-      success: true,
-      message: 'Contact message sent successfully',
-      id: contactId,
+    await convex.mutation(api.contact.createContactMessage, {
+      name: String(body.name),
+      email: String(body.email),
+      phone: body.phone ? String(body.phone) : undefined,
+      company: body.company ? String(body.company) : undefined,
+      subject: String(body.subject),
+      message: String(body.message),
+      service: body.service ? String(body.service) : undefined,
     });
 
-  } catch (error) {
-    console.error('Error processing contact form:', error);
-    
-    return NextResponse.json(
-      { 
-        success: false, 
-        error: 'Failed to send message. Please try again or contact us directly.' 
-      },
-      { status: 500 }
-    );
+    return NextResponse.json({ ok: true });
+  } catch (err) {
+    console.error("contact route error:", err);
+    return NextResponse.json({ ok: false, error: String(err) }, { status: 500 });
   }
-}
-
-// Handle GET requests (optional - for testing)
-export async function GET() {
-  return NextResponse.json({
-    message: 'Contact API endpoint is working',
-    timestamp: new Date().toISOString(),
-  });
 }

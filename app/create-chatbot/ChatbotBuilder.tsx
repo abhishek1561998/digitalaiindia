@@ -24,6 +24,7 @@ import ChatbotPurposeStep from "./steps/ChatbotPurposeStep";
 import FormSetupStep from "./steps/FormSetupStep";
 import AvatarVoiceStep from "./steps/AvatarVoiceStep";
 import CreateChatbotStep from "./steps/CreateChatbotStep";
+import FuturisticHeader from "@/components/FuturisticHeader";
 
 interface ChatbotConfig {
   // Step 1: Training Data
@@ -204,6 +205,12 @@ export default function ChatbotBuilder() {
 
   return (
     <main className="min-h-screen bg-black text-white">
+
+      <FuturisticHeader />
+      <br/>
+      <br/>
+      <br/>
+   
       {/* Background effects */}
       <div className="absolute inset-0 bg-gradient-to-br from-cyan-900/20 via-purple-900/20 to-pink-900/20" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(34,211,238,0.1),transparent_50%)]" />
@@ -230,7 +237,7 @@ export default function ChatbotBuilder() {
 
       <div className="relative z-10 flex">
         {/* Sidebar */}
-        <div className="w-80 border-r border-white/10 bg-black/50 backdrop-blur-sm">
+        <div className="w-80 h-full border-r border-white/10 bg-black/50 backdrop-blur-sm">
           <div className="p-6">
             <h2 className="text-lg font-semibold text-white mb-6">Setup Steps</h2>
             
