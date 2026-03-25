@@ -3,8 +3,9 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { SignedOut, SignInButton, SignedIn } from "@clerk/nextjs";
-import { ArrowRight, Play, Sparkles, Zap, Brain, Cpu } from "lucide-react";
+import { ArrowRight, Play, Sparkles, Zap } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function HeroBanner() {
   const [currentText, setCurrentText] = useState(0);
@@ -29,31 +30,16 @@ export default function HeroBanner() {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Animated Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-slate-900">
-        {/* Floating particles */}
-        <div className="absolute inset-0">
-          {[...Array(50)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute w-1 h-1 bg-cyan-400 rounded-full animate-pulse"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 3}s`,
-                animationDuration: `${2 + Math.random() * 3}s`
-              }}
-            />
-          ))}
-        </div>
-        
-        {/* Gradient orbs */}
-        <div className="absolute top-20 left-10 md:left-20 w-72 h-72 bg-gradient-to-r from-orange-600/30 to-red-600/30 rounded-full mix-blend-screen filter blur-3xl animate-blob"></div>
-        <div className="absolute top-40 right-10 md:right-20 w-72 h-72 bg-gradient-to-r from-yellow-600/30 to-orange-600/30 rounded-full mix-blend-screen filter blur-3xl animate-blob animation-delay-2000"></div>
-        <div className="absolute bottom-20 left-1/2 -translate-x-1/2 w-72 h-72 bg-gradient-to-r from-orange-600/30 to-yellow-600/30 rounded-full mix-blend-screen filter blur-3xl animate-blob animation-delay-4000"></div>
-        
-        {/* Grid pattern */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(251,146,60,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(251,146,60,0.1)_1px,transparent_1px)] bg-[size:50px_50px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)]"></div>
+      {/* Banner Background */}
+      <div className="absolute inset-0">
+        <Image
+          src="/banner.png"
+          alt="Digital AI India Banner"
+          fill
+          className="object-cover object-center"
+          priority
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/80" />
       </div>
 
       {/* Main Content */}
@@ -93,11 +79,11 @@ export default function HeroBanner() {
           </div>
 
           {/* Subtitle */}
-          <p className="text-xl md:text-2xl text-gray-300 mb-12 leading-relaxed max-w-3xl mx-auto">
+          {/* <p className="text-xl md:text-2xl text-gray-300 mb-12 leading-relaxed max-w-3xl mx-auto">
             Experience the next generation of artificial intelligence with{" "}
             <span className="text-orange-400 font-semibold">Digitalaiindia.com</span>.
             Transform your business with cutting-edge AI solutions designed for the digital future.
-          </p>
+          </p> */}
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-6 justify-center mb-16">

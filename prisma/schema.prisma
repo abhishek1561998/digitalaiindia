@@ -1,0 +1,56 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Plan {
+  FREE
+  PRO
+}
+
+model User {
+  id            String        @id @default(cuid())
+  name          String
+  email         String        @unique
+  passwordHash  String
+  plan          Plan          @default(FREE)
+  monthlyLimit  Int           @default(1000)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  apiKeys       ApiKey[]
+  usageRecords  UsageRecord[]
+}
+
+model ApiKey {
+  id            String   @id @default(cuid())
+  name          String
+  keyPrefix     String
+  keyLastFour   String
+  keyHash       String   @unique
+  encryptedKey  String
+  isActive      Boolean  @default(true)
+  requests      Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  lastUsedAt    DateTime?
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, isActive])
+}
+
+model UsageRecord {
+  id        String   @id @default(cuid())
+  month     String
+  count     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, month])
+}

@@ -1,18 +1,7 @@
-import FuturisticHeader from "@/components/FuturisticHeader";
-import HeroBanner from "@/components/HeroBanner";
-import FeaturesSection from "@/components/FeaturesSection";
-import SolutionsSection from "@/components/SolutionsSection";
-import TestimonialsSection from "@/components/TestimonialsSection";
-import FuturisticFooter from "@/components/FuturisticFooter";
+import { MarketingLanding } from "@/components/dai/marketing-landing";
+import { getCurrentUser } from "@/lib/server/auth";
 
-export default function Home() {
-  return (
-    <div className="min-h-screen bg-black overflow-x-hidden">
-      <FuturisticHeader />
-      <HeroBanner />
-      <SolutionsSection />
-      <TestimonialsSection />
-      <FuturisticFooter />
-    </div>
-  );
+export default async function HomePage() {
+  const user = await getCurrentUser();
+  return <MarketingLanding isLoggedIn={Boolean(user)} />;
 }
