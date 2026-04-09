@@ -368,11 +368,41 @@ export function MarketingLanding({ isLoggedIn }: { isLoggedIn: boolean }) {
         </div>
       </section>
 
+      {/* ── Closing CTA ── */}
+      <section className={styles.ctaBanner}>
+        <div className={styles.ctaBannerOrb} />
+        <div className={styles.ctaBannerContent}>
+          <div className={styles.sectionLabel} style={{ textAlign: "center" }}>Start today</div>
+          <h2 className={styles.ctaBannerTitle}>Your first API call is<br /><em className={styles.ctaBannerEm}>30 seconds away</em></h2>
+          <p className={styles.ctaBannerSub}>Free forever up to 1,000 requests. No credit card. No setup headaches.</p>
+          <div className={styles.heroCtas}>
+            <Link href={authLink} className={`${styles.btn} ${styles.btnPrimary} ${styles.btnLg}`}>
+              Get API Key — Free <ArrowIcon />
+            </Link>
+            <Link href="/dashboard?tab=docs" className={`${styles.btn} ${styles.btnGhost} ${styles.btnLg}`}>
+              Read the Docs
+            </Link>
+          </div>
+          <div className={styles.ctaTrustRow}>
+            <span>✓ No credit card</span>
+            <span>✓ 4 APIs, 1 key</span>
+            <span>✓ 99.9% uptime</span>
+            <span>✓ Made for India</span>
+          </div>
+        </div>
+      </section>
+
       {/* ── Footer ── */}
       <footer className={styles.footer}>
         <div className={styles.navLogo}>
           <div className={styles.logoIcon}><LogoIcon /></div>
           <span>DigitalAI<span className={styles.logoIndia}>India</span></span>
+        </div>
+        <div className={styles.footerLinks}>
+          <a href="#features">Features</a>
+          <a href="#pricing">Pricing</a>
+          <a href="/dashboard?tab=docs">Docs</a>
+          <Link href="/contact">Contact</Link>
         </div>
         <p className={styles.footerTagline}>Made with ♥ for Indian developers</p>
       </footer>

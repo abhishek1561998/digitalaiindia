@@ -902,10 +902,84 @@
   top: 1px;
 }
 
+/* ── Closing CTA Banner ── */
+.ctaBanner {
+  position: relative;
+  overflow: hidden;
+  padding: 6rem 2rem;
+  text-align: center;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.ctaBannerOrb {
+  position: absolute;
+  width: 700px;
+  height: 400px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(255, 117, 0, 0.13) 0%, transparent 70%);
+  filter: blur(60px);
+  pointer-events: none;
+}
+
+.ctaBannerContent {
+  position: relative;
+  z-index: 1;
+  max-width: 640px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.ctaBannerTitle {
+  font-family: var(--font-syne, sans-serif);
+  font-size: clamp(2.25rem, 4vw, 3.5rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+  color: var(--text);
+  margin: 0;
+}
+
+.ctaBannerEm {
+  font-style: italic;
+  font-weight: 300;
+  font-family: var(--font-outfit, sans-serif);
+  background: linear-gradient(130deg, #FF7500 0%, #FF3D6B 60%, #FF7500 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmerText 3s linear infinite;
+}
+
+.ctaBannerSub {
+  color: var(--text2);
+  font-size: 1rem;
+  line-height: 1.7;
+  max-width: 440px;
+  margin: 0;
+}
+
+.ctaTrustRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  justify-content: center;
+  font-size: 0.8125rem;
+  color: var(--text3);
+  margin-top: 0.25rem;
+}
+
 /* ── Footer ── */
 .footer {
   border-top: 1px solid var(--border);
-  padding: 3rem 2rem;
+  padding: 2.5rem 2rem;
   max-width: 1200px;
   margin: 0 auto;
   display: flex;
@@ -913,6 +987,24 @@
   justify-content: space-between;
   gap: 1rem;
   flex-wrap: wrap;
+}
+
+.footerLinks {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.footerLinks a {
+  color: var(--text3);
+  font-size: 0.8125rem;
+  text-decoration: none;
+  padding: 6px 12px;
+  border-radius: 8px;
+  transition: color 0.2s;
+}
+
+.footerLinks a:hover {
+  color: var(--text);
 }
 
 .footerTagline {
