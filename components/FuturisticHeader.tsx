@@ -57,7 +57,7 @@ export default function FuturisticHeader() {
                     Digitalai
                   </span>
                   <span className="text-gray-400 group-hover:text-yellow-300 transition-colors duration-300">
-                    india.com
+                    India.com
                   </span>
                 </h1>
 

@@ -1,7 +1,8 @@
 "use client";
 
-import { Brain, Mail, Phone, MapPin, Twitter, Linkedin, Github, Instagram } from "lucide-react";
+import { Mail, Phone, MapPin, Twitter, Linkedin, Github, Instagram } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function FuturisticFooter() {
   return (
@@ -16,52 +17,15 @@ export default function FuturisticFooter() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Company Info */}
           <div className="space-y-6">
-            <div className="flex items-center space-x-4 group">
-              {/* Enhanced footer logo */}
-              <div className="relative">
-                <div className="relative w-12 h-12 group-hover:scale-110 transition-all duration-500">
-                  {/* Outer glow ring */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 via-orange-500 to-amber-500 rounded-xl opacity-20 group-hover:opacity-40 transition-opacity duration-300 blur-sm"></div>
-
-                  {/* Middle ring */}
-                  <div className="absolute inset-1 bg-gradient-to-r from-yellow-500 to-orange-600 rounded-lg opacity-60 group-hover:opacity-80 transition-opacity duration-300"></div>
-
-                  {/* Inner core */}
-                  <div className="absolute inset-2 bg-gradient-to-br from-gray-900 to-black rounded-md flex items-center justify-center">
-                    <Brain className="w-5 h-5 text-yellow-400 group-hover:text-orange-300 transition-colors duration-300" />
-
-                    {/* Orbiting particles */}
-                    <div className="absolute -inset-2">
-                      <div className="absolute top-0 left-1/2 w-1 h-1 bg-yellow-400 rounded-full animate-spin origin-bottom transform -translate-x-1/2"></div>
-                      <div className="absolute bottom-0 right-0 w-1 h-1 bg-orange-400 rounded-full animate-spin origin-top-left" style={{animationDelay: '0.5s'}}></div>
-                      <div className="absolute top-1/2 left-0 w-1 h-1 bg-amber-400 rounded-full animate-spin origin-right transform -translate-y-1/2" style={{animationDelay: '1s'}}></div>
-                    </div>
-                  </div>
-
-                  {/* Status indicator */}
-                  <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full flex items-center justify-center group-hover:scale-125 transition-transform duration-300">
-                    <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <h3 className="text-xl font-bold leading-tight">
-                  <span className="bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent group-hover:from-yellow-300 group-hover:to-orange-400 transition-all duration-300">
-                    Digitalai
-                  </span>
-                  <span className="text-gray-400 group-hover:text-yellow-300 transition-colors duration-300">
-                    india.com
-                  </span>
-                </h3>
-                <div className="flex items-center space-x-1 -mt-1">
-                  <p className="text-xs text-gray-400 group-hover:text-yellow-400 transition-colors duration-300 font-medium">
-                    Future of AI
-                  </p>
-                  <div className="w-1 h-3 bg-yellow-400 animate-pulse"></div>
-                </div>
-              </div>
-            </div>
+            <Link href="/" className="inline-block group">
+              <Image
+                src="/logo.png"
+                alt="Digital AI India"
+                width={180}
+                height={54}
+                className="h-14 w-auto group-hover:scale-105 transition-transform duration-300 drop-shadow-[0_0_12px_rgba(234,179,8,0.25)] brightness-110"
+              />
+            </Link>
             <p className="text-gray-400 text-sm leading-relaxed">
               Pioneering the future of artificial intelligence with cutting-edge solutions 
               that transform businesses and empower innovation across India and beyond.
