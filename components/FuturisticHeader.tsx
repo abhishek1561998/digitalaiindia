@@ -61,8 +61,9 @@ export default function FuturisticHeader() {
     };
   }, []);
 
-  const primaryHref = user ? "/dashboard" : "/auth?mode=signup";
-  const secondaryHref = user ? "/dashboard" : "/auth";
+  const PLATFORM = "https://platform.digitalaiindia.com";
+  const primaryHref = user ? `${PLATFORM}/dashboard` : PLATFORM;
+  const secondaryHref = user ? `${PLATFORM}/dashboard` : PLATFORM;
 
   return (
     <header
@@ -165,28 +166,28 @@ export default function FuturisticHeader() {
           <div className="hidden lg:flex items-center space-x-4">
             {!user ? (
               <>
-                <Link href={secondaryHref}>
+                <a href={secondaryHref}>
                   <Button
                     variant="outline"
                     className="border-yellow-400/50 text-yellow-400 hover:bg-yellow-400/10 hover:border-yellow-400"
                   >
                     {authLoading ? "Loading..." : "Sign In"}
                   </Button>
-                </Link>
-                <Link href={primaryHref}>
+                </a>
+                <a href={primaryHref}>
                   <Button className="bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-400 hover:to-orange-500 text-white border-0 shadow-lg hover:shadow-yellow-500/25 group">
                     Get Started
                     <Sparkles className="ml-2 w-4 h-4 group-hover:rotate-12 transition-transform duration-300" />
                   </Button>
-                </Link>
+                </a>
               </>
             ) : (
-              <Link href="/dashboard">
+              <a href={primaryHref}>
                 <Button className="bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-400 hover:to-orange-500 text-white border-0 shadow-lg hover:shadow-yellow-500/25 group">
                   Dashboard
                   <Zap className="ml-2 w-4 h-4 group-hover:scale-110 transition-transform duration-300" />
                 </Button>
-              </Link>
+              </a>
             )}
           </div>
 
@@ -255,26 +256,26 @@ export default function FuturisticHeader() {
               <div className="flex flex-col space-y-3 pt-4 border-t border-gray-700">
                 {!user ? (
                   <>
-                    <Link href={secondaryHref} onClick={() => setIsMenuOpen(false)}>
+                    <a href={secondaryHref} className="w-full" onClick={() => setIsMenuOpen(false)}>
                       <Button
                         variant="outline"
                         className="border-yellow-400/50 text-yellow-400 hover:bg-yellow-400/10 hover:border-yellow-400 w-full"
                       >
                         {authLoading ? "Loading..." : "Sign In"}
                       </Button>
-                    </Link>
-                    <Link href={primaryHref} onClick={() => setIsMenuOpen(false)}>
+                    </a>
+                    <a href={primaryHref} className="w-full" onClick={() => setIsMenuOpen(false)}>
                       <Button className="bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-400 hover:to-orange-500 text-white border-0 w-full">
                         Get Started
                       </Button>
-                    </Link>
+                    </a>
                   </>
                 ) : (
-                  <Link href="/dashboard" onClick={() => setIsMenuOpen(false)}>
+                  <a href={primaryHref} className="w-full" onClick={() => setIsMenuOpen(false)}>
                     <Button className="bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-400 hover:to-orange-500 text-white border-0 w-full">
                       Dashboard
                     </Button>
-                  </Link>
+                  </a>
                 )}
               </div>
             </nav>
