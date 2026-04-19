@@ -75,9 +75,9 @@ export async function GET(req: Request) {
   try {
     const code = url.searchParams.get("code");
     const state = url.searchParams.get("state");
-    const clientId = process.env.GOOGLE_CLIENT_ID;
-    const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
-    const configuredRedirectUri = process.env.GOOGLE_REDIRECT_URI || `${url.origin}/api/auth/google/callback`;
+    const clientId = process.env.GOOGLE_CLIENT_ID?.trim();
+    const clientSecret = process.env.GOOGLE_CLIENT_SECRET?.trim();
+    const configuredRedirectUri = (process.env.GOOGLE_REDIRECT_URI || `${url.origin}/api/auth/google/callback`).trim();
     const redirectUris = Array.from(
       new Set([
         configuredRedirectUri,

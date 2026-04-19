@@ -4,8 +4,8 @@ import { NextResponse } from "next/server";
 const STATE_COOKIE = "dai_google_oauth_state";
 
 export async function GET(req: Request) {
-  const clientId = process.env.GOOGLE_CLIENT_ID;
-  const redirectUri = process.env.GOOGLE_REDIRECT_URI || `${new URL(req.url).origin}/api/auth/google/callback`;
+  const clientId = process.env.GOOGLE_CLIENT_ID?.trim();
+  const redirectUri = (process.env.GOOGLE_REDIRECT_URI || `${new URL(req.url).origin}/api/auth/google/callback`).trim();
 
   if (!clientId) {
     return NextResponse.json({ error: "Missing GOOGLE_CLIENT_ID" }, { status: 500 });
