@@ -11,7 +11,12 @@ export function proxy(req: NextRequest) {
     return NextResponse.redirect(new URL("/dashboard", req.url));
   }
 
-  if (isMainDomain && pathname.startsWith("/dashboard")) {
+  const isPlatformRoute =
+    pathname.startsWith("/dashboard") ||
+    pathname.startsWith("/auth") ||
+    pathname.startsWith("/api/auth");
+
+  if (isMainDomain && isPlatformRoute) {
     const target = new URL(req.url);
     target.hostname = "platform.digitalaiindia.com";
     return NextResponse.redirect(target);
