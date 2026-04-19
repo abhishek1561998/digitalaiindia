@@ -1,8 +1,16 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { Syne, Outfit } from "next/font/google";
+import Link from "next/link";
+import { ThemeToggle } from "./theme-toggle";
+import styles from "./dashboard-shell.module.css";
 
+const syne = Syne({ subsets: ["latin"], variable: "--font-syne" });
+const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" });
+
+/* ── Types ── */
 type DashboardUser = {
   id: string;
   name: string;
@@ -41,164 +49,220 @@ type RequestLog = {
 
 type Tab = "overview" | "keys" | "playground" | "logs" | "billing" | "docs" | "settings";
 
-const tabs: { id: Tab; label: string }[] = [
-  { id: "overview", label: "Overview" },
-  { id: "keys", label: "API Keys" },
-  { id: "playground", label: "Playground" },
-  { id: "logs", label: "Request Logs" },
-  { id: "billing", label: "Billing" },
-  { id: "docs", label: "Docs" },
-  { id: "settings", label: "Settings" },
+/* ── Icons ── */
+const OverviewIcon = () => (
+  <svg className={styles.sideTabIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" />
+    <rect x="14" y="14" width="7" height="7" /><rect x="3" y="14" width="7" height="7" />
+  </svg>
+);
+const KeyIcon = () => (
+  <svg className={styles.sideTabIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4" />
+  </svg>
+);
+const PlayIcon = () => (
+  <svg className={styles.sideTabIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <polygon points="5 3 19 12 5 21 5 3" />
+  </svg>
+);
+const LogsIcon = () => (
+  <svg className={styles.sideTabIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" />
+    <line x1="16" y1="13" x2="8" y2="13" /><line x1="16" y1="17" x2="8" y2="17" /><polyline points="10 9 9 9 8 9" />
+  </svg>
+);
+const BillingIcon = () => (
+  <svg className={styles.sideTabIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="1" y="4" width="22" height="16" rx="2" ry="2" /><line x1="1" y1="10" x2="23" y2="10" />
+  </svg>
+);
+const DocsIcon = () => (
+  <svg className={styles.sideTabIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" /><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+  </svg>
+);
+const SettingsIcon = () => (
+  <svg className={styles.sideTabIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="12" r="3" />
+    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+  </svg>
+);
+const LogoIcon = () => (
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+  </svg>
+);
+const CopyIcon = () => (
+  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="9" y="9" width="13" height="13" rx="2" ry="2" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+  </svg>
+);
+
+/* ── Constants ── */
+const tabs: { id: Tab; label: string; icon: () => React.ReactElement }[] = [
+  { id: "overview",    label: "Overview",      icon: OverviewIcon },
+  { id: "keys",        label: "API Keys",       icon: KeyIcon },
+  { id: "playground",  label: "Playground",     icon: PlayIcon },
+  { id: "logs",        label: "Request Logs",   icon: LogsIcon },
+  { id: "billing",     label: "Billing",        icon: BillingIcon },
+  { id: "docs",        label: "Docs",           icon: DocsIcon },
+  { id: "settings",    label: "Settings",       icon: SettingsIcon },
 ];
 
+const docsExamples = {
+  chat: {
+    endpoint: "POST /api/chat",
+    body: `{\n  "prompt": "Explain transformer models in simple language"\n}`,
+    response: `{\n  "id": "resp_x8k21a",\n  "content": "Transformer models understand context...",\n  "model": "dai-chat-v1-mock",\n  "tokens_used": 82\n}`,
+  },
+  voice: {
+    endpoint: "POST /api/voice",
+    body: `{\n  "text": "Welcome to DigitalAIIndia",\n  "voice": "Priya"\n}`,
+    response: `{\n  "id": "voice_q1d9w2",\n  "audio_url": "https://...",\n  "duration_ms": 1840,\n  "voice": "Priya"\n}`,
+  },
+  design: {
+    endpoint: "POST /api/design",
+    body: `{\n  "prompt": "Generate a fintech app hero with saffron accents"\n}`,
+    response: `{\n  "id": "design_1m0za9",\n  "asset_url": "https://...",\n  "format": "png",\n  "size": "1536x1024"\n}`,
+  },
+  threeD: {
+    endpoint: "POST /api/three-d",
+    body: `{\n  "prompt": "Create a 3D product pedestal for a smart speaker"\n}`,
+    response: `{\n  "id": "three_d_0b4fkl",\n  "model_url": "https://...",\n  "format": "glb"\n}`,
+  },
+};
+
+/* ══════════════════════════════════════════════════════════════
+   Component
+══════════════════════════════════════════════════════════════ */
 export function DashboardShell({ user }: { user: DashboardUser }) {
   const params = useSearchParams();
   const initial = params.get("tab");
   const router = useRouter();
 
-  const [tab, setTab] = useState<Tab>(tabs.some((tabItem) => tabItem.id === initial) ? (initial as Tab) : "overview");
-  const [summary, setSummary] = useState<Summary | null>(null);
-  const [keys, setKeys] = useState<ApiKeyItem[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [show, setShow] = useState<Record<string, boolean>>({});
+  const [tab, setTab] = useState<Tab>(
+    tabs.some((t) => t.id === initial) ? (initial as Tab) : "overview"
+  );
+  const [summary, setSummary]       = useState<Summary | null>(null);
+  const [keys, setKeys]             = useState<ApiKeyItem[]>([]);
+  const [loading, setLoading]       = useState(true);
+  const [show, setShow]             = useState<Record<string, boolean>>({});
   const [activeKeyId, setActiveKeyId] = useState<string | null>(null);
   const [playgroundApi, setPlaygroundApi] = useState<"chat" | "voice" | "three-d" | "design">("chat");
-  const [prompt, setPrompt] = useState("Explain what an API gateway does.");
-  const [response, setResponse] = useState("Response will appear here...");
-  const [working, setWorking] = useState(false);
+  const [prompt, setPrompt]         = useState("Explain what an API gateway does.");
+  const [response, setResponse]     = useState("Response will appear here...");
+  const [working, setWorking]       = useState(false);
   const [newKeyName, setNewKeyName] = useState("");
-  const [notice, setNotice] = useState<string>("");
-  const [logs, setLogs] = useState<RequestLog[]>([]);
+  const [notice, setNotice]         = useState("");
+  const [logs, setLogs]             = useState<RequestLog[]>([]);
 
-  const activeKey = useMemo(() => keys.find((key) => key.id === activeKeyId) || keys[0], [keys, activeKeyId]);
+  const activeKey = useMemo(
+    () => keys.find((k) => k.id === activeKeyId) || keys[0],
+    [keys, activeKeyId]
+  );
+
+  const launchChecklist = useMemo(
+    () => [
+      { label: "Create your first API key",        done: keys.length > 0 },
+      { label: "Run a test request in Playground", done: logs.length > 0 },
+      { label: "Verify usage reporting",           done: Boolean(summary) },
+      { label: "Upgrade for production traffic",   done: (summary?.plan || user.plan) === "PRO" },
+    ],
+    [keys.length, logs.length, summary, user.plan]
+  );
+
   const usagePercent = useMemo(() => {
     if (!summary || summary.limit === 0) return 0;
     return Math.min(100, Math.round((summary.usage / summary.limit) * 100));
   }, [summary]);
 
+  /* ── Data ── */
   async function loadStats() {
-    const res = await fetch("/api/dashboard/stats", { cache: "no-store" });
-    if (res.status === 401) {
-      router.push("/auth");
-      return;
-    }
-    const data = await res.json();
-    setSummary(data.summary);
+    try {
+      const res = await fetch("/api/dashboard/stats", { cache: "no-store" });
+      if (res.status === 401) { router.push("/auth"); return; }
+      setSummary((await res.json()).summary);
+    } catch { setNotice("Unable to load dashboard metrics"); }
   }
 
   async function loadKeys() {
-    const res = await fetch("/api/keys", { cache: "no-store" });
-    if (res.status === 401) {
-      router.push("/auth");
-      return;
-    }
-    const data = await res.json();
-    setKeys(data.keys || []);
-    if (!activeKeyId && data.keys?.[0]?.id) {
-      setActiveKeyId(data.keys[0].id);
-    }
+    try {
+      const res = await fetch("/api/keys", { cache: "no-store" });
+      if (res.status === 401) { router.push("/auth"); return; }
+      const data = await res.json();
+      setKeys(data.keys || []);
+      if (!activeKeyId && data.keys?.[0]?.id) setActiveKeyId(data.keys[0].id);
+    } catch { setNotice("Unable to load API keys"); }
   }
 
   useEffect(() => {
-    async function boot() {
+    (async () => {
       setLoading(true);
       await Promise.all([loadStats(), loadKeys()]);
       setLoading(false);
-    }
-    boot();
+    })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    const timeout = setTimeout(() => setNotice(""), 2400);
-    return () => clearTimeout(timeout);
+    if (!notice) return;
+    const t = setTimeout(() => setNotice(""), 2600);
+    return () => clearTimeout(t);
   }, [notice]);
 
-  function selectTab(nextTab: Tab) {
-    setTab(nextTab);
-    router.replace(`/dashboard?tab=${nextTab}`);
+  function selectTab(next: Tab) {
+    setTab(next);
+    router.replace(`/dashboard?tab=${next}`);
   }
 
   async function createKey() {
-    const keyName = newKeyName.trim() || `Key ${keys.length + 1}`;
+    const name = newKeyName.trim() || `Key ${keys.length + 1}`;
     const res = await fetch("/api/keys", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name: keyName }),
+      body: JSON.stringify({ name }),
     });
     const data = await res.json();
-    if (!res.ok) {
-      setNotice(data.error || "Unable to create key");
-      return;
-    }
+    if (!res.ok) { setNotice(data.error || "Unable to create key"); return; }
     setNewKeyName("");
-    setNotice("API key generated successfully");
-    await loadKeys();
-    await loadStats();
+    setNotice("API key generated");
+    await Promise.all([loadKeys(), loadStats()]);
+    if (data.key?.id) setActiveKeyId(data.key.id);
   }
 
   async function deleteKey(id: string) {
     const res = await fetch(`/api/keys/${id}`, { method: "DELETE" });
-    if (!res.ok) {
-      const data = await res.json();
-      setNotice(data.error || "Unable to delete key");
-      return;
-    }
+    if (!res.ok) { const d = await res.json(); setNotice(d.error || "Unable to delete key"); return; }
     setNotice("API key deleted");
-    await loadKeys();
-    await loadStats();
+    await Promise.all([loadKeys(), loadStats()]);
   }
 
   async function runPlayground() {
-    if (!activeKey?.fullKey) {
-      setNotice("Create an API key first");
-      return;
-    }
-
+    if (!activeKey?.fullKey) { setNotice("Create an API key first"); return; }
     setWorking(true);
     setResponse("Loading...");
-    const startedAt = Date.now();
-
+    const t0 = Date.now();
     try {
       const body =
-        playgroundApi === "chat"
-          ? { prompt }
-          : playgroundApi === "voice"
-            ? { text: prompt, voice: "Priya" }
-            : { prompt };
-
+        playgroundApi === "chat"  ? { prompt } :
+        playgroundApi === "voice" ? { text: prompt, voice: "Priya" } :
+        { prompt };
       const res = await fetch(`/api/${playgroundApi}`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${activeKey.fullKey}`,
-        },
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${activeKey.fullKey}` },
         body: JSON.stringify(body),
       });
-
       const data = await res.json();
-      const pretty = JSON.stringify(data, null, 2);
-      const latencyMs = Date.now() - startedAt;
-      setResponse(res.ok ? pretty : `Error:\n${pretty}`);
-      setLogs((prev) => [
-        {
-          id: crypto.randomUUID(),
-          api: playgroundApi,
-          status: res.status,
-          keyName: activeKey.name,
-          latencyMs,
-          timestamp: new Date().toISOString(),
-        },
-        ...prev,
-      ]);
-
-      await loadStats();
-      await loadKeys();
-    } catch {
-      setResponse("Network error while testing API.");
-    } finally {
-      setWorking(false);
-    }
+      const latencyMs = Date.now() - t0;
+      setResponse(res.ok ? JSON.stringify(data, null, 2) : `Error:\n${JSON.stringify(data, null, 2)}`);
+      setLogs((prev) => [{
+        id: crypto.randomUUID(), api: playgroundApi, status: res.status,
+        keyName: activeKey.name, latencyMs, timestamp: new Date().toISOString(),
+      }, ...prev]);
+      await Promise.all([loadStats(), loadKeys()]);
+    } catch { setResponse("Network error while testing API."); }
+    finally { setWorking(false); }
   }
 
   async function logout() {
@@ -207,234 +271,366 @@ export function DashboardShell({ user }: { user: DashboardUser }) {
     router.refresh();
   }
 
-  function copyValue(value: string, label: string) {
-    navigator.clipboard.writeText(value).then(() => setNotice(`${label} copied`));
+  async function copy(value: string, label: string) {
+    try { await navigator.clipboard.writeText(value); setNotice(`${label} copied`); }
+    catch { setNotice(`Unable to copy ${label.toLowerCase()}`); }
   }
 
+  /* ─────────────── render ─────────────── */
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100">
-      <div className="sticky top-0 z-30 border-b border-white/10 bg-slate-950/90 px-4 py-3 backdrop-blur">
-        <div className="mx-auto flex max-w-7xl items-center justify-between">
-          <div>
-            <p className="text-lg font-semibold tracking-tight">platform.digitalaiindia.com</p>
-            <p className="text-xs text-slate-400">{user.email}</p>
+    <div className={`${syne.variable} ${outfit.variable} ${styles.shell}`}>
+
+      {/* ── Nav ── */}
+      <header className={styles.nav}>
+        <Link href="/" className={styles.navLogo}>
+          <div className={styles.navLogoIcon}><LogoIcon /></div>
+          Digital<span style={{ color: "var(--dai-accent)" }}>AI</span>India
+        </Link>
+
+        <div className={styles.navRight}>
+          <div className={styles.navUser}>
+            <span className={styles.navUserName}>{user.name}</span>
+            <span className={styles.navUserEmail}>{user.email}</span>
           </div>
-          <div className="flex items-center gap-2">
-            <span className="rounded-md border border-emerald-400/20 bg-emerald-500/10 px-2 py-1 text-xs text-emerald-300">Production Ready</span>
-            <button onClick={logout} className="rounded-lg border border-white/20 px-3 py-2 text-sm hover:bg-white/10">
-              Sign out
+          <span className={styles.navBadge}>Production Ready</span>
+          <ThemeToggle />
+          <button className={styles.btnGhost} onClick={logout}>Sign out</button>
+        </div>
+      </header>
+
+      {/* ── Mobile tab bar ── */}
+      <div className={styles.mobileTabs}>
+        <div className={styles.mobileTabsInner}>
+          {tabs.map((t) => (
+            <button
+              key={t.id}
+              className={`${styles.mobileTab} ${tab === t.id ? styles.mobileTabActive : ""}`}
+              onClick={() => selectTab(t.id)}
+            >
+              {t.label}
             </button>
-          </div>
+          ))}
         </div>
       </div>
 
-      <div className="mx-auto grid max-w-7xl gap-6 px-4 py-6 lg:grid-cols-[240px_1fr]">
-        <aside className="rounded-2xl border border-white/10 bg-slate-900/60 p-3">
-          <nav className="space-y-1">
-            {tabs.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => selectTab(item.id)}
-                className={`w-full rounded-lg px-3 py-2 text-left text-sm ${
-                  tab === item.id ? "bg-blue-500 text-white" : "text-slate-300 hover:bg-white/10"
-                }`}
-              >
-                {item.label}
-              </button>
-            ))}
+      {/* ── Mobile plan bar ── */}
+      <div className={styles.mobilePlanBar}>
+        <span className={styles.mobilePlanText}>
+          {summary?.plan || user.plan} · {summary?.usage ?? 0}/{summary?.limit ?? user.monthlyLimit}
+        </span>
+        <div className={styles.progressBar}>
+          <div className={styles.progressFill} style={{ width: `${usagePercent}%` }} />
+        </div>
+        <span className={styles.mobilePlanText}>{usagePercent}%</span>
+      </div>
+
+      {/* ── Body ── */}
+      <div className={styles.body}>
+
+        {/* Sidebar */}
+        <aside className={styles.sidebar}>
+          <nav className={styles.sideNav}>
+            {tabs.map((t) => {
+              const Icon = t.icon;
+              return (
+                <button
+                  key={t.id}
+                  className={`${styles.sideTab} ${tab === t.id ? styles.sideTabActive : ""}`}
+                  onClick={() => selectTab(t.id)}
+                >
+                  <Icon />
+                  {t.label}
+                </button>
+              );
+            })}
           </nav>
 
-          <div className="mt-6 rounded-xl border border-white/10 bg-slate-950 p-3">
-            <p className="text-xs text-slate-400">Current Plan</p>
-            <p className="mt-1 text-sm font-semibold">{summary?.plan || user.plan}</p>
-            <div className="mt-3 h-2 rounded-full bg-slate-800">
-              <div className="h-2 rounded-full bg-blue-500" style={{ width: `${usagePercent}%` }} />
+          <div className={styles.planCard}>
+            <p className={styles.planLabel}>Current Plan</p>
+            <p className={styles.planName}>{summary?.plan || user.plan}</p>
+            <div className={styles.progressBar}>
+              <div className={styles.progressFill} style={{ width: `${usagePercent}%` }} />
             </div>
-            <p className="mt-2 text-xs text-slate-400">{summary?.usage ?? 0} / {summary?.limit ?? user.monthlyLimit} requests</p>
+            <p className={styles.planUsage}>
+              {summary?.usage ?? 0} / {summary?.limit ?? user.monthlyLimit} requests
+            </p>
           </div>
         </aside>
 
-        <section className="rounded-2xl border border-white/10 bg-slate-900/60 p-5">
-          {notice ? <div className="mb-4 rounded-lg border border-blue-400/30 bg-blue-500/10 px-3 py-2 text-sm text-blue-200">{notice}</div> : null}
-          {loading ? <p className="text-sm text-slate-300">Loading dashboard...</p> : null}
+        {/* Main */}
+        <main className={styles.main}>
+          {notice && <div className={styles.notice}>{notice}</div>}
 
-          {!loading && tab === "overview" ? (
-            <div className="space-y-5">
-              <div className="flex items-center justify-between">
+          {loading && (
+            <div className={styles.loading}>
+              <span className={styles.spinner} />
+              Loading dashboard…
+            </div>
+          )}
+
+          {/* ── Overview ── */}
+          {!loading && tab === "overview" && (
+            <div>
+              <div className={styles.sectionHead}>
                 <div>
-                  <h2 className="text-2xl font-semibold">Welcome back, {user.name}</h2>
-                  <p className="text-sm text-slate-400">Monitor usage, key health, and API performance from one place.</p>
+                  <h2 className={styles.sectionTitle}>Welcome back, {user.name}</h2>
+                  <p className={styles.sectionSub}>Monitor usage, key health, and API performance.</p>
                 </div>
-                <button
-                  onClick={() => selectTab("playground")}
-                  className="rounded-lg bg-blue-500 px-4 py-2 text-sm font-medium hover:bg-blue-400"
-                >
+                <button className={styles.btnPrimary} onClick={() => selectTab("playground")}>
                   Open Playground
                 </button>
               </div>
 
-              <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
-                <div className="rounded-xl border border-white/10 bg-slate-950 p-4">
-                  <p className="text-xs uppercase tracking-wide text-slate-400">Monthly Usage</p>
-                  <p className="mt-1 text-2xl font-semibold">{summary?.usage ?? 0}</p>
-                  <p className="text-xs text-slate-500">of {summary?.limit ?? user.monthlyLimit}</p>
+              {/* Stat cards */}
+              <div className={styles.statGrid}>
+                <div className={styles.statCard}>
+                  <p className={styles.statLabel}>Monthly Usage</p>
+                  <p className={styles.statVal}>{summary?.usage ?? 0}</p>
+                  <p className={styles.statSub}>of {summary?.limit ?? user.monthlyLimit}</p>
                 </div>
-                <div className="rounded-xl border border-white/10 bg-slate-950 p-4">
-                  <p className="text-xs uppercase tracking-wide text-slate-400">Remaining</p>
-                  <p className="mt-1 text-2xl font-semibold">{summary?.remaining ?? user.monthlyLimit}</p>
-                  <p className="text-xs text-slate-500">resets monthly</p>
+                <div className={styles.statCard}>
+                  <p className={styles.statLabel}>Remaining</p>
+                  <p className={styles.statVal}>{summary?.remaining ?? user.monthlyLimit}</p>
+                  <p className={styles.statSub}>resets monthly</p>
                 </div>
-                <div className="rounded-xl border border-white/10 bg-slate-950 p-4">
-                  <p className="text-xs uppercase tracking-wide text-slate-400">Active Keys</p>
-                  <p className="mt-1 text-2xl font-semibold">{summary?.activeKeys ?? 0}</p>
-                  <p className="text-xs text-slate-500">securely managed</p>
+                <div className={styles.statCard}>
+                  <p className={styles.statLabel}>Active Keys</p>
+                  <p className={styles.statVal}>{summary?.activeKeys ?? 0}</p>
+                  <p className={styles.statSub}>securely managed</p>
                 </div>
-                <div className="rounded-xl border border-white/10 bg-slate-950 p-4">
-                  <p className="text-xs uppercase tracking-wide text-slate-400">Success Rate</p>
-                  <p className="mt-1 text-2xl font-semibold">{logs.length ? `${Math.round((logs.filter((l) => l.status < 400).length / logs.length) * 100)}%` : "100%"}</p>
-                  <p className="text-xs text-slate-500">last {Math.max(logs.length, 1)} requests</p>
+                <div className={styles.statCard}>
+                  <p className={styles.statLabel}>Success Rate</p>
+                  <p className={styles.statVal}>
+                    {logs.length
+                      ? `${Math.round((logs.filter((l) => l.status < 400).length / logs.length) * 100)}%`
+                      : "100%"}
+                  </p>
+                  <p className={styles.statSub}>last {Math.max(logs.length, 1)} requests</p>
                 </div>
               </div>
 
-              <div className="grid gap-4 lg:grid-cols-2">
-                <div className="rounded-xl border border-white/10 bg-slate-950 p-4">
-                  <p className="text-sm font-medium">Usage Progress</p>
-                  <div className="mt-3 h-2 rounded-full bg-slate-800">
-                    <div className="h-2 rounded-full bg-gradient-to-r from-blue-500 to-indigo-500" style={{ width: `${usagePercent}%` }} />
+              {/* Usage + Quick actions */}
+              <div className={styles.grid2}>
+                <div className={styles.card}>
+                  <p className={styles.cardTitle}>Usage Progress</p>
+                  <div className={styles.progressBar} style={{ marginTop: "0.75rem", height: 7 }}>
+                    <div className={styles.progressFill} style={{ width: `${usagePercent}%` }} />
                   </div>
-                  <p className="mt-2 text-xs text-slate-400">{usagePercent}% consumed in {summary?.period || "current month"}</p>
+                  <p className={styles.statSub} style={{ marginTop: "0.5rem" }}>
+                    {usagePercent}% consumed in {summary?.period || "current month"}
+                  </p>
+                </div>
+                <div className={styles.card}>
+                  <p className={styles.cardTitle}>Quick Actions</p>
+                  <div className={styles.quickGrid}>
+                    <button className={styles.quickBtn} onClick={() => selectTab("keys")}>Generate API key</button>
+                    <button className={styles.quickBtn} onClick={() => selectTab("docs")}>Open docs</button>
+                    <button className={styles.quickBtn} onClick={() => selectTab("billing")}>Manage plan</button>
+                    <button className={styles.quickBtn} onClick={() => selectTab("logs")}>View logs</button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Checklist + Platform status */}
+              <div className={`${styles.grid2} ${styles.grid2Alt}`}>
+                <div className={styles.card}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "0.5rem" }}>
+                    <div>
+                      <p className={styles.cardTitle}>Launch Checklist</p>
+                      <p className={styles.cardMeta} style={{ marginBottom: 0 }}>Everything you need before production traffic.</p>
+                    </div>
+                    <span style={{ fontSize: "0.6875rem", color: "var(--dai-text3)" }}>
+                      {launchChecklist.filter((i) => i.done).length}/{launchChecklist.length} complete
+                    </span>
+                  </div>
+                  <div className={styles.checklist}>
+                    {launchChecklist.map((item) => (
+                      <div key={item.label} className={styles.checkRow}>
+                        <div className={styles.checkLeft}>
+                          <span className={`${styles.checkDot} ${item.done ? styles.checkDotDone : styles.checkDotPending}`}>
+                            {item.done ? "✓" : "·"}
+                          </span>
+                          <span className={styles.checkLabel}>{item.label}</span>
+                        </div>
+                        <span className={`${styles.checkStatus} ${item.done ? styles.checkStatusDone : styles.checkStatusPending}`}>
+                          {item.done ? "Done" : "Pending"}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
 
-                <div className="rounded-xl border border-white/10 bg-slate-950 p-4">
-                  <p className="text-sm font-medium">Quick Actions</p>
-                  <div className="mt-3 grid gap-2 sm:grid-cols-2">
-                    <button onClick={() => selectTab("keys")} className="rounded-lg border border-white/15 px-3 py-2 text-sm hover:bg-white/10">Generate API key</button>
-                    <button onClick={() => selectTab("docs")} className="rounded-lg border border-white/15 px-3 py-2 text-sm hover:bg-white/10">Open docs</button>
-                    <button onClick={() => selectTab("billing")} className="rounded-lg border border-white/15 px-3 py-2 text-sm hover:bg-white/10">Manage plan</button>
-                    <button onClick={() => selectTab("logs")} className="rounded-lg border border-white/15 px-3 py-2 text-sm hover:bg-white/10">View logs</button>
+                <div className={styles.card}>
+                  <p className={styles.cardTitle}>Platform Status</p>
+                  <div style={{ marginTop: "0.75rem" }}>
+                    <div className={`${styles.statusItem} ${styles.cardOk}`}>
+                      <p className={styles.statusTitle} style={{ color: "var(--dai-accent3)" }}>API Gateway</p>
+                      <p className={styles.statusBody}>Healthy — accepting authenticated requests.</p>
+                    </div>
+                    <div className={`${styles.statusItem} ${styles.cardAccent}`}>
+                      <p className={styles.statusTitle} style={{ color: "var(--dai-accent)" }}>Developer Experience</p>
+                      <p className={styles.statusBody}>Auth, logging, playground, and key management are live.</p>
+                    </div>
+                    <div className={`${styles.statusItem} ${styles.cardWarn}`}>
+                      <p className={styles.statusTitle} style={{ color: "#B87A00" }}>Next Step</p>
+                      <p className={styles.statusBody}>
+                        {keys.length === 0
+                          ? "Generate your first key to begin integration."
+                          : logs.length === 0
+                          ? "Run a playground request to validate your stack."
+                          : "Connect your app and monitor usage from Request Logs."}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          ) : null}
+          )}
 
-          {!loading && tab === "keys" ? (
-            <div className="space-y-4">
-              <div className="flex flex-wrap items-center justify-between gap-3">
+          {/* ── API Keys ── */}
+          {!loading && tab === "keys" && (
+            <div>
+              <div className={styles.keyHeader}>
                 <div>
-                  <h2 className="text-xl font-semibold">API Key Management</h2>
-                  <p className="text-sm text-slate-400">Create and rotate keys for services and environments.</p>
+                  <h2 className={styles.sectionTitle}>API Key Management</h2>
+                  <p className={styles.sectionSub}>Create and rotate keys for services and environments.</p>
                 </div>
-                <div className="flex gap-2">
+                <div className={styles.keyForm}>
                   <input
+                    className={`${styles.input} ${styles.keyFormInput}`}
                     value={newKeyName}
                     onChange={(e) => setNewKeyName(e.target.value)}
                     placeholder="Key name (e.g. Production)"
-                    className="rounded-lg border border-white/20 bg-slate-950 px-3 py-2 text-sm"
+                    onKeyDown={(e) => e.key === "Enter" && createKey()}
                   />
-                  <button onClick={createKey} className="rounded-lg bg-blue-500 px-3 py-2 text-sm font-medium hover:bg-blue-400">Generate</button>
+                  <button className={styles.btnPrimary} onClick={createKey}>Generate</button>
                 </div>
               </div>
 
               {keys.length === 0 ? (
-                <div className="rounded-xl border border-dashed border-white/20 p-8 text-center text-sm text-slate-300">
+                <div className={styles.emptyState}>
                   No API keys yet. Create your first key to start calling APIs.
                 </div>
               ) : (
-                <div className="space-y-3">
+                <div>
                   {keys.map((key) => (
-                    <div key={key.id} className="rounded-xl border border-white/10 bg-slate-950 p-4">
-                      <div className="flex flex-wrap items-center justify-between gap-3">
+                    <div key={key.id} className={styles.keyCard}>
+                      <div className={styles.keyCardTop}>
                         <div>
-                          <div className="flex items-center gap-2">
-                            <p className="font-medium">{key.name}</p>
-                            {activeKeyId === key.id ? (
-                              <span className="rounded bg-emerald-500/20 px-2 py-0.5 text-xs text-emerald-300">Active</span>
-                            ) : null}
+                          <div className={styles.keyName}>
+                            {key.name}
+                            {activeKeyId === key.id && <span className={styles.activeBadge}>Active</span>}
                           </div>
-                          <p className="text-xs text-slate-400">Requests: {key.requests} · Created: {new Date(key.createdAt).toLocaleDateString()}</p>
+                          <p className={styles.keyMeta}>
+                            {key.requests} requests · Created {new Date(key.createdAt).toLocaleDateString()}
+                            {key.lastUsedAt ? ` · Last used ${new Date(key.lastUsedAt).toLocaleDateString()}` : ""}
+                          </p>
                         </div>
-                        <div className="flex items-center gap-2">
-                          <button onClick={() => setActiveKeyId(key.id)} className="rounded-lg border border-white/20 px-2 py-1 text-xs hover:bg-white/10">Use</button>
-                          <button onClick={() => setShow((prev) => ({ ...prev, [key.id]: !prev[key.id] }))} className="rounded-lg border border-white/20 px-2 py-1 text-xs hover:bg-white/10">{show[key.id] ? "Hide" : "Show"}</button>
-                          <button onClick={() => copyValue(key.fullKey, "API key")} className="rounded-lg border border-white/20 px-2 py-1 text-xs hover:bg-white/10">Copy</button>
-                          <button onClick={() => deleteKey(key.id)} className="rounded-lg border border-red-400/40 px-2 py-1 text-xs text-red-300">Delete</button>
+                        <div className={styles.keyActions}>
+                          <button className={styles.btnSm} onClick={() => setActiveKeyId(key.id)}>Use</button>
+                          <button className={styles.btnSm} onClick={() => setShow((p) => ({ ...p, [key.id]: !p[key.id] }))}>
+                            {show[key.id] ? "Hide" : "Show"}
+                          </button>
+                          <button className={styles.btnSm} onClick={() => copy(key.fullKey, "API key")}>
+                            <CopyIcon />
+                          </button>
+                          <button className={styles.btnDanger} onClick={() => deleteKey(key.id)}>Delete</button>
                         </div>
                       </div>
-                      <p className="mt-3 break-all rounded-lg bg-slate-900 px-3 py-2 font-mono text-xs text-slate-300">{show[key.id] ? key.fullKey : key.masked}</p>
+                      <div className={styles.keyValue}>{show[key.id] ? key.fullKey : key.masked}</div>
                     </div>
                   ))}
                 </div>
               )}
             </div>
-          ) : null}
+          )}
 
-          {!loading && tab === "playground" ? (
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <h2 className="text-xl font-semibold">API Playground</h2>
-                <span className="text-xs text-slate-400">Using key: {activeKey?.name || "None"}</span>
+          {/* ── Playground ── */}
+          {!loading && tab === "playground" && (
+            <div>
+              <div className={styles.sectionHead}>
+                <div>
+                  <h2 className={styles.sectionTitle}>API Playground</h2>
+                  <p className={styles.sectionSub}>Using key: {activeKey?.name || "None selected"}</p>
+                </div>
               </div>
 
-              <div className="grid gap-2 sm:grid-cols-4">
+              <div className={styles.apiTabs}>
                 {(["chat", "voice", "three-d", "design"] as const).map((name) => (
                   <button
                     key={name}
+                    className={`${styles.apiTab} ${playgroundApi === name ? styles.apiTabActive : ""}`}
                     onClick={() => setPlaygroundApi(name)}
-                    className={`rounded-lg px-3 py-2 text-sm capitalize ${
-                      playgroundApi === name ? "bg-blue-500 text-white" : "border border-white/20 text-slate-300"
-                    }`}
                   >
                     {name}
                   </button>
                 ))}
               </div>
 
-              <div className="rounded-xl border border-white/10 bg-slate-950 p-4">
-                <textarea value={prompt} onChange={(e) => setPrompt(e.target.value)} className="h-28 w-full rounded-lg border border-white/20 bg-slate-900 px-3 py-2" />
-                <div className="mt-3 flex items-center justify-between">
-                  <p className="text-xs text-slate-400">Endpoint: /api/{playgroundApi}</p>
-                  <button onClick={runPlayground} disabled={working} className="rounded-lg bg-blue-500 px-4 py-2 text-sm font-medium hover:bg-blue-400 disabled:opacity-60">{working ? "Running..." : "Run request"}</button>
+              <div className={styles.card} style={{ marginBottom: "1rem" }}>
+                <textarea
+                  className={styles.textarea}
+                  style={{ height: 112 }}
+                  value={prompt}
+                  onChange={(e) => setPrompt(e.target.value)}
+                />
+                <div className={styles.playFooter}>
+                  <span className={styles.playEndpoint}>POST /api/{playgroundApi}</span>
+                  <button className={styles.btnPrimary} onClick={runPlayground} disabled={working}>
+                    {working ? (
+                      <><span className={styles.spinner} style={{ width: 13, height: 13, borderWidth: 2 }} /> Running…</>
+                    ) : "Run request"}
+                  </button>
                 </div>
               </div>
 
-              <pre className="overflow-x-auto rounded-xl border border-white/10 bg-slate-950 p-4 text-xs text-slate-200">{response}</pre>
+              <pre className={styles.preBlock}>{response}</pre>
             </div>
-          ) : null}
+          )}
 
-          {!loading && tab === "logs" ? (
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <h2 className="text-xl font-semibold">Request Logs</h2>
-                <button onClick={() => setLogs([])} className="rounded-lg border border-white/20 px-3 py-2 text-sm hover:bg-white/10">Clear</button>
+          {/* ── Logs ── */}
+          {!loading && tab === "logs" && (
+            <div>
+              <div className={styles.sectionHead}>
+                <div>
+                  <h2 className={styles.sectionTitle}>Request Logs</h2>
+                  <p className={styles.sectionSub}>API requests made from Playground.</p>
+                </div>
+                {logs.length > 0 && (
+                  <button className={styles.btnGhost} onClick={() => setLogs([])}>Clear logs</button>
+                )}
               </div>
 
               {logs.length === 0 ? (
-                <div className="rounded-xl border border-dashed border-white/20 p-8 text-center text-sm text-slate-300">
-                  No request logs yet. Run requests from Playground to populate logs.
+                <div className={styles.emptyState}>
+                  No request logs yet. Run requests from Playground to see logs here.
                 </div>
               ) : (
-                <div className="overflow-x-auto rounded-xl border border-white/10">
-                  <table className="min-w-full text-sm">
-                    <thead className="bg-slate-950/80 text-slate-400">
+                <div className={styles.tableWrap}>
+                  <table className={styles.table}>
+                    <thead>
                       <tr>
-                        <th className="px-4 py-3 text-left font-medium">Time</th>
-                        <th className="px-4 py-3 text-left font-medium">API</th>
-                        <th className="px-4 py-3 text-left font-medium">Status</th>
-                        <th className="px-4 py-3 text-left font-medium">Latency</th>
-                        <th className="px-4 py-3 text-left font-medium">Key</th>
+                        <th>Time</th>
+                        <th>API</th>
+                        <th>Status</th>
+                        <th>Latency</th>
+                        <th>Key</th>
                       </tr>
                     </thead>
                     <tbody>
                       {logs.map((log) => (
-                        <tr key={log.id} className="border-t border-white/10">
-                          <td className="px-4 py-3">{new Date(log.timestamp).toLocaleString()}</td>
-                          <td className="px-4 py-3 uppercase">{log.api}</td>
-                          <td className="px-4 py-3">
-                            <span className={`rounded px-2 py-1 text-xs ${log.status < 400 ? "bg-emerald-500/20 text-emerald-300" : "bg-red-500/20 text-red-300"}`}>{log.status}</span>
+                        <tr key={log.id}>
+                          <td>{new Date(log.timestamp).toLocaleTimeString()}</td>
+                          <td style={{ fontFamily: "var(--font-mono, monospace)", textTransform: "uppercase", fontSize: "0.75rem" }}>
+                            {log.api}
                           </td>
-                          <td className="px-4 py-3">{log.latencyMs}ms</td>
-                          <td className="px-4 py-3">{log.keyName}</td>
+                          <td>
+                            <span className={log.status < 400 ? styles.statusOk : styles.statusErr}>
+                              {log.status}
+                            </span>
+                          </td>
+                          <td>{log.latencyMs}ms</td>
+                          <td>{log.keyName}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -442,63 +638,143 @@ export function DashboardShell({ user }: { user: DashboardUser }) {
                 </div>
               )}
             </div>
-          ) : null}
+          )}
 
-          {!loading && tab === "billing" ? (
-            <div className="space-y-4">
-              <h2 className="text-xl font-semibold">Billing & Plan</h2>
-              <div className="grid gap-4 lg:grid-cols-3">
-                <div className="rounded-xl border border-white/10 bg-slate-950 p-4">
-                  <p className="text-xs text-slate-400">Current Plan</p>
-                  <p className="mt-1 text-2xl font-semibold">{summary?.plan || user.plan}</p>
-                  <p className="mt-1 text-xs text-slate-500">Monthly limit: {summary?.limit ?? user.monthlyLimit}</p>
+          {/* ── Billing ── */}
+          {!loading && tab === "billing" && (
+            <div>
+              <h2 className={styles.sectionTitle} style={{ marginBottom: "1.25rem" }}>Billing & Plan</h2>
+              <div className={styles.billingGrid}>
+                <div className={styles.card}>
+                  <p className={styles.rowLabel}>Current Plan</p>
+                  <p style={{ fontFamily: "var(--font-syne, sans-serif)", fontSize: "1.75rem", fontWeight: 800, letterSpacing: "-0.03em", color: "var(--dai-text)", margin: "0.25rem 0 0.25rem" }}>
+                    {summary?.plan || user.plan}
+                  </p>
+                  <p className={styles.statSub}>Monthly limit: {summary?.limit ?? user.monthlyLimit} requests</p>
+                  <div className={styles.progressBar} style={{ marginTop: "0.875rem", height: 6 }}>
+                    <div className={styles.progressFill} style={{ width: `${usagePercent}%` }} />
+                  </div>
+                  <p className={styles.planUsage} style={{ marginTop: "0.375rem" }}>
+                    {summary?.usage ?? 0} of {summary?.limit ?? user.monthlyLimit} used
+                  </p>
                 </div>
-                <div className="rounded-xl border border-blue-400/20 bg-blue-500/10 p-4 lg:col-span-2">
-                  <p className="text-sm font-medium">Upgrade to Pro</p>
-                  <p className="mt-1 text-sm text-slate-300">Get higher limits, dedicated support, and team controls for production workloads.</p>
-                  <button className="mt-3 rounded-lg bg-blue-500 px-4 py-2 text-sm font-medium hover:bg-blue-400">Contact Sales</button>
+
+                <div className={`${styles.card} ${styles.cardAccent}`}>
+                  <p className={styles.cardTitle}>Upgrade to Pro</p>
+                  <p className={styles.cardMeta}>
+                    Higher limits, dedicated support, and team controls for production workloads.
+                  </p>
+                  <ul style={{ margin: "0.75rem 0", padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: "0.375rem" }}>
+                    {["10,000 requests/month", "Priority support", "Team API key management", "Custom rate limits", "SLA guarantee"].map((f) => (
+                      <li key={f} style={{ fontSize: "0.8125rem", color: "var(--dai-text2)", display: "flex", gap: "0.5rem" }}>
+                        <span style={{ color: "var(--dai-accent3)", fontWeight: 700 }}>✓</span> {f}
+                      </li>
+                    ))}
+                  </ul>
+                  <button className={styles.btnPrimary} style={{ marginTop: "0.5rem" }}>Contact Sales</button>
                 </div>
               </div>
             </div>
-          ) : null}
+          )}
 
-          {!loading && tab === "docs" ? (
-            <div className="space-y-3">
-              <h2 className="text-xl font-semibold">Developer Docs</h2>
-              <p className="text-sm text-slate-300">Authentication Header</p>
-              <pre className="overflow-x-auto rounded-xl border border-white/10 bg-slate-950 p-4 text-xs text-slate-200">{`Authorization: Bearer dai_your_api_key`}</pre>
-              <p className="text-sm text-slate-300">Chat API</p>
-              <pre className="overflow-x-auto rounded-xl border border-white/10 bg-slate-950 p-4 text-xs text-slate-200">{`POST /api/chat\n{ "prompt": "Explain transformers" }`}</pre>
-              <p className="text-sm text-slate-300">Voice API</p>
-              <pre className="overflow-x-auto rounded-xl border border-white/10 bg-slate-950 p-4 text-xs text-slate-200">{`POST /api/voice\n{ "text": "Hello", "voice": "Priya" }`}</pre>
+          {/* ── Docs ── */}
+          {!loading && tab === "docs" && (
+            <div>
+              <h2 className={styles.sectionTitle} style={{ marginBottom: "0.375rem" }}>Developer Docs</h2>
+              <p className={styles.sectionSub} style={{ marginBottom: "1.25rem" }}>
+                All APIs use bearer auth and JSON-first requests.
+              </p>
+
+              <div className={styles.grid2} style={{ marginBottom: "1rem" }}>
+                <div className={styles.card}>
+                  <p className={styles.cardTitle}>Authentication Header</p>
+                  <p className={styles.cardMeta}>Use your active API key in every request.</p>
+                  <pre className={styles.preBlock}>{`Authorization: Bearer dai_your_api_key`}</pre>
+                </div>
+                <div className={styles.card}>
+                  <p className={styles.cardTitle}>Base URL</p>
+                  <p className={styles.cardMeta}>Call from frontend, backend, or internal tooling.</p>
+                  <pre className={styles.preBlock}>{`https://platform.digitalaiindia.com`}</pre>
+                </div>
+              </div>
+
+              <div className={styles.docsGrid}>
+                {[
+                  { title: "Chat API",   ex: docsExamples.chat },
+                  { title: "Voice API",  ex: docsExamples.voice },
+                  { title: "Design API", ex: docsExamples.design },
+                  { title: "3D API",     ex: docsExamples.threeD },
+                ].map(({ title, ex }) => (
+                  <div key={title} className={styles.card}>
+                    <p className={styles.cardTitle}>{title}</p>
+                    <p className={styles.cardMeta}>{ex.endpoint}</p>
+                    <p className={styles.rowLabel} style={{ marginBottom: "0.375rem" }}>Request</p>
+                    <pre className={styles.preBlock} style={{ marginBottom: "0.75rem" }}>{ex.body}</pre>
+                    <p className={styles.rowLabel} style={{ marginBottom: "0.375rem" }}>Response</p>
+                    <pre className={styles.preBlock}>{ex.response}</pre>
+                  </div>
+                ))}
+              </div>
+
+              <div className={styles.card} style={{ marginTop: "1rem" }}>
+                <p className={styles.cardTitle}>cURL Example</p>
+                <pre className={styles.preBlock} style={{ marginTop: "0.75rem" }}>{`curl -X POST https://platform.digitalaiindia.com/api/chat \\
+  -H "Authorization: Bearer dai_your_api_key" \\
+  -H "Content-Type: application/json" \\
+  -d '{ "prompt": "Explain transformers" }'`}</pre>
+              </div>
             </div>
-          ) : null}
+          )}
 
-          {!loading && tab === "settings" ? (
-            <div className="space-y-4">
-              <h2 className="text-xl font-semibold">Platform Settings</h2>
-              <div className="grid gap-4 lg:grid-cols-2">
-                <div className="rounded-xl border border-white/10 bg-slate-950 p-4">
-                  <p className="text-sm font-medium">Webhook Endpoint</p>
-                  <p className="mt-1 text-xs text-slate-400">Use this URL to receive async event notifications.</p>
-                  <div className="mt-3 flex items-center gap-2 rounded-lg border border-white/10 bg-slate-900 px-3 py-2 font-mono text-xs">
-                    <span className="truncate">https://platform.digitalaiindia.com/webhooks/events</span>
-                    <button onClick={() => copyValue("https://platform.digitalaiindia.com/webhooks/events", "Webhook URL")} className="rounded border border-white/20 px-2 py-1">Copy</button>
+          {/* ── Settings ── */}
+          {!loading && tab === "settings" && (
+            <div>
+              <h2 className={styles.sectionTitle} style={{ marginBottom: "1.25rem" }}>Platform Settings</h2>
+              <div className={styles.settingsGrid}>
+                <div className={styles.card}>
+                  <p className={styles.cardTitle}>Webhook Endpoint</p>
+                  <p className={styles.cardMeta}>Receive async event notifications at this URL.</p>
+                  <div className={styles.inlineRow}>
+                    <span>https://platform.digitalaiindia.com/webhooks/events</span>
+                    <button
+                      className={styles.btnSm}
+                      onClick={() => copy("https://platform.digitalaiindia.com/webhooks/events", "Webhook URL")}
+                    >
+                      <CopyIcon />
+                    </button>
                   </div>
                 </div>
 
-                <div className="rounded-xl border border-white/10 bg-slate-950 p-4">
-                  <p className="text-sm font-medium">Allowed Origins</p>
-                  <p className="mt-1 text-xs text-slate-400">For browser-based SDK requests.</p>
+                <div className={styles.card}>
+                  <p className={styles.cardTitle}>Allowed Origins</p>
+                  <p className={styles.cardMeta}>For browser-based SDK requests (CORS).</p>
                   <textarea
+                    className={styles.textarea}
+                    style={{ height: 80, marginTop: "0.75rem" }}
                     defaultValue={"https://app.digitalaiindia.com\nhttps://admin.digitalaiindia.com"}
-                    className="mt-3 h-24 w-full rounded-lg border border-white/20 bg-slate-900 px-3 py-2 text-xs"
                   />
+                </div>
+
+                <div className={styles.card}>
+                  <p className={styles.cardTitle}>Appearance</p>
+                  <p className={styles.cardMeta}>Toggle between light and dark mode.</p>
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginTop: "0.75rem" }}>
+                    <ThemeToggle />
+                    <span style={{ fontSize: "0.8125rem", color: "var(--dai-text2)" }}>Light / Dark</span>
+                  </div>
+                </div>
+
+                <div className={styles.card}>
+                  <p className={styles.cardTitle}>Account</p>
+                  <p className={styles.cardMeta}>Signed in as {user.email}</p>
+                  <button className={`${styles.btnGhost} ${styles.btnDanger}`} style={{ marginTop: "0.75rem" }} onClick={logout}>
+                    Sign out
+                  </button>
                 </div>
               </div>
             </div>
-          ) : null}
-        </section>
+          )}
+        </main>
       </div>
     </div>
   );

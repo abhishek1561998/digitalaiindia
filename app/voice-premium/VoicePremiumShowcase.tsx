@@ -11,10 +11,18 @@ import { useMutation } from "convex/react";
 import { Id } from "@/convex/_generated/dataModel";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Mic, Volume2, Zap, Globe2, Settings, MessageSquare, BarChart3, Smartphone, Shield, Rocket } from "lucide-react";
+import { Mic, Zap, Settings, MessageSquare, BarChart3, Smartphone, Shield, Rocket } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function VoicePremiumShowcase() {
+  return (
+    <ConvexClientProvider>
+      <VoicePremiumShowcaseContent />
+    </ConvexClientProvider>
+  );
+}
+
+function VoicePremiumShowcaseContent() {
   const [chatId, setChatId] = useState<Id<"chats"> | null>(null);
   const [isCreatingChat, setIsCreatingChat] = useState(false);
   const [activeTab, setActiveTab] = useState<"desktop" | "mobile" | "analytics">("desktop");
@@ -37,12 +45,10 @@ export default function VoicePremiumShowcase() {
   if (!chatId) {
     return (
       <main className="min-h-screen bg-black text-white">
-        {/* Background effects */}
         <div className="absolute inset-0 bg-gradient-to-br from-cyan-900/20 via-purple-900/20 to-pink-900/20" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(34,211,238,0.1),transparent_50%)]" />
-        
+
         <div className="relative z-10 min-h-screen flex flex-col">
-          {/* Header */}
           <div className="border-b border-white/10">
             <div className="max-w-7xl mx-auto px-6 py-8">
               <div className="text-center">
@@ -50,14 +56,13 @@ export default function VoicePremiumShowcase() {
                   Premium Voice AI
                 </h1>
                 <p className="text-xl text-slate-400 max-w-3xl mx-auto">
-                  Advanced voice AI system with analytics, mobile optimization, error handling, 
+                  Advanced voice AI system with analytics, mobile optimization, error handling,
                   and professional-grade features powered by ElevenLabs and LangGraph.
                 </p>
               </div>
             </div>
           </div>
 
-          {/* Premium Features Grid */}
           <div className="flex-1 py-12">
             <div className="max-w-7xl mx-auto px-6">
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
@@ -122,7 +127,6 @@ export default function VoicePremiumShowcase() {
                 </Card>
               </div>
 
-              {/* Start Button */}
               <div className="text-center">
                 <Button
                   onClick={handleCreateChat}
@@ -141,7 +145,7 @@ export default function VoicePremiumShowcase() {
                     </>
                   )}
                 </Button>
-                
+
                 <div className="mt-6 text-sm text-slate-500">
                   <p>Experience the complete premium voice AI system with all advanced features.</p>
                   <p>Includes analytics, mobile optimization, and professional error handling.</p>
@@ -155,123 +159,116 @@ export default function VoicePremiumShowcase() {
   }
 
   return (
-    <ConvexClientProvider>
-      <main className="min-h-screen bg-black text-white">
-        {/* Background effects */}
-        <div className="absolute inset-0 bg-gradient-to-br from-cyan-900/20 via-purple-900/20 to-pink-900/20" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(34,211,238,0.1),transparent_50%)]" />
-        
-        {/* Header */}
-        <div className="relative z-10 border-b border-white/10">
-          <div className="max-w-7xl mx-auto px-6 py-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
-                  Premium Voice AI Showcase
-                </h1>
-                <p className="text-slate-400 mt-1">
-                  Advanced voice AI with analytics, mobile optimization, and professional features
-                </p>
-              </div>
-              <div className="flex items-center space-x-2 text-sm text-slate-400">
-                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                <span>Premium Features Active</span>
-              </div>
-            </div>
-          </div>
-        </div>
+    <main className="min-h-screen bg-black text-white">
+      <div className="absolute inset-0 bg-gradient-to-br from-cyan-900/20 via-purple-900/20 to-pink-900/20" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(34,211,238,0.1),transparent_50%)]" />
 
-        {/* Tab Navigation */}
-        <div className="relative z-10 border-b border-white/10">
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="flex space-x-1">
-              <Button
-                onClick={() => setActiveTab("desktop")}
-                variant={activeTab === "desktop" ? "default" : "ghost"}
-                className={cn(
-                  "px-6 py-3",
-                  activeTab === "desktop"
-                    ? "bg-cyan-600 hover:bg-cyan-500 text-white"
-                    : "text-slate-400 hover:text-white"
-                )}
-              >
-                <MessageSquare className="w-4 h-4 mr-2" />
-                Desktop Experience
-              </Button>
-              <Button
-                onClick={() => setActiveTab("mobile")}
-                variant={activeTab === "mobile" ? "default" : "ghost"}
-                className={cn(
-                  "px-6 py-3",
-                  activeTab === "mobile"
-                    ? "bg-cyan-600 hover:bg-cyan-500 text-white"
-                    : "text-slate-400 hover:text-white"
-                )}
-              >
-                <Smartphone className="w-4 h-4 mr-2" />
-                Mobile Optimized
-              </Button>
-              <Button
-                onClick={() => setActiveTab("analytics")}
-                variant={activeTab === "analytics" ? "default" : "ghost"}
-                className={cn(
-                  "px-6 py-3",
-                  activeTab === "analytics"
-                    ? "bg-cyan-600 hover:bg-cyan-500 text-white"
-                    : "text-slate-400 hover:text-white"
-                )}
-              >
-                <BarChart3 className="w-4 h-4 mr-2" />
-                Voice Analytics
-              </Button>
-            </div>
-          </div>
-        </div>
-
-        {/* Main content */}
-        <div className="relative z-10 flex-1 h-[calc(100vh-160px)] p-6">
-          {activeTab === "desktop" && (
-            <VoiceAvatarChat 
-              chatId={chatId}
-              avatars={[...avatars]}
-              className="h-full" 
-            />
-          )}
-          
-          {activeTab === "mobile" && (
-            <div className="h-full flex items-center justify-center">
-              <div className="max-w-md w-full">
-                <VoiceMobile
-                  onMessage={(message) => console.log("Mobile message:", message)}
-                  onResponse={(response) => console.log("Mobile response:", response)}
-                  className="h-full"
-                />
-              </div>
-            </div>
-          )}
-          
-          {activeTab === "analytics" && (
-            <div className="h-full flex items-center justify-center">
-              <div className="max-w-2xl w-full">
-                <VoiceAnalytics chatId={chatId} className="h-full" />
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Footer info */}
-        <div className="relative z-10 border-t border-white/10">
-          <div className="max-w-7xl mx-auto px-6 py-4">
-            <div className="text-center text-sm text-slate-400">
-              <p>
-                Premium Voice AI powered by ElevenLabs, LangGraph, and Convex.
-                <br />
-                Features advanced analytics, mobile optimization, and professional error handling.
+      <div className="relative z-10 border-b border-white/10">
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
+                Premium Voice AI Showcase
+              </h1>
+              <p className="text-slate-400 mt-1">
+                Advanced voice AI with analytics, mobile optimization, and professional features
               </p>
             </div>
+            <div className="flex items-center space-x-2 text-sm text-slate-400">
+              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+              <span>Premium Features Active</span>
+            </div>
           </div>
         </div>
-      </main>
-    </ConvexClientProvider>
+      </div>
+
+      <div className="relative z-10 border-b border-white/10">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="flex space-x-1">
+            <Button
+              onClick={() => setActiveTab("desktop")}
+              variant={activeTab === "desktop" ? "default" : "ghost"}
+              className={cn(
+                "px-6 py-3",
+                activeTab === "desktop"
+                  ? "bg-cyan-600 hover:bg-cyan-500 text-white"
+                  : "text-slate-400 hover:text-white"
+              )}
+            >
+              <MessageSquare className="w-4 h-4 mr-2" />
+              Desktop Experience
+            </Button>
+            <Button
+              onClick={() => setActiveTab("mobile")}
+              variant={activeTab === "mobile" ? "default" : "ghost"}
+              className={cn(
+                "px-6 py-3",
+                activeTab === "mobile"
+                  ? "bg-cyan-600 hover:bg-cyan-500 text-white"
+                  : "text-slate-400 hover:text-white"
+              )}
+            >
+              <Smartphone className="w-4 h-4 mr-2" />
+              Mobile Optimized
+            </Button>
+            <Button
+              onClick={() => setActiveTab("analytics")}
+              variant={activeTab === "analytics" ? "default" : "ghost"}
+              className={cn(
+                "px-6 py-3",
+                activeTab === "analytics"
+                  ? "bg-cyan-600 hover:bg-cyan-500 text-white"
+                  : "text-slate-400 hover:text-white"
+              )}
+            >
+              <BarChart3 className="w-4 h-4 mr-2" />
+              Voice Analytics
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      <div className="relative z-10 flex-1 h-[calc(100vh-160px)] p-6">
+        {activeTab === "desktop" && (
+          <VoiceAvatarChat
+            chatId={chatId}
+            avatars={[...avatars]}
+            className="h-full"
+          />
+        )}
+
+        {activeTab === "mobile" && (
+          <div className="h-full flex items-center justify-center">
+            <div className="max-w-md w-full">
+              <VoiceMobile
+                onMessage={(message) => console.log("Mobile message:", message)}
+                onResponse={(response) => console.log("Mobile response:", response)}
+                className="h-full"
+              />
+            </div>
+          </div>
+        )}
+
+        {activeTab === "analytics" && (
+          <div className="h-full flex items-center justify-center">
+            <div className="max-w-2xl w-full">
+              <VoiceAnalytics chatId={chatId} className="h-full" />
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div className="relative z-10 border-t border-white/10">
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          <div className="text-center text-sm text-slate-400">
+            <p>
+              Premium Voice AI powered by ElevenLabs, LangGraph, and Convex.
+              <br />
+              Features advanced analytics, mobile optimization, and professional error handling.
+            </p>
+          </div>
+        </div>
+      </div>
+    </main>
   );
 }

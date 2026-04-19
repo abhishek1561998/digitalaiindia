@@ -16,8 +16,7 @@ const GoogleIcon = () => (
 
 const EyeIcon = ({ open }: { open: boolean }) => open ? (
   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-    <circle cx="12" cy="12" r="3" />
+    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" />
   </svg>
 ) : (
   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -26,21 +25,33 @@ const EyeIcon = ({ open }: { open: boolean }) => open ? (
   </svg>
 );
 
+const SpinIcon = () => (
+  <span style={{
+    width: 14, height: 14, borderRadius: "50%",
+    border: "2px solid rgba(255,255,255,0.3)",
+    borderTopColor: "#fff", display: "inline-block",
+    animation: "dai-spin .7s linear infinite",
+  }} />
+);
+
 export function AuthForm() {
   const searchParams = useSearchParams();
   const initialMode = searchParams.get("mode") === "signup" ? "signup" : "login";
 
-  const [mode, setMode] = useState<Mode>(initialMode);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+  const [mode, setMode]       = useState<Mode>(initialMode);
+  const [name, setName]       = useState("");
+  const [email, setEmail]     = useState("");
   const [password, setPassword] = useState("");
-  const [showPw, setShowPw] = useState(false);
+  const [showPw, setShowPw]   = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError]     = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const router = useRouter();
 
-  const endpoint = useMemo(() => (mode === "signup" ? "/api/auth/signup" : "/api/auth/login"), [mode]);
+  const endpoint = useMemo(
+    () => (mode === "signup" ? "/api/auth/signup" : "/api/auth/login"),
+    [mode]
+  );
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -65,24 +76,12 @@ export function AuthForm() {
     }
   }
 
-  const card: React.CSSProperties = {
-    width: "100%",
-    maxWidth: 420,
-    borderRadius: 20,
-    border: "1px solid rgba(255,120,0,0.14)",
-    background: "rgba(8,8,26,0.85)",
-    backdropFilter: "blur(24px)",
-    WebkitBackdropFilter: "blur(24px)",
-    padding: "2rem",
-    boxShadow: "0 0 0 1px rgba(255,117,0,0.06), 0 32px 80px rgba(0,0,0,0.4)",
-  };
-
-  const inputBase: React.CSSProperties = {
+  const inputStyle: React.CSSProperties = {
     width: "100%",
     borderRadius: 12,
-    border: "1px solid rgba(255,255,255,0.08)",
-    background: "rgba(4,4,14,0.8)",
-    color: "#EDE8FF",
+    border: "1px solid var(--dai-border2)",
+    background: "var(--dai-bg2)",
+    color: "var(--dai-text)",
     fontSize: "0.9rem",
     padding: "11px 14px",
     outline: "none",
@@ -91,14 +90,33 @@ export function AuthForm() {
     boxSizing: "border-box",
   };
 
+  const labelStyle: React.CSSProperties = {
+    fontSize: "0.75rem",
+    color: "var(--dai-text3)",
+    fontWeight: 700,
+    letterSpacing: "0.05em",
+    textTransform: "uppercase",
+    display: "block",
+    marginBottom: 6,
+  };
+
   return (
-    <div style={card}>
+    <div style={{
+      width: "100%",
+      maxWidth: 420,
+      borderRadius: 20,
+      border: "1px solid var(--dai-border2)",
+      background: "var(--dai-bg2)",
+      padding: "2rem",
+      boxShadow: "0 8px 48px rgba(0,0,0,0.07)",
+      transition: "background .3s, border-color .3s",
+    }}>
       {/* Mode toggle */}
       <div style={{
         display: "grid", gridTemplateColumns: "1fr 1fr",
         borderRadius: 12,
-        border: "1px solid rgba(255,255,255,0.07)",
-        background: "rgba(4,4,14,0.6)",
+        border: "1px solid var(--dai-border)",
+        background: "var(--dai-bg3)",
         padding: 4,
         marginBottom: "1.75rem",
         gap: 4,
@@ -120,7 +138,7 @@ export function AuthForm() {
               background: mode === m
                 ? "linear-gradient(135deg, #FF7500, #FF3D6B)"
                 : "transparent",
-              color: mode === m ? "#fff" : "#6B6890",
+              color: mode === m ? "#fff" : "var(--dai-text3)",
               boxShadow: mode === m ? "0 2px 14px rgba(255,117,0,0.3)" : "none",
             }}
           >
@@ -132,40 +150,34 @@ export function AuthForm() {
       <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "0.875rem" }}>
         {mode === "signup" && (
           <div>
-            <label style={{ fontSize: "0.75rem", color: "#6B6890", fontWeight: 600, letterSpacing: "0.04em", textTransform: "uppercase", display: "block", marginBottom: 6 }}>
-              Full Name
-            </label>
+            <label style={labelStyle}>Full Name</label>
             <input
               placeholder="Arjun Sharma"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              style={inputBase}
+              style={inputStyle}
               onFocus={e => { e.target.style.borderColor = "rgba(255,117,0,0.4)"; e.target.style.boxShadow = "0 0 0 3px rgba(255,117,0,0.08)"; }}
-              onBlur={e => { e.target.style.borderColor = "rgba(255,255,255,0.08)"; e.target.style.boxShadow = "none"; }}
+              onBlur={e => { e.target.style.borderColor = "var(--dai-border2)"; e.target.style.boxShadow = "none"; }}
             />
           </div>
         )}
 
         <div>
-          <label style={{ fontSize: "0.75rem", color: "#6B6890", fontWeight: 600, letterSpacing: "0.04em", textTransform: "uppercase", display: "block", marginBottom: 6 }}>
-            Email
-          </label>
+          <label style={labelStyle}>Email</label>
           <input
             type="email"
             placeholder="you@company.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            style={inputBase}
+            style={inputStyle}
             onFocus={e => { e.target.style.borderColor = "rgba(255,117,0,0.4)"; e.target.style.boxShadow = "0 0 0 3px rgba(255,117,0,0.08)"; }}
-            onBlur={e => { e.target.style.borderColor = "rgba(255,255,255,0.08)"; e.target.style.boxShadow = "none"; }}
+            onBlur={e => { e.target.style.borderColor = "var(--dai-border2)"; e.target.style.boxShadow = "none"; }}
           />
         </div>
 
         <div>
-          <label style={{ fontSize: "0.75rem", color: "#6B6890", fontWeight: 600, letterSpacing: "0.04em", textTransform: "uppercase", display: "block", marginBottom: 6 }}>
-            Password
-          </label>
+          <label style={labelStyle}>Password</label>
           <div style={{ position: "relative" }}>
             <input
               type={showPw ? "text" : "password"}
@@ -173,16 +185,16 @@ export function AuthForm() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              style={{ ...inputBase, paddingRight: 42 }}
+              style={{ ...inputStyle, paddingRight: 42 }}
               onFocus={e => { e.target.style.borderColor = "rgba(255,117,0,0.4)"; e.target.style.boxShadow = "0 0 0 3px rgba(255,117,0,0.08)"; }}
-              onBlur={e => { e.target.style.borderColor = "rgba(255,255,255,0.08)"; e.target.style.boxShadow = "none"; }}
+              onBlur={e => { e.target.style.borderColor = "var(--dai-border2)"; e.target.style.boxShadow = "none"; }}
             />
             <button
               type="button"
               onClick={() => setShowPw(!showPw)}
               style={{
                 position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)",
-                background: "none", border: "none", color: "#6B6890", cursor: "pointer",
+                background: "none", border: "none", color: "var(--dai-text3)", cursor: "pointer",
                 padding: 0, display: "flex", alignItems: "center",
               }}
             >
@@ -193,9 +205,12 @@ export function AuthForm() {
 
         {error && (
           <div style={{
-            borderRadius: 10, border: "1px solid rgba(255,95,87,0.3)",
-            background: "rgba(255,95,87,0.08)", padding: "9px 12px",
-            fontSize: "0.8125rem", color: "#FF9B96",
+            borderRadius: 10,
+            border: "1px solid rgba(255,95,87,0.28)",
+            background: "rgba(255,95,87,0.07)",
+            padding: "9px 12px",
+            fontSize: "0.8125rem",
+            color: "#D93025",
           }}>
             {error}
           </div>
@@ -203,9 +218,12 @@ export function AuthForm() {
 
         {success && (
           <div style={{
-            borderRadius: 10, border: "1px solid rgba(0,229,176,0.25)",
-            background: "rgba(0,229,176,0.07)", padding: "9px 12px",
-            fontSize: "0.8125rem", color: "#00E5B0",
+            borderRadius: 10,
+            border: "1px solid rgba(0,229,176,0.25)",
+            background: "rgba(0,229,176,0.07)",
+            padding: "9px 12px",
+            fontSize: "0.8125rem",
+            color: "#00A87A",
           }}>
             {success}
           </div>
@@ -223,11 +241,9 @@ export function AuthForm() {
             fontSize: "0.9375rem",
             fontWeight: 700,
             fontFamily: "inherit",
-            background: loading
-              ? "rgba(255,117,0,0.4)"
-              : "linear-gradient(135deg, #FF7500 0%, #FF3D6B 100%)",
+            background: loading ? "rgba(255,117,0,0.4)" : "linear-gradient(135deg, #FF7500, #FF3D6B)",
             color: "#fff",
-            boxShadow: loading ? "none" : "0 4px 20px rgba(255,117,0,0.32)",
+            boxShadow: loading ? "none" : "0 4px 20px rgba(255,117,0,0.28)",
             transition: "all 0.2s",
             marginTop: "0.25rem",
             display: "flex",
@@ -236,31 +252,22 @@ export function AuthForm() {
             gap: 8,
           }}
         >
-          {loading ? (
-            <>
-              <span style={{
-                width: 14, height: 14, borderRadius: "50%",
-                border: "2px solid rgba(255,255,255,0.3)",
-                borderTopColor: "#fff",
-                display: "inline-block",
-                animation: "spin 0.7s linear infinite",
-              }} />
-              Please wait…
-            </>
-          ) : mode === "signup" ? "Create account" : "Sign in"}
+          {loading ? <><SpinIcon /> Please wait…</> : mode === "signup" ? "Create account" : "Sign in"}
         </button>
       </form>
 
+      {/* Divider */}
       <div style={{
         display: "flex", alignItems: "center", gap: 12,
         margin: "1.25rem 0",
-        fontSize: "0.75rem", color: "#38365A",
+        fontSize: "0.75rem", color: "var(--dai-text3)",
       }}>
-        <div style={{ flex: 1, height: 1, background: "rgba(255,255,255,0.06)" }} />
+        <div style={{ flex: 1, height: 1, background: "var(--dai-border)" }} />
         or continue with
-        <div style={{ flex: 1, height: 1, background: "rgba(255,255,255,0.06)" }} />
+        <div style={{ flex: 1, height: 1, background: "var(--dai-border)" }} />
       </div>
 
+      {/* Google */}
       <a
         href="/api/auth/google/start"
         style={{
@@ -270,25 +277,33 @@ export function AuthForm() {
           justifyContent: "center",
           gap: 10,
           borderRadius: 12,
-          border: "1px solid rgba(255,255,255,0.09)",
-          background: "rgba(255,255,255,0.04)",
+          border: "1px solid var(--dai-border2)",
+          background: "var(--dai-card)",
           padding: "11px 0",
           fontSize: "0.875rem",
           fontWeight: 600,
-          color: "#9090A8",
+          color: "var(--dai-text2)",
           textDecoration: "none",
           fontFamily: "inherit",
           transition: "all 0.2s",
           boxSizing: "border-box",
         }}
-        onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.background = "rgba(255,255,255,0.07)"; (e.currentTarget as HTMLAnchorElement).style.color = "#EDE8FF"; }}
-        onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.background = "rgba(255,255,255,0.04)"; (e.currentTarget as HTMLAnchorElement).style.color = "#9090A8"; }}
+        onMouseEnter={e => {
+          (e.currentTarget as HTMLAnchorElement).style.background = "var(--dai-cardHov)";
+          (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(255,117,0,0.25)";
+          (e.currentTarget as HTMLAnchorElement).style.color = "var(--dai-text)";
+        }}
+        onMouseLeave={e => {
+          (e.currentTarget as HTMLAnchorElement).style.background = "var(--dai-card)";
+          (e.currentTarget as HTMLAnchorElement).style.borderColor = "var(--dai-border2)";
+          (e.currentTarget as HTMLAnchorElement).style.color = "var(--dai-text2)";
+        }}
       >
         <GoogleIcon />
         Continue with Google
       </a>
 
-      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+      <style>{`@keyframes dai-spin { to { transform: rotate(360deg); } }`}</style>
     </div>
   );
 }

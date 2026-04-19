@@ -2,13 +2,22 @@
 
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { SignedOut, SignInButton, SignedIn } from "@clerk/nextjs";
 import { Menu, X, Zap, Brain, Sparkles } from "lucide-react";
 import Link from "next/link";
+
+type SessionUser = {
+  id: string;
+  name: string;
+  email: string;
+  plan: "FREE" | "PRO";
+  monthlyLimit: number;
+};
 
 export default function FuturisticHeader() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [user, setUser] = useState<SessionUser | null>(null);
+  const [authLoading, setAuthLoading] = useState(true);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -17,6 +26,43 @@ export default function FuturisticHeader() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  useEffect(() => {
+    let active = true;
+
+    async function loadSession() {
+      try {
+        const res = await fetch("/api/auth/session", { cache: "no-store" });
+        if (!active) {
+          return;
+        }
+
+        if (!res.ok) {
+          setUser(null);
+          return;
+        }
+
+        const data = await res.json();
+        setUser(data.user ?? null);
+      } catch {
+        if (active) {
+          setUser(null);
+        }
+      } finally {
+        if (active) {
+          setAuthLoading(false);
+        }
+      }
+    }
+
+    loadSession();
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const primaryHref = user ? "/dashboard" : "/auth?mode=signup";
+  const secondaryHref = user ? "/dashboard" : "/auth";
 
   return (
     <header
@@ -117,38 +163,31 @@ export default function FuturisticHeader() {
 
           {/* CTA Buttons */}
           <div className="hidden lg:flex items-center space-x-4">
-            <SignedOut>
-              <SignInButton
-                mode="modal"
-                fallbackRedirectUrl="/dashboard"
-                forceRedirectUrl="/dashboard"
-              >
-                <Button
-                  variant="outline"
-                  className="border-yellow-400/50 text-yellow-400 hover:bg-yellow-400/10 hover:border-yellow-400"
-                >
-                  Sign In
-                </Button>
-              </SignInButton>
-              <SignInButton
-                mode="modal"
-                fallbackRedirectUrl="/dashboard"
-                forceRedirectUrl="/dashboard"
-              >
-                <Button className="bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-400 hover:to-orange-500 text-white border-0 shadow-lg hover:shadow-yellow-500/25 group">
-                  Get Started
-                  <Sparkles className="ml-2 w-4 h-4 group-hover:rotate-12 transition-transform duration-300" />
-                </Button>
-              </SignInButton>
-            </SignedOut>
-            <SignedIn>
+            {!user ? (
+              <>
+                <Link href={secondaryHref}>
+                  <Button
+                    variant="outline"
+                    className="border-yellow-400/50 text-yellow-400 hover:bg-yellow-400/10 hover:border-yellow-400"
+                  >
+                    {authLoading ? "Loading..." : "Sign In"}
+                  </Button>
+                </Link>
+                <Link href={primaryHref}>
+                  <Button className="bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-400 hover:to-orange-500 text-white border-0 shadow-lg hover:shadow-yellow-500/25 group">
+                    Get Started
+                    <Sparkles className="ml-2 w-4 h-4 group-hover:rotate-12 transition-transform duration-300" />
+                  </Button>
+                </Link>
+              </>
+            ) : (
               <Link href="/dashboard">
                 <Button className="bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-400 hover:to-orange-500 text-white border-0 shadow-lg hover:shadow-yellow-500/25 group">
                   Dashboard
                   <Zap className="ml-2 w-4 h-4 group-hover:scale-110 transition-transform duration-300" />
                 </Button>
               </Link>
-            </SignedIn>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -214,36 +253,29 @@ export default function FuturisticHeader() {
                 Contact
               </Link>
               <div className="flex flex-col space-y-3 pt-4 border-t border-gray-700">
-                <SignedOut>
-                  <SignInButton
-                    mode="modal"
-                    fallbackRedirectUrl="/dashboard"
-                    forceRedirectUrl="/dashboard"
-                  >
-                    <Button
-                      variant="outline"
-                      className="border-yellow-400/50 text-yellow-400 hover:bg-yellow-400/10 hover:border-yellow-400 w-full"
-                    >
-                      Sign In
-                    </Button>
-                  </SignInButton>
-                  <SignInButton
-                    mode="modal"
-                    fallbackRedirectUrl="/dashboard"
-                    forceRedirectUrl="/dashboard"
-                  >
-                    <Button className="bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-400 hover:to-orange-500 text-white border-0 w-full">
-                      Get Started
-                    </Button>
-                  </SignInButton>
-                </SignedOut>
-                <SignedIn>
-                  <Link href="/dashboard">
+                {!user ? (
+                  <>
+                    <Link href={secondaryHref} onClick={() => setIsMenuOpen(false)}>
+                      <Button
+                        variant="outline"
+                        className="border-yellow-400/50 text-yellow-400 hover:bg-yellow-400/10 hover:border-yellow-400 w-full"
+                      >
+                        {authLoading ? "Loading..." : "Sign In"}
+                      </Button>
+                    </Link>
+                    <Link href={primaryHref} onClick={() => setIsMenuOpen(false)}>
+                      <Button className="bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-400 hover:to-orange-500 text-white border-0 w-full">
+                        Get Started
+                      </Button>
+                    </Link>
+                  </>
+                ) : (
+                  <Link href="/dashboard" onClick={() => setIsMenuOpen(false)}>
                     <Button className="bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-400 hover:to-orange-500 text-white border-0 w-full">
                       Dashboard
                     </Button>
                   </Link>
-                </SignedIn>
+                )}
               </div>
             </nav>
           </div>

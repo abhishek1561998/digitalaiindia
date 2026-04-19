@@ -76,25 +76,27 @@ const LogoIcon = () => (
 );
 
 export function MarketingLanding({ isLoggedIn }: { isLoggedIn: boolean }) {
-  const [theme, setTheme] = useState<"dark" | "light">("dark");
+  const [theme, setTheme] = useState<"dark" | "light">("light");
   const [tab, setTab] = useState<"curl" | "javascript" | "python">("curl");
 
   const authLink = useMemo(() => (isLoggedIn ? "/dashboard" : "/auth?mode=signup"), [isLoggedIn]);
 
   useEffect(() => {
-    const saved = window.localStorage.getItem("dai-theme");
-    if (saved === "dark" || saved === "light") {
-      setTheme(saved);
-      return;
-    }
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    setTheme(prefersDark ? "dark" : "light");
+    const saved = window.localStorage.getItem("theme");
+    setTheme(saved === "dark" ? "dark" : "light");
   }, []);
 
   function toggleTheme() {
     const next = theme === "dark" ? "light" : "dark";
     setTheme(next);
-    window.localStorage.setItem("dai-theme", next);
+    window.localStorage.setItem("theme", next);
+    if (next === "dark") {
+      document.documentElement.setAttribute("data-theme", "dark");
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.removeAttribute("data-theme");
+      document.documentElement.classList.remove("dark");
+    }
   }
 
   return (
