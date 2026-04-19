@@ -22,6 +22,14 @@ import ThemeBackdrop from "../ai-machine-agent/ThemeBackdrop";
 import FuturisticHeader from "@/components/FuturisticHeader";
 
 export default function VoiceShowcase() {
+  return (
+    <ConvexClientProvider>
+      <VoiceShowcaseContent />
+    </ConvexClientProvider>
+  );
+}
+
+function VoiceShowcaseContent() {
   const [chatId, setChatId] = useState<Id<"chats"> | null>(null);
   const [isCreatingChat, setIsCreatingChat] = useState(false);
   const createChat = useMutation(api.chats.create);
@@ -41,26 +49,24 @@ export default function VoiceShowcase() {
   if (!chatId) {
     return (
       <main className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white relative overflow-hidden">
-      <FuturisticHeader />
-      <br/>
-      <br/>
-   
+        <FuturisticHeader />
+        <br />
+        <br />
+
         <ThemeBackdrop />
 
         <div className="relative z-10 min-h-screen flex flex-col">
-          {/* Header */}
           <div className="max-w-6xl mx-auto px-8 py-12 text-center space-y-6">
-              <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-amber-200 via-amber-300 to-orange-400 bg-clip-text text-transparent tracking-tight">
-                AI Voice Showcase
-              </h1>
-              <p className="text-lg md:text-xl text-amber-50/90 max-w-2xl mx-auto leading-relaxed">
-                Experience natural voice conversations with AI avatars powered by ElevenLabs & LangGraph
-              </p>
-            </div>
+            <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-amber-200 via-amber-300 to-orange-400 bg-clip-text text-transparent tracking-tight">
+              AI Voice Showcase
+            </h1>
+            <p className="text-lg md:text-xl text-amber-50/90 max-w-2xl mx-auto leading-relaxed">
+              Experience natural voice conversations with AI avatars powered by ElevenLabs & LangGraph
+            </p>
+          </div>
 
           <div className="flex-1 py-16">
             <div className="max-w-6xl mx-auto px-8">
-              {/* Avatars */}
               <div className="mb-14">
                 <h2 className="text-2xl font-bold text-white mb-6 text-center">Choose Your AI Avatar</h2>
                 <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
@@ -94,7 +100,6 @@ export default function VoiceShowcase() {
                 </div>
               </div>
 
-              {/* CTA */}
               <div className="text-center">
                 <Button
                   onClick={handleCreateChat}
@@ -114,8 +119,10 @@ export default function VoiceShowcase() {
                   )}
                 </Button>
               </div>
-                <br/>
-                <br/>
+
+              <br />
+              <br />
+
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-14">
                 <Card className="p-6 bg-white/5 border border-amber-600/20 hover:bg-amber-500/10 transition-all group">
                   <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-amber-500 to-orange-500 flex items-center justify-center mb-3 group-hover:scale-105 transition-transform">
@@ -156,67 +163,59 @@ export default function VoiceShowcase() {
     );
   }
 
-  /* ------------------------------ CHAT VIEW ------------------------------- */
   return (
-    <ConvexClientProvider>
-      <main className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white relative overflow-hidden">
-        {/* Dark base */}
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900" />
+    <main className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900" />
 
-        {/* Subtle AI glow effects */}
-        <div className="absolute inset-0 opacity-30 pointer-events-none">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl" />
-          <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-orange-500/10 rounded-full blur-3xl" />
-          <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-yellow-500/5 rounded-full blur-2xl" />
-        </div>
+      <div className="absolute inset-0 opacity-30 pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-orange-500/10 rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-yellow-500/5 rounded-full blur-2xl" />
+      </div>
 
-        {/* Soft radial overlays */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_25%,rgba(251,191,36,0.15),transparent_50%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_75%,rgba(249,115,22,0.15),transparent_50%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_25%,rgba(251,191,36,0.15),transparent_50%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_75%,rgba(249,115,22,0.15),transparent_50%)]" />
 
-        {/* Header */}
-        <div className="relative z-10 border-b border-amber-500/20">
-          <div className="max-w-6xl mx-auto px-8 py-6">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 flex items-center justify-center shadow-lg shadow-amber-500/25">
-                  <Mic className="w-5 h-5 text-white" />
-                </div>
-                <div>
-                  <h1 className="text-2xl font-bold text-white">AI Voice Showcase</h1>
-                  <p className="text-amber-100/90 text-sm">Live voice conversation with AI avatars</p>
-                </div>
+      <div className="relative z-10 border-b border-amber-500/20">
+        <div className="max-w-6xl mx-auto px-8 py-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 flex items-center justify-center shadow-lg shadow-amber-500/25">
+                <Mic className="w-5 h-5 text-white" />
               </div>
-
-              <div className="flex items-center space-x-3">
-                <div className="flex items-center space-x-2 text-sm text-amber-200">
-                  <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                  <span>Live Voice Chat</span>
-                </div>
-                <Button
-                  onClick={() => setChatId(null)}
-                  variant="outline"
-                  className="border-amber-600/50 text-amber-200 hover:bg-amber-500/10 hover:border-amber-500"
-                >
-                  <RotateCcw className="w-4 h-4 mr-2" />
-                  Back to Demo
-                </Button>
+              <div>
+                <h1 className="text-2xl font-bold text-white">AI Voice Showcase</h1>
+                <p className="text-amber-100/90 text-sm">Live voice conversation with AI avatars</p>
               </div>
+            </div>
+
+            <div className="flex items-center space-x-3">
+              <div className="flex items-center space-x-2 text-sm text-amber-200">
+                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+                <span>Live Voice Chat</span>
+              </div>
+              <Button
+                onClick={() => setChatId(null)}
+                variant="outline"
+                className="border-amber-600/50 text-amber-200 hover:bg-amber-500/10 hover:border-amber-500"
+              >
+                <RotateCcw className="w-4 h-4 mr-2" />
+                Back to Demo
+              </Button>
             </div>
           </div>
         </div>
+      </div>
 
-        {/* Chat body */}
-        <div className="relative z-10 flex-1 h-[calc(100vh-88px)] p-8">
-          <div className="h-full max-w-6xl mx-auto">
-            <VoiceAvatarChat
-              chatId={chatId}
-              avatars={[...avatars]}
-              className="h-full rounded-xl border border-amber-500/20 bg-slate-800/30 backdrop-blur-sm"
-            />
-          </div>
+      <div className="relative z-10 flex-1 h-[calc(100vh-88px)] p-8">
+        <div className="h-full max-w-6xl mx-auto">
+          <VoiceAvatarChat
+            chatId={chatId}
+            avatars={[...avatars]}
+            className="h-full rounded-xl border border-amber-500/20 bg-slate-800/30 backdrop-blur-sm"
+          />
         </div>
-      </main>
-    </ConvexClientProvider>
+      </div>
+    </main>
   );
 }
