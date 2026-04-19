@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { AuthForm } from "@/components/dai/auth-form";
 import { ThemeToggle } from "@/components/dai/theme-toggle";
 import { Syne, Outfit } from "next/font/google";
@@ -11,8 +10,9 @@ const syne = Syne({ subsets: ["latin"], variable: "--font-syne" });
 const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" });
 
 const LogoIcon = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FACC15" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96-.46 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z"/>
+    <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96-.46 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z"/>
   </svg>
 );
 
@@ -78,36 +78,38 @@ function AuthPageInner() {
         backdropFilter: "blur(20px)",
         background: "var(--dai-navBg)",
       }}>
-        <Link href="/" style={{
-          display: "flex", alignItems: "center", gap: 9,
-          fontFamily: "var(--font-syne, sans-serif)",
-          fontSize: "1rem", fontWeight: 700, letterSpacing: "-0.02em",
-          color: "var(--dai-text)", textDecoration: "none",
+        <a href="https://digitalaiindia.com" style={{
+          display: "flex", alignItems: "center", gap: 10,
+          textDecoration: "none",
         }}>
-          <div style={{
-            width: 30, height: 30, borderRadius: 8,
-            background: "linear-gradient(135deg, #FF7500, #FF3D6B)",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            boxShadow: "0 0 14px rgba(255,117,0,0.35)",
-          }}>
-            <LogoIcon />
+          {/* Logo box — matches landing page */}
+          <div style={{ position: "relative", width: 40, height: 40, flexShrink: 0 }}>
+            <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg,#FACC15,#F97316)", borderRadius: 10, opacity: 0.85 }} />
+            <div style={{ position: "absolute", inset: 2, background: "linear-gradient(135deg,#111827,#000)", borderRadius: 7, display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <LogoIcon />
+            </div>
           </div>
-          Digital<span style={{ color: "#FF7500" }}>AI</span>India
-        </Link>
+          <div style={{ display: "flex", flexDirection: "column", lineHeight: 1.15 }}>
+            <span style={{ fontFamily: "var(--font-syne,sans-serif)", fontWeight: 700, fontSize: "1rem", letterSpacing: "-0.02em" }}>
+              <span style={{ background: "linear-gradient(90deg,#FACC15,#F97316)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Digitalai</span>
+              <span style={{ color: "var(--dai-text2)" }}>India.com</span>
+            </span>
+            <span style={{ fontSize: "0.6rem", color: "var(--dai-text3)", fontWeight: 500 }}>Future of AI</span>
+          </div>
+        </a>
 
         <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
           <ThemeToggle />
-          <Link href="/" style={{
+          <a href="https://digitalaiindia.com" style={{
             fontSize: "0.8125rem", color: "var(--dai-text3)",
             textDecoration: "none", transition: "color 0.2s",
-            padding: "6px 12px",
-            borderRadius: 8,
+            padding: "6px 12px", borderRadius: 8,
           }}
             onMouseEnter={e => (e.currentTarget.style.color = "var(--dai-text)")}
             onMouseLeave={e => (e.currentTarget.style.color = "var(--dai-text3)")}
           >
             ← Home
-          </Link>
+          </a>
         </div>
       </nav>
 
