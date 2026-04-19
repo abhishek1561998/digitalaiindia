@@ -76,27 +76,43 @@
 .navLogo {
   display: flex;
   align-items: center;
-  gap: 9px;
+  gap: 10px;
   font-family: var(--font-syne, sans-serif);
-  font-size: 1rem;
+  font-size: 1.1rem;
   font-weight: 700;
   letter-spacing: -0.02em;
   color: var(--text);
   text-decoration: none;
   flex-shrink: 0;
+  transition: opacity .2s;
 }
+.navLogo:hover { opacity: .85; }
 
 .navLogoIcon {
-  width: 30px;
-  height: 30px;
-  border-radius: 8px;
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #FACC15, #F97316);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
-  box-shadow: 0 0 14px rgba(255,117,0,0.35);
   flex-shrink: 0;
+  position: relative;
+  box-shadow: 0 0 16px rgba(249,115,22,0.4);
+}
+
+.navLogoIcon::after {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  border-radius: 7px;
+  background: linear-gradient(135deg, #111, #1a0a00);
+}
+
+.navLogoIcon svg {
+  position: relative;
+  z-index: 1;
+  color: #FACC15;
 }
 
 .navRight {

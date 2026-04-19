@@ -42,10 +42,7 @@ export const metadata: Metadata = {
     images: ["/banner.png"],
   },
   icons: {
-    icon: [
-      { url: "/favicon.svg", type: "image/svg+xml" },
-      { url: "/favicon.ico" },
-    ],
+    icon: "/favicon.svg",
     apple: "/favicon.svg",
   },
 };

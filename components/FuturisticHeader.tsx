@@ -62,8 +62,8 @@ export default function FuturisticHeader() {
   }, []);
 
   const PLATFORM = "https://platform.digitalaiindia.com";
-  const primaryHref = user ? `${PLATFORM}/dashboard` : PLATFORM;
-  const secondaryHref = user ? `${PLATFORM}/dashboard` : PLATFORM;
+  const primaryHref = user ? `${PLATFORM}/dashboard` : `${PLATFORM}/auth`;
+  const secondaryHref = user ? `${PLATFORM}/dashboard` : `${PLATFORM}/auth`;
 
   return (
     <header
