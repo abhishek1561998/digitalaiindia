@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Syne, Outfit } from "next/font/google";
 import Link from "next/link";
 import { ThemeToggle } from "./theme-toggle";
+import { VoiceLibrary } from "./voice-library";
 import styles from "./dashboard-shell.module.css";
 
 const syne = Syne({ subsets: ["latin"], variable: "--font-syne" });
@@ -47,7 +48,7 @@ type RequestLog = {
   timestamp: string;
 };
 
-type Tab = "overview" | "keys" | "playground" | "logs" | "billing" | "docs" | "settings";
+type Tab = "overview" | "keys" | "voices" | "playground" | "logs" | "billing" | "docs" | "settings";
 
 /* ── Icons ── */
 const OverviewIcon = () => (
@@ -64,6 +65,14 @@ const KeyIcon = () => (
 const PlayIcon = () => (
   <svg className={styles.sideTabIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <polygon points="5 3 19 12 5 21 5 3" />
+  </svg>
+);
+const VoiceIcon = () => (
+  <svg className={styles.sideTabIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
+    <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+    <line x1="12" y1="19" x2="12" y2="23" />
+    <line x1="8" y1="23" x2="16" y2="23" />
   </svg>
 );
 const LogsIcon = () => (
@@ -104,6 +113,7 @@ const CopyIcon = () => (
 const tabs: { id: Tab; label: string; icon: () => React.ReactElement }[] = [
   { id: "overview",    label: "Overview",      icon: OverviewIcon },
   { id: "keys",        label: "API Keys",       icon: KeyIcon },
+  { id: "voices",      label: "Voice Library",  icon: VoiceIcon },
   { id: "playground",  label: "Playground",     icon: PlayIcon },
   { id: "logs",        label: "Request Logs",   icon: LogsIcon },
   { id: "billing",     label: "Billing",        icon: BillingIcon },
@@ -559,6 +569,11 @@ export function DashboardShell({ user }: { user: DashboardUser }) {
                 </div>
               )}
             </div>
+          )}
+
+          {/* ── Voice Library ── */}
+          {!loading && tab === "voices" && (
+            <VoiceLibrary />
           )}
 
           {/* ── Playground ── */}
