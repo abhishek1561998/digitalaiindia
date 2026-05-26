@@ -21,6 +21,7 @@ export async function GET() {
       requests: true,
       createdAt: true,
       lastUsedAt: true,
+      settings: true,
     },
   });
 
@@ -37,6 +38,7 @@ export async function GET() {
         requests: key.requests,
         createdAt: key.createdAt,
         lastUsedAt: key.lastUsedAt,
+        settings: key.settings || null,
       };
     }),
   });

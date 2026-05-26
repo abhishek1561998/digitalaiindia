@@ -84,10 +84,20 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const voiceId = String(body?.voiceId || DEFAULT_VOICE_ID);
-  const modelId = String(body?.modelId || DEFAULT_MODEL_ID);
-  const stability = clamp01(body?.stability, 0.5);
-  const similarityBoost = clamp01(body?.similarityBoost, 0.75);
+  // Fallback chain: request body → key's saved preset → endpoint default.
+  // Lets a customer save "use Rachel @ stability 0.6" on their key and
+  // never repeat it on every TTS call.
+  const preset = (auth as any).keySettings || {};
+  const voiceId = String(body?.voiceId || preset.voiceId || DEFAULT_VOICE_ID);
+  const modelId = String(body?.modelId || preset.modelId || DEFAULT_MODEL_ID);
+  const stability = clamp01(
+    body?.stability ?? preset.stability,
+    0.5
+  );
+  const similarityBoost = clamp01(
+    body?.similarityBoost ?? preset.similarityBoost,
+    0.75
+  );
 
   // 3) Check provider key
   const elevenKey = (process.env.ELEVENLABS_API_KEY || "").trim();

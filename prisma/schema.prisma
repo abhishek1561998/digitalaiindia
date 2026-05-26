@@ -40,6 +40,12 @@ model ApiKey {
   userId        String
   user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  // Per-key preset that the TTS endpoint falls back to when the request
+  // body omits these fields. Lets a customer save "use Rachel @ stability
+  // 0.6" once and never repeat it in every call.
+  // Shape: { voiceId?: string, modelId?: string, stability?: number, similarityBoost?: number }
+  settings      Json?
+
   @@index([userId, isActive])
 }
 

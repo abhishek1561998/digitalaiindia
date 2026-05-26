@@ -30,6 +30,17 @@ interface Voice {
   };
 }
 
+interface ApiKeySummary {
+  id: string;
+  name: string;
+  settings: {
+    voiceId?: string;
+    modelId?: string;
+    stability?: number;
+    similarityBoost?: number;
+  } | null;
+}
+
 export function VoiceLibrary() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -38,7 +49,35 @@ export function VoiceLibrary() {
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [filterGender, setFilterGender] = useState<string>("all");
   const [filterUseCase, setFilterUseCase] = useState<string>("all");
+  // Settings editor state
+  const [keys, setKeys] = useState<ApiKeySummary[]>([]);
+  const [selectedKeyId, setSelectedKeyId] = useState<string | null>(null);
+  const [savingKeyId, setSavingKeyId] = useState<string | null>(null);
+  const [savedFlash, setSavedFlash] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  // Load the user's API keys so they can set a voice as default for one.
+  useEffect(() => {
+    fetch("/api/keys", { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : Promise.reject(r.statusText)))
+      .then((data) => {
+        const list: ApiKeySummary[] = (data?.keys || []).map((k: any) => ({
+          id: k.id,
+          name: k.name,
+          settings: k.settings || null,
+        }));
+        setKeys(list);
+        if (list.length > 0) setSelectedKeyId(list[0].id);
+      })
+      .catch(() => {
+        /* swallow — settings are optional */
+      });
+  }, []);
+
+  const selectedKey = useMemo(
+    () => keys.find((k) => k.id === selectedKeyId) || null,
+    [keys, selectedKeyId]
+  );
 
   useEffect(() => {
     let cancelled = false;
@@ -119,6 +158,45 @@ export function VoiceLibrary() {
     } catch {}
   }
 
+  // Save a partial settings update to the selected API key. Optimistic UI:
+  // updates local state immediately, rolls back on error.
+  async function saveKeySettings(patch: Partial<NonNullable<ApiKeySummary["settings"]>>) {
+    if (!selectedKey) return;
+    const id = selectedKey.id;
+    const merged = { ...(selectedKey.settings || {}), ...patch };
+
+    setKeys((prev) =>
+      prev.map((k) => (k.id === id ? { ...k, settings: merged } : k))
+    );
+    setSavingKeyId(id);
+    try {
+      const res = await fetch(`/api/keys/${encodeURIComponent(id)}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ settings: merged }),
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      setSavedFlash(id);
+      setTimeout(() => setSavedFlash((s) => (s === id ? null : s)), 1500);
+    } catch (err) {
+      // Roll back optimistic update on failure
+      setKeys((prev) =>
+        prev.map((k) => (k.id === id ? { ...k, settings: selectedKey.settings } : k))
+      );
+      alert("Settings save failed — try again");
+    } finally {
+      setSavingKeyId(null);
+    }
+  }
+
+  async function setAsDefaultVoice(voice: Voice) {
+    if (!selectedKey) {
+      alert("Pehle ek API key select karo (key dropdown se).");
+      return;
+    }
+    await saveKeySettings({ voiceId: voice.voiceId });
+  }
+
   if (loading) {
     return <div style={loadingStyle}>Voices load ho rahi hain…</div>;
   }
@@ -146,6 +224,57 @@ export function VoiceLibrary() {
           <code style={codeStyle}>voiceId</code> ke saath bhej do.
         </p>
       </header>
+
+      {/* ── Per-key voice settings panel ── */}
+      {keys.length > 0 && (
+        <div style={settingsPanelStyle}>
+          <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
+            <strong style={{ fontSize: 14 }}>⚙️ Voice Settings for:</strong>
+            <select
+              value={selectedKeyId || ""}
+              onChange={(e) => setSelectedKeyId(e.target.value)}
+              style={selectStyle}
+            >
+              {keys.map((k) => (
+                <option key={k.id} value={k.id}>
+                  {k.name}
+                </option>
+              ))}
+            </select>
+            {savedFlash === selectedKeyId && (
+              <span style={savedFlashStyle}>✓ Saved</span>
+            )}
+            {savingKeyId === selectedKeyId && (
+              <span style={{ fontSize: 12, opacity: 0.6 }}>Saving…</span>
+            )}
+          </div>
+
+          {selectedKey && (
+            <div style={{ marginTop: 10, display: "flex", flexWrap: "wrap", gap: 24, alignItems: "center" }}>
+              <div style={{ fontSize: 12, opacity: 0.75 }}>
+                Default voice:{" "}
+                <code style={codeStyle}>
+                  {selectedKey.settings?.voiceId || "(not set — endpoint default)"}
+                </code>
+              </div>
+              <SliderField
+                label="Stability"
+                value={selectedKey.settings?.stability ?? 0.5}
+                onChange={(v) => saveKeySettings({ stability: v })}
+              />
+              <SliderField
+                label="Similarity"
+                value={selectedKey.settings?.similarityBoost ?? 0.75}
+                onChange={(v) => saveKeySettings({ similarityBoost: v })}
+              />
+              <p style={{ margin: 0, fontSize: 11, opacity: 0.55, flex: "1 0 100%" }}>
+                Saved settings auto-apply jab request me ye fields explicitly nahi bheje jate.
+                Niche voice card pe ⭐ click karke usko default banao.
+              </p>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Filter chips */}
       <div style={filterRowStyle}>
@@ -210,6 +339,33 @@ export function VoiceLibrary() {
                   {wasCopied ? "✓ Copied" : "📋 Copy ID"}
                 </button>
               </div>
+              {selectedKey && (
+                <button
+                  onClick={() => setAsDefaultVoice(v)}
+                  disabled={savingKeyId === selectedKey.id}
+                  style={{
+                    ...secondaryBtnStyle,
+                    marginTop: 4,
+                    width: "100%",
+                    background:
+                      selectedKey.settings?.voiceId === v.voiceId
+                        ? "rgba(34,197,94,0.12)"
+                        : "transparent",
+                    borderColor:
+                      selectedKey.settings?.voiceId === v.voiceId
+                        ? "#16a34a"
+                        : "rgba(0,0,0,0.15)",
+                    color:
+                      selectedKey.settings?.voiceId === v.voiceId
+                        ? "#16a34a"
+                        : "inherit",
+                  }}
+                >
+                  {selectedKey.settings?.voiceId === v.voiceId
+                    ? "⭐ Default for " + selectedKey.name
+                    : "⭐ Set as default"}
+                </button>
+              )}
             </div>
           );
         })}
@@ -221,6 +377,34 @@ export function VoiceLibrary() {
         </div>
       )}
     </div>
+  );
+}
+
+function SliderField({
+  label,
+  value,
+  onChange,
+}: {
+  label: string;
+  value: number;
+  onChange: (v: number) => void;
+}) {
+  return (
+    <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12 }}>
+      <span style={{ fontWeight: 600, opacity: 0.75, minWidth: 70 }}>{label}</span>
+      <input
+        type="range"
+        min={0}
+        max={1}
+        step={0.05}
+        value={value}
+        onChange={(e) => onChange(Number(e.target.value))}
+        style={{ width: 120 }}
+      />
+      <span style={{ width: 32, textAlign: "right", fontVariantNumeric: "tabular-nums", opacity: 0.75 }}>
+        {value.toFixed(2)}
+      </span>
+    </label>
   );
 }
 
@@ -380,4 +564,26 @@ const emptyStyle: React.CSSProperties = {
   padding: 30,
   textAlign: "center",
   opacity: 0.6,
+};
+const settingsPanelStyle: React.CSSProperties = {
+  border: "1px solid rgba(220,38,38,0.18)",
+  borderRadius: 12,
+  padding: 14,
+  background: "rgba(220,38,38,0.04)",
+};
+const selectStyle: React.CSSProperties = {
+  padding: "6px 10px",
+  borderRadius: 8,
+  border: "1px solid rgba(0,0,0,0.15)",
+  fontSize: 13,
+  fontWeight: 600,
+  cursor: "pointer",
+};
+const savedFlashStyle: React.CSSProperties = {
+  fontSize: 12,
+  fontWeight: 700,
+  color: "#16a34a",
+  background: "rgba(34,197,94,0.1)",
+  padding: "2px 8px",
+  borderRadius: 999,
 };

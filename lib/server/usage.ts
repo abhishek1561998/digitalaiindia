@@ -64,6 +64,8 @@ export async function validateApiKeyAndConsume(headers: Headers) {
 
     return {
       userId: key.userId,
+      keyId: key.id,
+      keySettings: (key.settings as Record<string, any> | null) || null,
       plan: key.user.plan,
       monthlyLimit: key.user.monthlyLimit,
       usageCount: updatedUsage.count,
