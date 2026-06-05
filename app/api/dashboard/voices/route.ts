@@ -17,13 +17,14 @@
 
 import { NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/server/auth";
-import { activeProvider, SARVAM_SPEAKERS } from "@/lib/server/tts-providers";
+import { envProvider, SARVAM_SPEAKERS } from "@/lib/server/tts-providers";
+import { getActiveIntegration } from "@/lib/server/voice-integrations";
 
 export const runtime = "nodejs";
 // Cache the voice list for 1 hour — it rarely changes and ElevenLabs
 // rate-limits the /voices endpoint.
 const REVALIDATE_SECONDS = 3600;
-let cache: { at: number; voices: NormalizedVoice[] } | null = null;
+let cache: { at: number; key: string; voices: NormalizedVoice[] } | null = null;
 
 interface NormalizedVoice {
   voiceId: string;
@@ -64,19 +65,22 @@ export async function GET() {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const provider = activeProvider();
+  // Prefer the user's connected integration; fall back to platform env.
+  const resolved = (await getActiveIntegration(user.id).catch(() => null)) || envProvider();
 
-  // No provider key at all → guide the operator.
-  if (!provider) {
+  // No provider connected anywhere → guide the user to the Integrations panel.
+  if (!resolved) {
     return NextResponse.json(
       {
         error: "voice_provider_not_configured",
         message:
-          "No TTS provider is configured. Add SARVAM_API_KEY (recommended for Hindi) or ELEVENLABS_API_KEY in Vercel env to enable the Voice Library.",
+          "Koi TTS provider connect nahi hai. Upar Integrations me Sarvam AI ya ElevenLabs ki API key paste karke connect karo.",
       },
       { status: 503 }
     );
   }
+
+  const provider = resolved.provider;
 
   // Sarvam has a fixed speaker catalog (no remote /voices endpoint), so we
   // serve it statically. No preview URLs — the cards just expose the speaker
@@ -93,12 +97,13 @@ export async function GET() {
     return NextResponse.json({ voices, provider, cached: false });
   }
 
-  // Cache hit? (ElevenLabs only — its catalog is fetched remotely.)
-  if (cache && Date.now() - cache.at < REVALIDATE_SECONDS * 1000) {
+  // ElevenLabs — fetch its remote catalog using the resolved key.
+  const key = resolved.apiKey;
+
+  // Cache hit? Keyed by provider key so two users' catalogs don't mix.
+  if (cache && cache.key === key && Date.now() - cache.at < REVALIDATE_SECONDS * 1000) {
     return NextResponse.json({ voices: cache.voices, provider, cached: true });
   }
-
-  const key = (process.env.ELEVENLABS_API_KEY || "").trim();
 
   try {
     const res = await fetch("https://api.elevenlabs.io/v1/voices", {
@@ -130,9 +135,9 @@ export async function GET() {
           .filter((v: NormalizedVoice | null): v is NormalizedVoice => !!v)
       : [];
 
-    cache = { at: Date.now(), voices };
+    cache = { at: Date.now(), key, voices };
 
-    return NextResponse.json({ voices, cached: false });
+    return NextResponse.json({ voices, provider, cached: false });
   } catch (err: any) {
     return NextResponse.json(
       { error: "voices_fetch_failed", message: err?.message || String(err) },

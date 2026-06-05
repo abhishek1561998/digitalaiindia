@@ -3,21 +3,32 @@
  *
  * The public /api/v1/voice/tts endpoint doesn't care which vendor actually
  * generates the audio. It asks this module to `synthesize()`, and we route to
- * whichever provider is configured:
+ * whichever provider the caller is configured for:
  *
- *   • Sarvam AI  (SARVAM_API_KEY)     — India-native, best Hindi prosody. WAV.
- *   • ElevenLabs (ELEVENLABS_API_KEY) — strong multilingual. MP3.
+ *   • Sarvam AI  — India-native, best Hindi prosody. WAV.
+ *   • ElevenLabs — strong multilingual. MP3.
  *
- * Selection (no code change needed to switch):
- *   1. TTS_PROVIDER env ("sarvam" | "elevenlabs") forces a choice.
- *   2. Otherwise auto-detect: Sarvam preferred when its key is present,
- *      else ElevenLabs.
- *
- * This is what makes setup "smooth": the operator just pastes ONE key into
- * Vercel and the right adapter activates — no redeploy of code, no edits.
+ * Key resolution (in priority order):
+ *   1. A per-user "bring your own key" integration connected from the
+ *      dashboard Voice tab (passed in as a ResolvedProvider). This is the
+ *      smooth path — the user pastes a key in the UI, picks the provider,
+ *      and it just works. No Vercel env editing.
+ *   2. Platform env fallback (SARVAM_API_KEY / ELEVENLABS_API_KEY, optional
+ *      TTS_PROVIDER override) for callers with no connected integration.
  */
 
 export type TtsProviderName = "sarvam" | "elevenlabs";
+
+export const TTS_PROVIDERS: TtsProviderName[] = ["sarvam", "elevenlabs"];
+
+// A fully-resolved provider choice: which vendor + the actual API key to use,
+// plus any saved per-provider defaults. Produced either from a user's DB
+// integration or from platform env.
+export interface ResolvedProvider {
+  provider: TtsProviderName;
+  apiKey: string;
+  settings?: Record<string, any> | null;
+}
 
 export interface SynthesizeOptions {
   text: string;
@@ -54,23 +65,78 @@ export class TtsUpstreamError extends Error {
   }
 }
 
-export function activeProvider(): TtsProviderName | null {
-  const hasSarvam = Boolean((process.env.SARVAM_API_KEY || "").trim());
-  const hasEleven = Boolean((process.env.ELEVENLABS_API_KEY || "").trim());
+// Platform env fallback: which provider the deployment itself is keyed for,
+// used only when a caller has no connected per-user integration.
+export function envProvider(): ResolvedProvider | null {
+  const sarvam = (process.env.SARVAM_API_KEY || "").trim();
+  const eleven = (process.env.ELEVENLABS_API_KEY || "").trim();
   const override = (process.env.TTS_PROVIDER || "").trim().toLowerCase();
 
-  if (override === "sarvam") return hasSarvam ? "sarvam" : null;
-  if (override === "elevenlabs") return hasEleven ? "elevenlabs" : null;
+  if (override === "sarvam") return sarvam ? { provider: "sarvam", apiKey: sarvam } : null;
+  if (override === "elevenlabs") return eleven ? { provider: "elevenlabs", apiKey: eleven } : null;
 
-  if (hasSarvam) return "sarvam";
-  if (hasEleven) return "elevenlabs";
+  if (sarvam) return { provider: "sarvam", apiKey: sarvam };
+  if (eleven) return { provider: "elevenlabs", apiKey: eleven };
   return null;
 }
 
-export async function synthesize(opts: SynthesizeOptions): Promise<SynthesizedAudio> {
-  const provider = activeProvider();
-  if (!provider) throw new TtsNotConfiguredError();
-  return provider === "sarvam" ? synthSarvam(opts) : synthEleven(opts);
+/**
+ * Generate audio. Prefer the caller's connected integration (BYOK); otherwise
+ * fall back to the platform's env key. Throws TtsNotConfiguredError when
+ * neither exists.
+ */
+export async function synthesize(
+  opts: SynthesizeOptions,
+  resolved?: ResolvedProvider | null
+): Promise<SynthesizedAudio> {
+  const r = resolved || envProvider();
+  if (!r || !r.apiKey) throw new TtsNotConfiguredError();
+
+  // Merge the integration's saved defaults under the per-request options.
+  const merged: SynthesizeOptions = { ...opts };
+  const s = r.settings || {};
+  merged.voiceId = merged.voiceId ?? s.voiceId ?? s.speaker;
+  merged.modelId = merged.modelId ?? s.modelId ?? s.model;
+  merged.stability = merged.stability ?? s.stability;
+  merged.similarityBoost = merged.similarityBoost ?? s.similarityBoost;
+  merged.language = merged.language ?? s.language;
+
+  return r.provider === "sarvam"
+    ? synthSarvam(merged, r.apiKey)
+    : synthEleven(merged, r.apiKey);
+}
+
+/**
+ * Cheaply check that a provider key actually works, so the dashboard can
+ * reject a bad key at connect-time instead of failing silently later.
+ * ElevenLabs: GET /voices (free, no quota). Sarvam: a 1-char TTS (tiny).
+ * Returns { ok } or { ok:false, detail }.
+ */
+export async function validateProviderKey(
+  provider: TtsProviderName,
+  apiKey: string
+): Promise<{ ok: boolean; detail?: string }> {
+  const key = (apiKey || "").trim();
+  if (!key) return { ok: false, detail: "Empty key" };
+  try {
+    if (provider === "elevenlabs") {
+      const res = await fetch("https://api.elevenlabs.io/v1/voices", {
+        headers: { "xi-api-key": key, Accept: "application/json" },
+        signal: AbortSignal.timeout(12000),
+      });
+      return res.ok
+        ? { ok: true }
+        : { ok: false, detail: (await res.text().catch(() => "")).slice(0, 200) };
+    }
+    // Sarvam — no free validate endpoint; do a minimal synth.
+    await synthSarvam({ text: "नमस्ते" }, key);
+    return { ok: true };
+  } catch (err: any) {
+    if (err instanceof TtsUpstreamError) {
+      return { ok: false, detail: `${err.status}: ${err.detail}` };
+    }
+    return { ok: false, detail: err?.message || String(err) };
+  }
 }
 
 /* ----------------------------- ElevenLabs ------------------------------ */
@@ -79,8 +145,8 @@ const ELEVEN_BASE = "https://api.elevenlabs.io/v1/text-to-speech";
 const ELEVEN_DEFAULT_VOICE = "21m00Tcm4TlvDq8ikWAM"; // Rachel (multilingual)
 const ELEVEN_DEFAULT_MODEL = "eleven_multilingual_v2";
 
-async function synthEleven(o: SynthesizeOptions): Promise<SynthesizedAudio> {
-  const key = (process.env.ELEVENLABS_API_KEY || "").trim();
+async function synthEleven(o: SynthesizeOptions, apiKey: string): Promise<SynthesizedAudio> {
+  const key = (apiKey || "").trim();
   const voiceId = o.voiceId || ELEVEN_DEFAULT_VOICE;
   const modelId = o.modelId || ELEVEN_DEFAULT_MODEL;
 
@@ -125,8 +191,8 @@ export const SARVAM_SPEAKERS = [
   { id: "hitesh", gender: "male" },
 ] as const;
 
-async function synthSarvam(o: SynthesizeOptions): Promise<SynthesizedAudio> {
-  const key = (process.env.SARVAM_API_KEY || "").trim();
+async function synthSarvam(o: SynthesizeOptions, apiKey: string): Promise<SynthesizedAudio> {
+  const key = (apiKey || "").trim();
   const speaker = o.voiceId || (process.env.SARVAM_SPEAKER || "").trim() || "anushka";
   const model = o.modelId || (process.env.SARVAM_MODEL || "").trim() || "bulbul:v2";
   const lang = o.language || (process.env.SARVAM_LANGUAGE || "").trim() || "hi-IN";

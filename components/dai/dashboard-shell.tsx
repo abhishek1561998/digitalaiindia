@@ -6,6 +6,7 @@ import { Syne, Outfit } from "next/font/google";
 import Link from "next/link";
 import { ThemeToggle } from "./theme-toggle";
 import { VoiceLibrary } from "./voice-library";
+import { VoiceIntegrations } from "./voice-integrations";
 import styles from "./dashboard-shell.module.css";
 
 const syne = Syne({ subsets: ["latin"], variable: "--font-syne" });
@@ -161,6 +162,7 @@ export function DashboardShell({ user }: { user: DashboardUser }) {
   const [loading, setLoading]       = useState(true);
   const [show, setShow]             = useState<Record<string, boolean>>({});
   const [activeKeyId, setActiveKeyId] = useState<string | null>(null);
+  const [voiceRefresh, setVoiceRefresh] = useState(0);
   const [playgroundApi, setPlaygroundApi] = useState<"chat" | "voice" | "three-d" | "design">("chat");
   const [prompt, setPrompt]         = useState("Explain what an API gateway does.");
   const [response, setResponse]     = useState("Response will appear here...");
@@ -584,7 +586,10 @@ export function DashboardShell({ user }: { user: DashboardUser }) {
 
           {/* ── Voice Library ── */}
           {!loading && tab === "voices" && (
-            <VoiceLibrary />
+            <>
+              <VoiceIntegrations onChange={() => setVoiceRefresh((n) => n + 1)} />
+              <VoiceLibrary key={voiceRefresh} />
+            </>
           )}
 
           {/* ── Playground ── */}

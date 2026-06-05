@@ -23,6 +23,30 @@ model User {
   updatedAt     DateTime      @updatedAt
   apiKeys       ApiKey[]
   usageRecords  UsageRecord[]
+  voiceIntegrations VoiceIntegration[]
+}
+
+// A user's "bring your own key" connection to a TTS provider (Sarvam AI or
+// ElevenLabs), configured from the dashboard Voice tab. The provider key is
+// AES-GCM encrypted at rest (same secret as ApiKey.encryptedKey). The single
+// row with isActive=true decides which provider the user's voice/tts calls
+// use — no Vercel env editing required.
+model VoiceIntegration {
+  id           String   @id @default(cuid())
+  provider     String   // "sarvam" | "elevenlabs"
+  encryptedKey String
+  keyLastFour  String
+  isActive     Boolean  @default(false)
+  // Optional per-provider defaults, e.g. { speaker, model } (Sarvam) or
+  // { voiceId, modelId, stability, similarityBoost } (ElevenLabs).
+  settings     Json?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, provider])
+  @@index([userId, isActive])
 }
 
 model ApiKey {

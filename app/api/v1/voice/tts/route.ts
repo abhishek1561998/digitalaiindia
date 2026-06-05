@@ -34,6 +34,7 @@ import {
   TtsNotConfiguredError,
   TtsUpstreamError,
 } from "@/lib/server/tts-providers";
+import { getActiveIntegration } from "@/lib/server/voice-integrations";
 
 // We stream the audio response back to the caller, so this route must run
 // on the Node runtime (Buffer + binary body), not Edge.
@@ -98,9 +99,13 @@ export async function POST(req: NextRequest) {
     language: body?.language || preset.language || undefined,
   };
 
-  // 3) Synthesize via whichever provider is configured (Sarvam | ElevenLabs).
+  // 3) Resolve the provider: prefer the user's connected integration (BYOK,
+  // configured in the dashboard), else fall back to the platform env key.
+  const resolved = await getActiveIntegration(auth.userId).catch(() => null);
+
+  // 4) Synthesize via whichever provider is configured (Sarvam | ElevenLabs).
   try {
-    const { audio, contentType, provider } = await synthesize(opts);
+    const { audio, contentType, provider } = await synthesize(opts, resolved);
 
     // Copy into a fresh, ArrayBuffer-backed view so the body type is a
     // concrete (non-shared) buffer that satisfies NextResponse's BodyInit.
