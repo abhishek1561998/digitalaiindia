@@ -27,14 +27,28 @@ export async function GET() {
 
   return NextResponse.json({
     keys: keys.map((key: any) => {
-      const fullKey = decryptApiKey(key.encryptedKey);
+      // A key encrypted under an old API_KEY_ENCRYPTION_SECRET can no longer
+      // be decrypted. Don't let one bad key throw and 500 the whole list
+      // (that hid every key from the dashboard while still counting toward
+      // the plan limit, so users got stuck unable to see or create keys).
+      // Surface it instead, flagged, so the owner can delete/rotate it.
+      let fullKey = "";
+      let masked = `${key.keyPrefix}${"•".repeat(6)}${key.keyLastFour}`;
+      let decryptError = false;
+      try {
+        fullKey = decryptApiKey(key.encryptedKey);
+        masked = maskApiKey(fullKey);
+      } catch {
+        decryptError = true;
+      }
       return {
         id: key.id,
         name: key.name,
         prefix: key.keyPrefix,
         lastFour: key.keyLastFour,
-        masked: maskApiKey(fullKey),
+        masked,
         fullKey,
+        decryptError,
         requests: key.requests,
         createdAt: key.createdAt,
         lastUsedAt: key.lastUsedAt,

@@ -34,6 +34,7 @@ type ApiKeyItem = {
   name: string;
   fullKey: string;
   masked: string;
+  decryptError?: boolean;
   requests: number;
   createdAt: string;
   lastUsedAt: string | null;
@@ -553,17 +554,27 @@ export function DashboardShell({ user }: { user: DashboardUser }) {
                           </p>
                         </div>
                         <div className={styles.keyActions}>
-                          <button className={styles.btnSm} onClick={() => setActiveKeyId(key.id)}>Use</button>
-                          <button className={styles.btnSm} onClick={() => setShow((p) => ({ ...p, [key.id]: !p[key.id] }))}>
-                            {show[key.id] ? "Hide" : "Show"}
-                          </button>
-                          <button className={styles.btnSm} onClick={() => copy(key.fullKey, "API key")}>
-                            <CopyIcon />
-                          </button>
+                          {!key.decryptError && (
+                            <>
+                              <button className={styles.btnSm} onClick={() => setActiveKeyId(key.id)}>Use</button>
+                              <button className={styles.btnSm} onClick={() => setShow((p) => ({ ...p, [key.id]: !p[key.id] }))}>
+                                {show[key.id] ? "Hide" : "Show"}
+                              </button>
+                              <button className={styles.btnSm} onClick={() => copy(key.fullKey, "API key")}>
+                                <CopyIcon />
+                              </button>
+                            </>
+                          )}
                           <button className={styles.btnDanger} onClick={() => deleteKey(key.id)}>Delete</button>
                         </div>
                       </div>
-                      <div className={styles.keyValue}>{show[key.id] ? key.fullKey : key.masked}</div>
+                      {key.decryptError ? (
+                        <div className={styles.keyValue} style={{ color: "#d97706" }}>
+                          ⚠ {key.masked} — couldn&apos;t decrypt (created under an old secret). Delete it and generate a new key.
+                        </div>
+                      ) : (
+                        <div className={styles.keyValue}>{show[key.id] ? key.fullKey : key.masked}</div>
+                      )}
                     </div>
                   ))}
                 </div>
