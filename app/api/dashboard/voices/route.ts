@@ -17,6 +17,7 @@
 
 import { NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/server/auth";
+import { activeProvider, SARVAM_SPEAKERS } from "@/lib/server/tts-providers";
 
 export const runtime = "nodejs";
 // Cache the voice list for 1 hour — it rarely changes and ElevenLabs
@@ -63,22 +64,41 @@ export async function GET() {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  // Cache hit?
-  if (cache && Date.now() - cache.at < REVALIDATE_SECONDS * 1000) {
-    return NextResponse.json({ voices: cache.voices, cached: true });
-  }
+  const provider = activeProvider();
 
-  const key = (process.env.ELEVENLABS_API_KEY || "").trim();
-  if (!key) {
+  // No provider key at all → guide the operator.
+  if (!provider) {
     return NextResponse.json(
       {
         error: "voice_provider_not_configured",
         message:
-          "ELEVENLABS_API_KEY is not set on this deployment. Add it in Vercel env to enable the Voice Library.",
+          "No TTS provider is configured. Add SARVAM_API_KEY (recommended for Hindi) or ELEVENLABS_API_KEY in Vercel env to enable the Voice Library.",
       },
       { status: 503 }
     );
   }
+
+  // Sarvam has a fixed speaker catalog (no remote /voices endpoint), so we
+  // serve it statically. No preview URLs — the cards just expose the speaker
+  // id to copy into voiceId.
+  if (provider === "sarvam") {
+    const voices: NormalizedVoice[] = SARVAM_SPEAKERS.map((s) => ({
+      voiceId: s.id,
+      name: s.id.charAt(0).toUpperCase() + s.id.slice(1),
+      category: "sarvam",
+      description: "",
+      previewUrl: null,
+      labels: { gender: s.gender, accent: "indian", useCase: "news" },
+    }));
+    return NextResponse.json({ voices, provider, cached: false });
+  }
+
+  // Cache hit? (ElevenLabs only — its catalog is fetched remotely.)
+  if (cache && Date.now() - cache.at < REVALIDATE_SECONDS * 1000) {
+    return NextResponse.json({ voices: cache.voices, provider, cached: true });
+  }
+
+  const key = (process.env.ELEVENLABS_API_KEY || "").trim();
 
   try {
     const res = await fetch("https://api.elevenlabs.io/v1/voices", {

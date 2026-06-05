@@ -29,17 +29,17 @@ import {
   validateApiKeyAndConsume,
   ApiAuthError,
 } from "@/lib/server/usage";
+import {
+  synthesize,
+  TtsNotConfiguredError,
+  TtsUpstreamError,
+} from "@/lib/server/tts-providers";
 
 // We stream the audio response back to the caller, so this route must run
 // on the Node runtime (Buffer + binary body), not Edge.
 export const runtime = "nodejs";
 
-// Default voice: a multilingual one that handles Hindi reasonably.
-// Customers can override per-request via the `voiceId` body field.
-const DEFAULT_VOICE_ID = "21m00Tcm4TlvDq8ikWAM"; // "Rachel"
-const DEFAULT_MODEL_ID = "eleven_multilingual_v2"; // handles Hindi
 const MAX_TEXT_LENGTH = 5000;
-const ELEVEN_BASE = "https://api.elevenlabs.io/v1/text-to-speech";
 
 export async function POST(req: NextRequest) {
   // 1) Validate API key + atomically increment usage counter
@@ -84,71 +84,36 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // Fallback chain: request body → key's saved preset → endpoint default.
-  // Lets a customer save "use Rachel @ stability 0.6" on their key and
-  // never repeat it on every TTS call.
+  // Fallback chain: request body → key's saved preset → provider default.
+  // Lets a customer save "use <voice> @ stability 0.6" on their key and
+  // never repeat it on every TTS call. Undefined values let each provider
+  // apply its own sensible default (e.g. Hindi speaker for Sarvam).
   const preset = (auth as any).keySettings || {};
-  const voiceId = String(body?.voiceId || preset.voiceId || DEFAULT_VOICE_ID);
-  const modelId = String(body?.modelId || preset.modelId || DEFAULT_MODEL_ID);
-  const stability = clamp01(
-    body?.stability ?? preset.stability,
-    0.5
-  );
-  const similarityBoost = clamp01(
-    body?.similarityBoost ?? preset.similarityBoost,
-    0.75
-  );
+  const opts = {
+    text,
+    voiceId: body?.voiceId || preset.voiceId || undefined,
+    modelId: body?.modelId || preset.modelId || undefined,
+    stability: body?.stability ?? preset.stability,
+    similarityBoost: body?.similarityBoost ?? preset.similarityBoost,
+    language: body?.language || preset.language || undefined,
+  };
 
-  // 3) Check provider key
-  const elevenKey = (process.env.ELEVENLABS_API_KEY || "").trim();
-  if (!elevenKey) {
-    return NextResponse.json(
-      { error: "TTS provider not configured" },
-      { status: 503 }
-    );
-  }
-
-  // 4) Call ElevenLabs REST directly — no SDK = no build-time issues.
+  // 3) Synthesize via whichever provider is configured (Sarvam | ElevenLabs).
   try {
-    const elevenRes = await fetch(`${ELEVEN_BASE}/${encodeURIComponent(voiceId)}`, {
-      method: "POST",
-      headers: {
-        "xi-api-key": elevenKey,
-        "Content-Type": "application/json",
-        Accept: "audio/mpeg",
-      },
-      body: JSON.stringify({
-        text,
-        model_id: modelId,
-        voice_settings: {
-          stability,
-          similarity_boost: similarityBoost,
-        },
-      }),
-    });
+    const { audio, contentType, provider } = await synthesize(opts);
 
-    if (!elevenRes.ok) {
-      const errText = await elevenRes.text();
-      return NextResponse.json(
-        {
-          error: "TTS provider error",
-          status: elevenRes.status,
-          detail: errText.slice(0, 300),
-        },
-        { status: 502 }
-      );
-    }
+    // Copy into a fresh, ArrayBuffer-backed view so the body type is a
+    // concrete (non-shared) buffer that satisfies NextResponse's BodyInit.
+    const body = new Uint8Array(audio);
 
-    const arrayBuf = await elevenRes.arrayBuffer();
-    const audio = Buffer.from(arrayBuf);
-
-    return new NextResponse(audio, {
+    return new NextResponse(body, {
       status: 200,
       headers: {
-        "Content-Type": "audio/mpeg",
+        "Content-Type": contentType,
         "Content-Length": audio.length.toString(),
         "Cache-Control": "no-store",
         // Expose how much quota the caller has left so SDKs can warn
+        "X-DAI-Provider": provider,
         "X-DAI-Plan": auth.plan,
         "X-DAI-Usage": String(auth.usageCount),
         "X-DAI-Limit": String(auth.monthlyLimit),
@@ -156,15 +121,21 @@ export async function POST(req: NextRequest) {
       },
     });
   } catch (err: any) {
+    if (err instanceof TtsNotConfiguredError) {
+      return NextResponse.json(
+        { error: "TTS provider not configured" },
+        { status: 503 }
+      );
+    }
+    if (err instanceof TtsUpstreamError) {
+      return NextResponse.json(
+        { error: "TTS provider error", status: err.status, detail: err.detail },
+        { status: 502 }
+      );
+    }
     return NextResponse.json(
       { error: "TTS call failed", message: err?.message || String(err) },
       { status: 500 }
     );
   }
-}
-
-function clamp01(v: any, fallback: number): number {
-  const n = Number(v);
-  if (!Number.isFinite(n)) return fallback;
-  return Math.max(0, Math.min(1, n));
 }
