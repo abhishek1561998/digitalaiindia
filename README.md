@@ -2,7 +2,7 @@
 
 A **production-ready AI voice conversation system** that rivals the best voice AI platforms in the market, including [Machine Agents](https://digitalaiindia.com/). Built with Next.js, ElevenLabs, LangGraph, and Convex.
 
-## 🚀 **Live Demo**
+## 🚀 **Live Demo***
 
 Your voice AI system is running at:
 - **Main Site**: `http://localhost:3001/ai-machine-agent`
