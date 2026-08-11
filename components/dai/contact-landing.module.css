@@ -1,0 +1,157 @@
+/* Contact page — extends the Bharat Circuit tokens defined on .shell */
+
+.layout {
+  margin-top: 3rem;
+  display: grid;
+  grid-template-columns: 1fr 1.6fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .layout { grid-template-columns: 1fr; }
+}
+
+.panel {
+  border: 1px solid var(--border);
+  border-radius: var(--radiusLg);
+  background: var(--card);
+  padding: 2rem;
+}
+
+.panelTitle {
+  font-family: var(--font-syne, sans-serif);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 1.5rem;
+}
+
+.infoRow {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+}
+
+.infoRow:last-of-type { margin-bottom: 0; }
+
+.infoIcon {
+  flex-shrink: 0;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 117, 0, 0.12);
+  color: var(--accent);
+}
+
+.infoLabel {
+  font-family: var(--font-syne, sans-serif);
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--text);
+  margin-bottom: 0.2rem;
+}
+
+.infoValue {
+  font-size: 0.875rem;
+  color: var(--text2);
+  line-height: 1.6;
+}
+
+.infoValue a {
+  color: var(--accent);
+}
+
+.infoValue a:hover {
+  text-decoration: underline;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 560px) {
+  .formRow { grid-template-columns: 1fr; }
+}
+
+.field {
+  margin-bottom: 1.25rem;
+}
+
+.label {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--text2);
+  margin-bottom: 0.4rem;
+  font-family: var(--font-mono, monospace);
+}
+
+.input,
+.textarea,
+.select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border2);
+  background: var(--bg2);
+  color: var(--text);
+  font-family: var(--font-outfit, sans-serif);
+  font-size: 0.9rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.input::placeholder,
+.textarea::placeholder {
+  color: var(--text3);
+}
+
+.input:focus,
+.textarea:focus,
+.select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--glow);
+}
+
+.inputError {
+  border-color: var(--accent2);
+}
+
+.errorText {
+  margin-top: 0.35rem;
+  font-size: 0.78rem;
+  color: var(--accent2);
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 140px;
+}
+
+.banner {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius);
+  margin-bottom: 1.5rem;
+  font-size: 0.875rem;
+}
+
+.bannerSuccess {
+  background: rgba(0, 229, 176, 0.1);
+  border: 1px solid rgba(0, 229, 176, 0.3);
+  color: var(--accent3);
+}
+
+.bannerError {
+  background: rgba(255, 61, 107, 0.1);
+  border: 1px solid rgba(255, 61, 107, 0.3);
+  color: var(--accent2);
+}
