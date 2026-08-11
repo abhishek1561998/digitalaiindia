@@ -452,6 +452,46 @@ export function LearnLanding({ isLoggedIn }: { isLoggedIn: boolean }) {
         </div>
       </section>
 
+      {/* ── Who this is for ── */}
+      <section className={styles.section}>
+        <div className={styles.sectionLabel}>Who this is for</div>
+        <h2 className={styles.sectionTitle}>Built for people starting from different places</h2>
+        <div className={styles.buildGrid}>
+          <div className={styles.buildCard}><span className={styles.buildArrow}>→</span><strong>College students</strong><span>No CS background needed to start</span></div>
+          <div className={styles.buildCard}><span className={styles.buildArrow}>→</span><strong>Career switchers</strong><span>A structured path into tech</span></div>
+          <div className={styles.buildCard}><span className={styles.buildArrow}>→</span><strong>Working developers</strong><span>Leveling up into AI engineering</span></div>
+          <div className={styles.buildCard}><span className={styles.buildArrow}>→</span><strong>Self-taught coders</strong><span>Structure for what you already know</span></div>
+        </div>
+      </section>
+
+      {/* ── FAQ ── */}
+      <section className={styles.section}>
+        <div className={styles.sectionLabel}>FAQ</div>
+        <h2 className={styles.sectionTitle}>Before you ask</h2>
+        <div className={learn.faqList}>
+          <div className={learn.faqItem}>
+            <div className={learn.faqQ}>Is it really free?</div>
+            <div className={learn.faqA}>Yes, free during beta — no credit card, no trial period that quietly starts charging you.</div>
+          </div>
+          <div className={learn.faqItem}>
+            <div className={learn.faqQ}>Do I need prior coding experience?</div>
+            <div className={learn.faqA}>No. JavaScript Fundamentals starts from zero. DSA, MERN, and AI Engineering assume you&apos;ve been through the earlier stages of the path.</div>
+          </div>
+          <div className={learn.faqItem}>
+            <div className={learn.faqQ}>When does the first track launch?</div>
+            <div className={learn.faqA}>We&apos;re writing it now. We&apos;d rather ship something good late than something thin on time — join the waitlist and you&apos;ll be the first to know.</div>
+          </div>
+          <div className={learn.faqItem}>
+            <div className={learn.faqQ}>Is this only about AI?</div>
+            <div className={learn.faqA}>No — MERN, JavaScript, DSA, project building, and system design are equally core to the path, not side content.</div>
+          </div>
+          <div className={learn.faqItem}>
+            <div className={learn.faqQ}>How is this different from a typical bootcamp?</div>
+            <div className={learn.faqA}>Every track is pulled from a system we&apos;ve actually shipped at DigitalAIIndia — not a generic curriculum written once and never touched again.</div>
+          </div>
+        </div>
+      </section>
+
       {/* ── Closing CTA ── */}
       <section className={styles.ctaBanner}>
         <div className={styles.ctaBannerOrb} />

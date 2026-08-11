@@ -519,6 +519,34 @@
   font-family: var(--font-mono, monospace);
 }
 
+/* ── FAQ ── */
+.faqList {
+  margin-top: 2.5rem;
+  max-width: 760px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.faqItem {
+  padding: 1.5rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.faqQ {
+  font-family: var(--font-syne, sans-serif);
+  font-weight: 700;
+  font-size: 1.02rem;
+  color: var(--text);
+  margin-bottom: 0.5rem;
+}
+
+.faqA {
+  color: var(--text2);
+  font-size: 0.92rem;
+  line-height: 1.7;
+}
+
 /* ── Waitlist form ── */
 .waitlistForm {
   display: flex;
