@@ -7,6 +7,17 @@
   background-clip: text;
   color: transparent;
   animation: shimmer 7s linear infinite;
+  padding: 8px;
+}
+
+.glowTextTitle {
+  background: linear-gradient(90deg, #161515, #be2e50, var(--accent3), #4e2d12);
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 7s linear infinite;
+  padding: 8px;
 }
 
 @keyframes shimmer {

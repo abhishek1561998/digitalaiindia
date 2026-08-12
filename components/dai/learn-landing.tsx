@@ -226,6 +226,11 @@ export function LearnLanding({ isLoggedIn }: { isLoggedIn: boolean }) {
     document.getElementById("path")?.scrollIntoView({ behavior: "smooth" });
   }
 
+  function scrollToWaitlist(e: React.MouseEvent) {
+    e.preventDefault();
+    document.getElementById("waitlist")?.scrollIntoView({ behavior: "smooth" });
+  }
+
   return (
     <div
       className={`${styles.shell} ${syne.variable} ${outfit.variable} ${jetBrains.variable}`}
@@ -281,7 +286,7 @@ export function LearnLanding({ isLoggedIn }: { isLoggedIn: boolean }) {
           <span className={styles.dot} /> For students — learn by building
         </div>
 
-        <h1 className={styles.heroTitle}>
+        <h1 className={`${styles.heroTitle} ${learn.glowTextTitle}`}>
           Become a developer,
           <br />
           not just a <em className={`${styles.heroEm} ${learn.glowText}`}>certificate</em>
@@ -293,9 +298,9 @@ export function LearnLanding({ isLoggedIn }: { isLoggedIn: boolean }) {
         </p>
 
         <div className={styles.heroCtas}>
-          <Link href="/contact" className={`${styles.btn} ${styles.btnPrimary} ${styles.btnLg}`}>
+          <button type="button" onClick={scrollToWaitlist} className={`${styles.btn} ${styles.btnPrimary} ${styles.btnLg}`}>
             Get notified when tracks launch <ArrowIcon />
-          </Link>
+          </button>
           <button type="button" onClick={scrollToPath} className={`${styles.btn} ${styles.btnGhost} ${styles.btnLg}`}>
             See the path
           </button>
@@ -307,6 +312,18 @@ export function LearnLanding({ isLoggedIn }: { isLoggedIn: boolean }) {
           <div className={styles.heroStat}><strong>Free</strong><span>During beta</span></div>
           <div className={styles.heroStatDivider} />
           <div className={styles.heroStat}><strong>Real</strong><span>Projects, not slides</span></div>
+        </div>
+      </section>
+
+      {/* ── Who this is for ── */}
+      <section className={styles.section}>
+        <div className={styles.sectionLabel}>Who this is for</div>
+        <h2 className={styles.sectionTitle}>Built for people starting from different places</h2>
+        <div className={styles.buildGrid}>
+          <div className={styles.buildCard}><span className={styles.buildArrow}>→</span><strong>College students</strong><span>No CS background needed to start</span></div>
+          <div className={styles.buildCard}><span className={styles.buildArrow}>→</span><strong>Career switchers</strong><span>A structured path into tech</span></div>
+          <div className={styles.buildCard}><span className={styles.buildArrow}>→</span><strong>Working developers</strong><span>Leveling up into AI engineering</span></div>
+          <div className={styles.buildCard}><span className={styles.buildArrow}>→</span><strong>Self-taught coders</strong><span>Structure for what you already know</span></div>
         </div>
       </section>
 
@@ -440,30 +457,6 @@ export function LearnLanding({ isLoggedIn }: { isLoggedIn: boolean }) {
         </div>
       </section>
 
-      {/* ── Why here ── */}
-      <section className={styles.section}>
-        <div className={styles.sectionLabel}>Why here</div>
-        <h2 className={styles.sectionTitle}>Not another prompt-engineering course</h2>
-        <div className={styles.buildGrid}>
-          <div className={styles.buildCard}><span className={styles.buildArrow}>→</span><strong>Real code</strong><span>From production systems</span></div>
-          <div className={styles.buildCard}><span className={styles.buildArrow}>→</span><strong>Built by us</strong><span>An India-first AI company</span></div>
-          <div className={styles.buildCard}><span className={styles.buildArrow}>→</span><strong>Free in beta</strong><span>No cost while we build it</span></div>
-          <div className={styles.buildCard}><span className={styles.buildArrow}>→</span><strong>No fluff</strong><span>Straight to the mechanism</span></div>
-        </div>
-      </section>
-
-      {/* ── Who this is for ── */}
-      <section className={styles.section}>
-        <div className={styles.sectionLabel}>Who this is for</div>
-        <h2 className={styles.sectionTitle}>Built for people starting from different places</h2>
-        <div className={styles.buildGrid}>
-          <div className={styles.buildCard}><span className={styles.buildArrow}>→</span><strong>College students</strong><span>No CS background needed to start</span></div>
-          <div className={styles.buildCard}><span className={styles.buildArrow}>→</span><strong>Career switchers</strong><span>A structured path into tech</span></div>
-          <div className={styles.buildCard}><span className={styles.buildArrow}>→</span><strong>Working developers</strong><span>Leveling up into AI engineering</span></div>
-          <div className={styles.buildCard}><span className={styles.buildArrow}>→</span><strong>Self-taught coders</strong><span>Structure for what you already know</span></div>
-        </div>
-      </section>
-
       {/* ── FAQ ── */}
       <section className={styles.section}>
         <div className={styles.sectionLabel}>FAQ</div>
@@ -493,7 +486,7 @@ export function LearnLanding({ isLoggedIn }: { isLoggedIn: boolean }) {
       </section>
 
       {/* ── Closing CTA ── */}
-      <section className={styles.ctaBanner}>
+      <section className={styles.ctaBanner} id="waitlist">
         <div className={styles.ctaBannerOrb} />
         <div className={styles.ctaBannerContent}>
           <div className={styles.sectionLabel} style={{ textAlign: "center" }}>Coming soon</div>

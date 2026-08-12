@@ -26,8 +26,10 @@
   font-family: var(--font-outfit, sans-serif);
   min-height: 100vh;
   color: var(--text);
-  background: var(--bg);
-  transition: background 0.3s, color 0.3s;
+  background-color: var(--bg);
+  background-image: radial-gradient(circle, var(--border2) 1px, transparent 1px);
+  background-size: 32px 32px;
+  transition: background-color 0.3s, color 0.3s;
 }
 
 .shell[data-theme="light"] {
@@ -505,9 +507,57 @@
 
 /* ── Sections ── */
 .section {
+  position: relative;
   max-width: 1200px;
   margin: 0 auto;
   padding: 6rem 2rem;
+}
+
+.section::before {
+  content: "";
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 68px;
+  background: linear-gradient(180deg, transparent, var(--accent) 45%, var(--accent3) 100%);
+  background-size: 100% 220%;
+  animation: circuitFlow 3.2s linear infinite;
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.section::after {
+  content: "";
+  position: absolute;
+  top: 78px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent3);
+  box-shadow: 0 0 14px var(--glow);
+  animation: circuitPulse 2.4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes circuitFlow {
+  to { background-position: 0 220%; }
+}
+
+@keyframes circuitPulse {
+  0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.9; }
+  50% { transform: translateX(-50%) scale(1.6); opacity: 0.4; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .section::before, .section::after { animation: none; }
+}
+
+@media (max-width: 640px) {
+  .section::before, .section::after { display: none; }
 }
 
 .sectionLabel {
