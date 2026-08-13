@@ -1,0 +1,279 @@
+/* JavaScript track — extends the Bharat Circuit tokens on .shell.
+   Deliberately restrained: one accent color (--accent), no extra hues. */
+
+/* Sections stacked with tight custom padding sit too close for the sitewide
+   .section circuit-line connector — it ends up drawn through the heading
+   instead of in clear space above it. Disable it on those sections only. */
+.tight::before, .tight::after { display: none; }
+
+.ctaRow {
+  margin-top: 1.75rem;
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.stageList {
+  margin-top: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.stageTop {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.4rem;
+}
+
+.stageNum {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.75rem;
+  color: var(--accent);
+  letter-spacing: 0.04em;
+}
+
+.stageTitle {
+  font-family: var(--font-syne, sans-serif);
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: var(--text);
+  margin: 0.2rem 0 0;
+}
+
+.stageTime {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text3);
+  white-space: nowrap;
+}
+
+.stageWhy {
+  color: var(--text2);
+  font-size: 0.9rem;
+  line-height: 1.65;
+  margin: 0.75rem 0 1.1rem;
+  padding-left: 0.9rem;
+  border-left: 2px solid var(--border2);
+}
+
+.miniLabel {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin: 1.1rem 0 0.6rem;
+}
+
+.miniLabel:first-of-type { margin-top: 0; }
+
+.learnList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.learnList li {
+  position: relative;
+  padding-left: 1rem;
+  font-size: 0.875rem;
+  color: var(--text2);
+  line-height: 1.55;
+}
+
+.learnList li::before {
+  content: "–";
+  position: absolute;
+  left: 0;
+  color: var(--text3);
+}
+
+.stageCode {
+  margin: 0.9rem 0 0;
+  padding: 1rem 1.1rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  overflow-x: auto;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.78rem;
+  line-height: 1.75;
+  color: var(--text2);
+  white-space: pre;
+}
+
+.stageCode .kw { color: var(--accent); }
+.stageCode .com { color: var(--text3); }
+
+.calloutRow {
+  margin-top: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.callout {
+  padding: 0.75rem 0.95rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  font-size: 0.85rem;
+  color: var(--text2);
+  line-height: 1.6;
+}
+
+.calloutLabel {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 700;
+  margin-bottom: 0.3rem;
+  display: block;
+}
+
+.callout strong { color: var(--text); }
+
+/* ── Capstone ── */
+.capstoneReqs {
+  margin-top: 1.25rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem 1.5rem;
+}
+
+@media (max-width: 560px) {
+  .capstoneReqs { grid-template-columns: 1fr; }
+}
+
+.capstoneReqs div {
+  font-size: 0.85rem;
+  color: var(--text2);
+  padding-left: 1.1rem;
+  position: relative;
+}
+
+.capstoneReqs div::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+}
+
+/* ── Two column: pitfalls / resources ── */
+.twoCol {
+  margin-top: 2.5rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2.5rem;
+}
+
+@media (max-width: 780px) {
+  .twoCol { grid-template-columns: 1fr; }
+}
+
+.pitList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.pitList li {
+  font-size: 0.85rem;
+  color: var(--text2);
+  line-height: 1.6;
+  padding-left: 0.9rem;
+  border-left: 2px solid var(--border2);
+}
+
+.pitList strong {
+  display: block;
+  color: var(--text);
+  font-size: 0.875rem;
+  margin-bottom: 0.15rem;
+}
+
+.resList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.resList li {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.75rem;
+  padding-bottom: 0.7rem;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.85rem;
+}
+
+.resList li:last-child { border-bottom: none; padding-bottom: 0; }
+.resName { color: var(--text); font-weight: 600; }
+.resTag {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.65rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text3);
+  white-space: nowrap;
+}
+
+/* ── Quick facts strip ── */
+.facts {
+  margin-top: 2rem;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+@media (max-width: 640px) {
+  .facts { grid-template-columns: repeat(2, 1fr); }
+}
+
+.fact {
+  padding: 0.85rem 1rem;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.fact:nth-child(4n) { border-right: none; }
+
+@media (max-width: 640px) {
+  .fact:nth-child(2n) { border-right: none; }
+  .fact:nth-child(4n) { border-right: 1px solid var(--border); }
+}
+
+.factK {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin-bottom: 0.3rem;
+}
+
+.factV {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text);
+}

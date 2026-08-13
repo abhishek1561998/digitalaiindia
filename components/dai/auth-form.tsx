@@ -67,7 +67,8 @@ export function AuthForm() {
       const data = await res.json();
       if (!res.ok) { setError(data.error || "Authentication failed"); return; }
       if (data.apiKey) setSuccess(`Account created! Your first API key: ${data.apiKey}`);
-      router.push("/dashboard");
+      const redirectTo = searchParams.get("redirect");
+      router.push(redirectTo && redirectTo.startsWith("/") ? redirectTo : "/dashboard");
       router.refresh();
     } catch {
       setError("Request failed. Please try again.");

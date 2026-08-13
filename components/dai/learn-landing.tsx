@@ -192,8 +192,23 @@ export function LearnLanding({ isLoggedIn }: { isLoggedIn: boolean }) {
   const [waitName, setWaitName] = useState("");
   const [waitEmail, setWaitEmail] = useState("");
   const [waitStatus, setWaitStatus] = useState<"idle" | "sending" | "done" | "error">("idle");
+  const [jsProgress, setJsProgress] = useState<{ percent: number; completed: boolean } | null>(null);
 
   const authLink = useMemo(() => (isLoggedIn ? "/dashboard" : "/auth?mode=signup"), [isLoggedIn]);
+
+  useEffect(() => {
+    if (!isLoggedIn) return;
+    fetch("/api/learn/progress?trackId=js")
+      .then((r) => r.json())
+      .then((data) => {
+        if (!data.enrollment) return;
+        const sp = data.enrollment.stageProgress as Record<string, number>;
+        const stageCount = 9;
+        const sum = Array.from({ length: stageCount }, (_, i) => sp[String(i)] || 0).reduce((a: number, b: number) => a + b, 0);
+        setJsProgress({ percent: Math.round(sum / stageCount), completed: Boolean(data.enrollment.completedAt) });
+      })
+      .catch(() => {});
+  }, [isLoggedIn]);
 
   async function submitWaitlist(e: React.FormEvent) {
     e.preventDefault();
@@ -350,6 +365,56 @@ export function LearnLanding({ isLoggedIn }: { isLoggedIn: boolean }) {
         </div>
       </section>
 
+          {/* ── Tracks ── */}
+      <section className={styles.section}>
+        <div className={styles.sectionLabel}>Tracks</div>
+        <h2 className={styles.sectionTitle}>What you&apos;ll learn</h2>
+        <p className={styles.sectionSub}>Six tracks in progress. New write-ups publish here first.</p>
+        <div className={learn.trackGrid}>
+          {tracks.map((t) => {
+            const isLive = t.id === "js";
+            const cardContent = (
+              <>
+                <div className={learn.trackIconWrap} style={{ "--icon-bg": t.bg, "--icon-fg": t.fg } as React.CSSProperties}>
+                  {t.icon}
+                </div>
+                <div className={learn.trackHead}>
+                  <h3>{t.title}</h3>
+                  <span className={learn.trackLevel}>{t.level}</span>
+                </div>
+                <p>{t.desc}</p>
+                <p><strong>You&apos;ll build:</strong> {t.build}</p>
+                <div className={learn.trackTags}>
+                  {t.tags.map((tag) => (
+                    <span className={learn.trackTag} key={tag}>{tag}</span>
+                  ))}
+                </div>
+                <div className={learn.trackFooter}>
+                  {isLive && jsProgress?.completed ? (
+                    <span className={learn.trackStatus} style={{ color: "var(--accent)" }}>● Completed — certificate earned</span>
+                  ) : isLive && jsProgress && jsProgress.percent > 0 ? (
+                    <span className={learn.trackStatus} style={{ color: "var(--accent)" }}>● {jsProgress.percent}% complete — continue →</span>
+                  ) : isLive ? (
+                    <span className={learn.trackStatus} style={{ color: "var(--accent)" }}>● View curriculum →</span>
+                  ) : (
+                    <span className={learn.trackStatus}>● Coming soon</span>
+                  )}
+                </div>
+              </>
+            );
+            return isLive ? (
+              <Link href="/learn/javascript" className={learn.trackCard} key={t.id}>
+                {cardContent}
+              </Link>
+            ) : (
+              <article className={learn.trackCard} key={t.id}>
+                {cardContent}
+              </article>
+            );
+          })}
+        </div>
+      </section>
+
       {/* ── Who this is for ── */}
       <section className={styles.section}>
         <div className={styles.sectionLabel}>Who this is for</div>
@@ -415,35 +480,7 @@ export function LearnLanding({ isLoggedIn }: { isLoggedIn: boolean }) {
         </div>
       </section>
 
-      {/* ── Tracks ── */}
-      <section className={styles.section}>
-        <div className={styles.sectionLabel}>Tracks</div>
-        <h2 className={styles.sectionTitle}>What you&apos;ll learn</h2>
-        <p className={styles.sectionSub}>Six tracks in progress. New write-ups publish here first.</p>
-        <div className={learn.trackGrid}>
-          {tracks.map((t) => (
-            <article className={learn.trackCard} key={t.id}>
-              <div className={learn.trackIconWrap} style={{ "--icon-bg": t.bg, "--icon-fg": t.fg } as React.CSSProperties}>
-                {t.icon}
-              </div>
-              <div className={learn.trackHead}>
-                <h3>{t.title}</h3>
-                <span className={learn.trackLevel}>{t.level}</span>
-              </div>
-              <p>{t.desc}</p>
-              <p><strong>You&apos;ll build:</strong> {t.build}</p>
-              <div className={learn.trackTags}>
-                {t.tags.map((tag) => (
-                  <span className={learn.trackTag} key={tag}>{tag}</span>
-                ))}
-              </div>
-              <div className={learn.trackFooter}>
-                <span className={learn.trackStatus}>● Coming soon</span>
-              </div>
-            </article>
-          ))}
-        </div>
-      </section>
+  
 
       {/* ── Code Preview ── */}
       <section className={styles.section}>

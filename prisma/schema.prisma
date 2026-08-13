@@ -24,6 +24,25 @@ model User {
   apiKeys       ApiKey[]
   usageRecords  UsageRecord[]
   voiceIntegrations VoiceIntegration[]
+  enrollments   TrackEnrollment[]
+}
+
+// One row per (user, track). stageProgress maps stage index -> 0 | 50 | 100
+// (50 = content viewed, 100 = quiz passed) so the course UI and the /learn
+// hub can both show granular per-topic progress, not just a single percent.
+model TrackEnrollment {
+  id            String    @id @default(cuid())
+  userId        String
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  trackId       String
+  currentStage  Int       @default(0)
+  stageProgress Json      @default("{}")
+  points        Int       @default(0)
+  completedAt   DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@unique([userId, trackId])
 }
 
 // A user's "bring your own key" connection to a TTS provider (Sarvam AI or

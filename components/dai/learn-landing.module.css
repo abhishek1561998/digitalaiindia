@@ -133,6 +133,8 @@
 
 .trackCard {
   position: relative;
+  display: block;
+  text-decoration: none;
   border: 1px solid var(--border);
   border-radius: var(--radiusLg);
   background: var(--card);
