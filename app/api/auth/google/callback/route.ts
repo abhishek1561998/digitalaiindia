@@ -2,10 +2,11 @@ import { randomBytes } from "crypto";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { SESSION_COOKIE, hashPassword, signSessionToken } from "@/lib/server/auth";
+import { SESSION_COOKIE, cookieDomainFor, hashPassword, signSessionToken } from "@/lib/server/auth";
 import { encryptApiKey, generateApiKey } from "@/lib/server/api-keys";
 
 const STATE_COOKIE = "dai_google_oauth_state";
+const RETURN_COOKIE = "dai_google_oauth_return";
 
 type GoogleTokenResponse = {
   id_token?: string;
@@ -191,7 +192,10 @@ export async function GET(req: Request) {
       name: user.name,
     });
 
-    const res = NextResponse.redirect(`${url.origin}/dashboard`);
+    const domain = cookieDomainFor(url.hostname);
+    const returnTo = cookieStore.get(RETURN_COOKIE)?.value || `${url.origin}/dashboard`;
+
+    const res = NextResponse.redirect(returnTo);
     res.cookies.set({
       name: SESSION_COOKIE,
       value: token,
@@ -200,14 +204,11 @@ export async function GET(req: Request) {
       sameSite: "lax",
       path: "/",
       maxAge: 60 * 60 * 24 * 7,
+      domain,
     });
 
-    res.cookies.set({
-      name: STATE_COOKIE,
-      value: "",
-      path: "/",
-      maxAge: 0,
-    });
+    res.cookies.set({ name: STATE_COOKIE, value: "", path: "/", maxAge: 0, domain });
+    res.cookies.set({ name: RETURN_COOKIE, value: "", path: "/", maxAge: 0, domain });
 
     return res;
   } catch (error) {

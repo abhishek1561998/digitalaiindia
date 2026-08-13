@@ -270,7 +270,10 @@ export function AuthForm() {
 
       {/* Google */}
       <a
-        href="/api/auth/google/start"
+        href={`/api/auth/google/start${(() => {
+          const r = searchParams.get("redirect");
+          return r && r.startsWith("/") ? `?redirect=${encodeURIComponent(r)}` : "";
+        })()}`}
         style={{
           display: "flex",
           width: "100%",

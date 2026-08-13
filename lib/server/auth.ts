@@ -4,6 +4,16 @@ import { prisma } from "@/lib/prisma";
 
 export const SESSION_COOKIE = "dai_session";
 
+// Cookies set without a domain are host-only — a session created on
+// learn.digitalaiindia.com would look logged-out on platform./blog./the
+// main domain. Scoping to .digitalaiindia.com shares it across all of them.
+// Left undefined on localhost/preview hosts, where an explicit domain that
+// doesn't match the request host makes the browser silently drop the cookie.
+export function cookieDomainFor(host: string): string | undefined {
+  const bare = host.split(":")[0];
+  return bare.endsWith("digitalaiindia.com") ? ".digitalaiindia.com" : undefined;
+}
+
 type SessionPayload = {
   sub: string;
   email: string;

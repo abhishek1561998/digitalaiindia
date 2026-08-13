@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { SESSION_COOKIE, hashPassword, signSessionToken } from "@/lib/server/auth";
+import { SESSION_COOKIE, cookieDomainFor, hashPassword, signSessionToken } from "@/lib/server/auth";
 import { encryptApiKey, generateApiKey } from "@/lib/server/api-keys";
 
 export async function POST(req: Request) {
@@ -73,6 +73,7 @@ export async function POST(req: Request) {
       sameSite: "lax",
       path: "/",
       maxAge: 60 * 60 * 24 * 7,
+      domain: cookieDomainFor(new URL(req.url).hostname),
     });
 
     return res;
