@@ -2,18 +2,21 @@ import { Resend } from "resend";
 
 // No email service was configured anywhere in this project before this —
 // gated on RESEND_API_KEY so the rest of the app keeps working (just
-// logs instead of sending) until that's set.
-const resendClient = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
-
+// logs instead of sending) until that's set. Instantiated per-call rather
+// than as a module-level singleton — a top-level `new Resend(...)` read
+// process.env.RESEND_API_KEY as unset in this project's serverless
+// bundling even after the var was confirmed present at runtime.
 const FROM = process.env.EMAIL_FROM || "DigitalAIIndia <onboarding@resend.dev>";
 const ADMIN_NOTIFY_EMAIL = process.env.ADMIN_NOTIFY_EMAIL || "info.digitalaiindia@gmail.com";
 
 async function send(to: string, subject: string, html: string) {
-  if (!resendClient) {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) {
     console.warn(`[email] RESEND_API_KEY not set — would have sent "${subject}" to ${to}`);
     return { sent: false };
   }
   try {
+    const resendClient = new Resend(apiKey);
     await resendClient.emails.send({ from: FROM, to, subject, html });
     return { sent: true };
   } catch (error) {
