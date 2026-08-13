@@ -105,7 +105,6 @@ export function PlatformLanding({ isLoggedIn }: { isLoggedIn: boolean }) {
   const [theme, setTheme] = useState<"dark" | "light">("light");
   const [mobileOpen, setMobileOpen] = useState(false);
   const [tab, setTab] = useState<"curl" | "javascript" | "python">("curl");
-
   const authLink = useMemo(() => (isLoggedIn ? "/dashboard" : "/auth?mode=signup"), [isLoggedIn]);
 
   useEffect(() => {
@@ -136,12 +135,8 @@ export function PlatformLanding({ isLoggedIn }: { isLoggedIn: boolean }) {
           <span>DigitalAI<span className={styles.logoIndia}>India</span></span>
         </div>
         <div className={styles.navLinks}>
-          <Link href="/">Home</Link>
-          <Link href="/platform">Products</Link>
+          <a href="https://digitalaiindia.com" className={styles.navBackLink}>← digitalaiindia.com</a>
           <Link href="/pricing">Pricing</Link>
-          <Link href="/about">About</Link>
-          <Link href="/blog">Blog</Link>
-          <Link href="/learn">Learn</Link>
         </div>
         <div className={styles.navRight}>
           <CelebrateButton />
@@ -158,12 +153,8 @@ export function PlatformLanding({ isLoggedIn }: { isLoggedIn: boolean }) {
 
       {mobileOpen && (
         <div className={styles.mobileMenu}>
-          <Link href="/" onClick={() => setMobileOpen(false)}>Home</Link>
-          <Link href="/platform" onClick={() => setMobileOpen(false)}>Products</Link>
+          <a href="https://digitalaiindia.com" onClick={() => setMobileOpen(false)}>← digitalaiindia.com</a>
           <Link href="/pricing" onClick={() => setMobileOpen(false)}>Pricing</Link>
-          <Link href="/about" onClick={() => setMobileOpen(false)}>About</Link>
-          <Link href="/blog" onClick={() => setMobileOpen(false)}>Blog</Link>
-          <Link href="/learn" onClick={() => setMobileOpen(false)}>Learn</Link>
           <div className={styles.mobileMenuActions}>
             <button type="button" className={`${styles.btn} ${styles.btnGhost} ${styles.btnSm}`} onClick={() => { toggleTheme(); setMobileOpen(false); }}>
               {theme === "dark" ? "Light mode" : "Dark mode"}

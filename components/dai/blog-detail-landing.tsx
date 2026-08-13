@@ -74,8 +74,6 @@ export function BlogDetailLanding({ isLoggedIn }: { isLoggedIn: boolean }) {
   const [post, setPost] = useState<BlogPost | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const authLink = useMemo(() => (isLoggedIn ? "/dashboard" : "/auth?mode=signup"), [isLoggedIn]);
-
   useEffect(() => {
     const saved = window.localStorage.getItem("theme");
     setTheme(saved === "dark" ? "dark" : "light");
@@ -117,21 +115,14 @@ export function BlogDetailLanding({ isLoggedIn }: { isLoggedIn: boolean }) {
           <span>DigitalAI<span className={styles.logoIndia}>India</span></span>
         </div>
         <div className={styles.navLinks}>
-          <Link href="/">Home</Link>
-          <Link href="/platform">Products</Link>
-          <Link href="/pricing">Pricing</Link>
-          <Link href="/about">About</Link>
-          <Link href="/blog">Blog</Link>
-          <Link href="/learn">Learn</Link>
-          
+          <a href="https://digitalaiindia.com" className={styles.navBackLink}>← digitalaiindia.com</a>
+          <Link href="/blog">All articles</Link>
         </div>
         <div className={styles.navRight}>
           <CelebrateButton />
           <button type="button" className={`${styles.btn} ${styles.themeToggle}`} onClick={toggleTheme} aria-label="Toggle theme">
             {theme === "dark" ? <SunIcon /> : <MoonIcon />}
           </button>
-          <Link href={isLoggedIn ? "/dashboard" : "/auth"} className={`${styles.btn} ${styles.btnGhost} ${styles.btnSm}`}>Sign In</Link>
-          <Link href={authLink} className={`${styles.btn} ${styles.btnPrimary} ${styles.btnSm}`}>Get API Key</Link>
         <button type="button" className={styles.navHamburger} onClick={() => setMobileOpen((v) => !v)} aria-label="Toggle menu" aria-expanded={mobileOpen}>
           {mobileOpen ? <XIcon /> : <MenuIcon />}
         </button>
@@ -140,17 +131,12 @@ export function BlogDetailLanding({ isLoggedIn }: { isLoggedIn: boolean }) {
 
       {mobileOpen && (
         <div className={styles.mobileMenu}>
-          <Link href="/" onClick={() => setMobileOpen(false)}>Home</Link>
-          <Link href="/platform" onClick={() => setMobileOpen(false)}>Products</Link>
-          <Link href="/pricing" onClick={() => setMobileOpen(false)}>Pricing</Link>
-          <Link href="/about" onClick={() => setMobileOpen(false)}>About</Link>
-          <Link href="/blog" onClick={() => setMobileOpen(false)}>Blog</Link>
-          <Link href="/learn" onClick={() => setMobileOpen(false)}>Learn</Link>
+          <a href="https://digitalaiindia.com" onClick={() => setMobileOpen(false)}>← digitalaiindia.com</a>
+          <Link href="/blog" onClick={() => setMobileOpen(false)}>All articles</Link>
           <div className={styles.mobileMenuActions}>
             <button type="button" className={`${styles.btn} ${styles.btnGhost} ${styles.btnSm}`} onClick={() => { toggleTheme(); setMobileOpen(false); }}>
               {theme === "dark" ? "Light mode" : "Dark mode"}
             </button>
-            <Link href={isLoggedIn ? "/dashboard" : "/auth"} onClick={() => setMobileOpen(false)} className={`${styles.btn} ${styles.btnGhost} ${styles.btnSm}`}>Sign In</Link>
           </div>
         </div>
       )}

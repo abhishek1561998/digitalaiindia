@@ -1,29 +1,41 @@
 import { NextRequest, NextResponse } from "next/server";
 
-// Paths that must resolve exactly as-is on learn.digitalaiindia.com instead
-// of being prefixed with /learn — shared auth/session/api routes so login
-// works identically whether someone arrives via the main domain or here.
-const LEARN_PASSTHROUGH_PREFIXES = ["/auth", "/api", "/dashboard", "/_next"];
+// Paths that must resolve exactly as-is on a content subdomain instead of
+// being prefixed — shared auth/session/api routes so login works
+// identically whether someone arrives via the main domain or a subdomain.
+const PASSTHROUGH_PREFIXES = ["/auth", "/api", "/dashboard", "/_next", "/pricing"];
+
+function subdomainRewrite(req: NextRequest, base: string) {
+  const { pathname } = req.nextUrl;
+  const passthrough = PASSTHROUGH_PREFIXES.some((p) => pathname.startsWith(p));
+  if (passthrough || pathname.startsWith(base)) return null;
+  const target = req.nextUrl.clone();
+  target.pathname = `${base}${pathname === "/" ? "" : pathname}`;
+  return NextResponse.rewrite(target);
+}
 
 export function proxy(req: NextRequest) {
   const host = req.headers.get("host") || "";
   const { pathname } = req.nextUrl;
   const isPlatform = host.startsWith("platform.");
   const isLearn = host.startsWith("learn.");
+  const isBlog = host.startsWith("blog.");
   const isMainDomain =
     host === "digitalaiindia.com" || host === "www.digitalaiindia.com";
 
-  if (isPlatform && pathname === "/") {
-    return NextResponse.redirect(new URL("/dashboard", req.url));
+  if (isPlatform) {
+    const rewritten = subdomainRewrite(req, "/platform");
+    if (rewritten) return rewritten;
   }
 
   if (isLearn) {
-    const passthrough = LEARN_PASSTHROUGH_PREFIXES.some((p) => pathname.startsWith(p));
-    if (!passthrough && !pathname.startsWith("/learn")) {
-      const target = req.nextUrl.clone();
-      target.pathname = `/learn${pathname === "/" ? "" : pathname}`;
-      return NextResponse.rewrite(target);
-    }
+    const rewritten = subdomainRewrite(req, "/learn");
+    if (rewritten) return rewritten;
+  }
+
+  if (isBlog) {
+    const rewritten = subdomainRewrite(req, "/blog");
+    if (rewritten) return rewritten;
   }
 
   const isPlatformRoute =

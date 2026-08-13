@@ -114,7 +114,6 @@ const services = [
 export function ContactLanding({ isLoggedIn }: { isLoggedIn: boolean }) {
   const [theme, setTheme] = useState<"dark" | "light">("light");
   const [mobileOpen, setMobileOpen] = useState(false);
-  const authLink = useMemo(() => (isLoggedIn ? "/dashboard" : "/auth?mode=signup"), [isLoggedIn]);
 
   const [formData, setFormData] = useState<ContactFormData>({
     name: "", email: "", phone: "", company: "", subject: "", message: "", service: "",
@@ -195,20 +194,17 @@ export function ContactLanding({ isLoggedIn }: { isLoggedIn: boolean }) {
         </div>
         <div className={styles.navLinks}>
           <Link href="/">Home</Link>
-          <Link href="/platform">Products</Link>
+          <a href="https://platform.digitalaiindia.com" target="_blank" rel="noopener noreferrer">Products</a>
           <Link href="/pricing">Pricing</Link>
           <Link href="/about">About</Link>
-          <Link href="/blog">Blog</Link>
-          <Link href="/learn">Learn</Link>
-          
+          <a href="https://blog.digitalaiindia.com" target="_blank" rel="noopener noreferrer">Blog</a>
+          <a href="https://learn.digitalaiindia.com" target="_blank" rel="noopener noreferrer">Learn</a>
         </div>
         <div className={styles.navRight}>
           <CelebrateButton />
           <button type="button" className={`${styles.btn} ${styles.themeToggle}`} onClick={toggleTheme} aria-label="Toggle theme">
             {theme === "dark" ? <SunIcon /> : <MoonIcon />}
           </button>
-          <Link href={isLoggedIn ? "/dashboard" : "/auth"} className={`${styles.btn} ${styles.btnGhost} ${styles.btnSm}`}>Sign In</Link>
-          <Link href={authLink} className={`${styles.btn} ${styles.btnPrimary} ${styles.btnSm}`}>Get API Key</Link>
         <button type="button" className={styles.navHamburger} onClick={() => setMobileOpen((v) => !v)} aria-label="Toggle menu" aria-expanded={mobileOpen}>
           {mobileOpen ? <XIcon /> : <MenuIcon />}
         </button>
@@ -227,7 +223,6 @@ export function ContactLanding({ isLoggedIn }: { isLoggedIn: boolean }) {
             <button type="button" className={`${styles.btn} ${styles.btnGhost} ${styles.btnSm}`} onClick={() => { toggleTheme(); setMobileOpen(false); }}>
               {theme === "dark" ? "Light mode" : "Dark mode"}
             </button>
-            <Link href={isLoggedIn ? "/dashboard" : "/auth"} onClick={() => setMobileOpen(false)} className={`${styles.btn} ${styles.btnGhost} ${styles.btnSm}`}>Sign In</Link>
           </div>
         </div>
       )}

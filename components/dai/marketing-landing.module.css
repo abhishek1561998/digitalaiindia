@@ -245,6 +245,17 @@
   gap: 0.1rem;
 }
 
+.navBackLink {
+  color: var(--text3) !important;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.78rem !important;
+  border-right: 1px solid var(--border);
+  margin-right: 0.4rem;
+  padding-right: 1rem !important;
+}
+
+.navBackLink:hover { color: var(--accent) !important; }
+
 .navLinks a {
   color: var(--text2);
   font-size: 0.875rem;
