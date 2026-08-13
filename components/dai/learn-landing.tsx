@@ -194,8 +194,6 @@ export function LearnLanding({ isLoggedIn }: { isLoggedIn: boolean }) {
   const [waitStatus, setWaitStatus] = useState<"idle" | "sending" | "done" | "error">("idle");
   const [jsProgress, setJsProgress] = useState<{ percent: number; completed: boolean } | null>(null);
 
-  const authLink = useMemo(() => (isLoggedIn ? "/dashboard" : "/auth?mode=signup"), [isLoggedIn]);
-
   useEffect(() => {
     if (!isLoggedIn) return;
     fetch("/api/learn/progress?trackId=js")
@@ -281,12 +279,6 @@ export function LearnLanding({ isLoggedIn }: { isLoggedIn: boolean }) {
           <button type="button" className={`${styles.btn} ${styles.themeToggle}`} onClick={toggleTheme} aria-label="Toggle theme">
             {theme === "dark" ? <SunIcon /> : <MoonIcon />}
           </button>
-          <Link href={isLoggedIn ? "/dashboard" : "/auth"} className={`${styles.btn} ${styles.btnGhost} ${styles.btnSm}`}>
-            Sign In
-          </Link>
-          <Link href={authLink} className={`${styles.btn} ${styles.btnPrimary} ${styles.btnSm}`}>
-            Get API Key
-          </Link>
         <button type="button" className={styles.navHamburger} onClick={() => setMobileOpen((v) => !v)} aria-label="Toggle menu" aria-expanded={mobileOpen}>
           {mobileOpen ? <XIcon /> : <MenuIcon />}
         </button>
@@ -301,7 +293,6 @@ export function LearnLanding({ isLoggedIn }: { isLoggedIn: boolean }) {
             <button type="button" className={`${styles.btn} ${styles.btnGhost} ${styles.btnSm}`} onClick={() => { toggleTheme(); setMobileOpen(false); }}>
               {theme === "dark" ? "Light mode" : "Dark mode"}
             </button>
-            <Link href={isLoggedIn ? "/dashboard" : "/auth"} onClick={() => setMobileOpen(false)} className={`${styles.btn} ${styles.btnGhost} ${styles.btnSm}`}>Sign In</Link>
           </div>
         </div>
       )}
