@@ -1,6 +1,11 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser, isAdminEmail } from "@/lib/server/auth";
+import { sendCertificateReadyEmail } from "@/lib/server/email";
+
+const TRACK_META: Record<string, { title: string; certPath: string }> = {
+  js: { title: "JavaScript, Properly.", certPath: "/learn/javascript/certificate" },
+};
 
 // Owner-only: flips a pending certificate payment to "paid" after manually
 // checking the UPI transaction reference actually landed. GET lists what's
@@ -35,7 +40,18 @@ export async function POST(req: Request) {
   const updated = await prisma.trackEnrollment.update({
     where: { id: enrollmentId },
     data: { paymentStatus: "paid" },
+    include: { user: { select: { name: true, email: true } } },
   });
+
+  const meta = TRACK_META[updated.trackId];
+  if (meta) {
+    await sendCertificateReadyEmail({
+      userName: updated.user.name,
+      userEmail: updated.user.email,
+      trackTitle: meta.title,
+      certificateUrl: `https://learn.digitalaiindia.com${meta.certPath.replace("/learn", "")}`,
+    });
+  }
 
   return NextResponse.json({ enrollment: updated });
 }

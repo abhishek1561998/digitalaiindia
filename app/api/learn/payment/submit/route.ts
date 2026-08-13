@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/server/auth";
+import { sendPaymentSubmittedEmail } from "@/lib/server/email";
 
 // Learner submits their UPI transaction reference after paying — this
 // marks the certificate as "pending" for manual verification. There's no
@@ -33,6 +34,8 @@ export async function POST(req: Request) {
     where: { id: enrollment.id },
     data: { paymentStatus: "pending", paymentRef, paymentSubmittedAt: new Date() },
   });
+
+  await sendPaymentSubmittedEmail({ userName: user.name, userEmail: user.email, trackId, paymentRef });
 
   return NextResponse.json({ enrollment: updated });
 }
