@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Syne, Outfit, JetBrains_Mono } from "next/font/google";
 import { useEffect, useMemo, useState } from "react";
 import styles from "./marketing-landing.module.css";
+import { CelebrateButton } from "./CelebrateButton";
 import { Reveal } from "./Reveal";
 
 const syne = Syne({ subsets: ["latin"], variable: "--font-syne" });
@@ -78,12 +79,19 @@ const PhoneIcon = () => (
 
 export function MarketingLanding({ isLoggedIn }: { isLoggedIn: boolean }) {
   const [theme, setTheme] = useState<"dark" | "light">("light");
+  const [showIdBanner, setShowIdBanner] = useState(false);
 
   const authLink = useMemo(() => (isLoggedIn ? "/dashboard" : "/auth?mode=signup"), [isLoggedIn]);
 
   useEffect(() => {
     const saved = window.localStorage.getItem("theme");
     setTheme(saved === "dark" ? "dark" : "light");
+  }, []);
+
+  useEffect(() => {
+    const now = new Date();
+    const inSeason = now.getMonth() === 7 && now.getDate() >= 10 && now.getDate() <= 17; // Aug 10–17
+    setShowIdBanner(inSeason);
   }, []);
 
   function toggleTheme() {
@@ -125,6 +133,7 @@ export function MarketingLanding({ isLoggedIn }: { isLoggedIn: boolean }) {
           <Link href="/learn">Learn</Link>
         </div>
         <div className={styles.navRight}>
+          <CelebrateButton />
           <button type="button" className={`${styles.btn} ${styles.themeToggle}`} onClick={toggleTheme} aria-label="Toggle theme">
             {theme === "dark" ? <SunIcon /> : <MoonIcon />}
           </button>
@@ -139,6 +148,18 @@ export function MarketingLanding({ isLoggedIn }: { isLoggedIn: boolean }) {
 
       {/* ── Hero ── */}
       <section className={styles.hero}>
+
+        {showIdBanner && (
+        <div className={styles.idBannerOuter}>
+          <div className={styles.idBanner}>
+            <span className={styles.idBadge}>🇮🇳</span>
+            <span className={styles.idBannerText}>
+              <strong>India&apos;s 80th Independence Day</strong> — 79 years of freedom since 1947. This is why we build India-first, always.
+            </span>
+          </div>
+        </div>
+      )}
+
         <div className={styles.heroBg}>
           <div className={styles.jaliPattern} />
           <div className={`${styles.orb} ${styles.orb1}`} />
@@ -147,9 +168,9 @@ export function MarketingLanding({ isLoggedIn }: { isLoggedIn: boolean }) {
         </div>
         <div className={styles.heroGrid} />
 
-        <span className={styles.indiaStamp}>
+        {/* <span className={styles.indiaStamp}>
           <span className={styles.indiaStampFlag} /> Made in India, for India
-        </span>
+        </span> */}
 
         <div className={styles.heroBadge} style={{ marginTop: "1.25rem" }}>
           <span className={styles.dot} /> India-first AI company

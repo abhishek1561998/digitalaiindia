@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Syne, Outfit, JetBrains_Mono } from "next/font/google";
 import { useEffect, useMemo, useState } from "react";
 import styles from "./marketing-landing.module.css";
+import { CelebrateButton } from "./CelebrateButton";
 import blog from "./blog-landing.module.css";
 
 const syne = Syne({ subsets: ["latin"], variable: "--font-syne" });
@@ -38,6 +39,18 @@ const SearchIcon = () => (
   </svg>
 );
 
+const ArrowLeftIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <line x1="19" y1="12" x2="5" y2="12" /><polyline points="12 19 5 12 12 5" />
+  </svg>
+);
+
+const ArrowRightIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" />
+  </svg>
+);
+
 interface BlogPost {
   id: string;
   title: string;
@@ -59,6 +72,7 @@ export function BlogLanding({ isLoggedIn }: { isLoggedIn: boolean }) {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [tagFilter, setTagFilter] = useState("all");
+  const [featuredIndex, setFeaturedIndex] = useState(0);
 
   const authLink = useMemo(() => (isLoggedIn ? "/dashboard" : "/auth?mode=signup"), [isLoggedIn]);
 
@@ -119,6 +133,7 @@ export function BlogLanding({ isLoggedIn }: { isLoggedIn: boolean }) {
           
         </div>
         <div className={styles.navRight}>
+          <CelebrateButton />
           <button type="button" className={`${styles.btn} ${styles.themeToggle}`} onClick={toggleTheme} aria-label="Toggle theme">
             {theme === "dark" ? <SunIcon /> : <MoonIcon />}
           </button>
@@ -127,21 +142,75 @@ export function BlogLanding({ isLoggedIn }: { isLoggedIn: boolean }) {
         </div>
       </nav>
 
-      {/* ── Header ── */}
-      <section className={styles.hero}>
-        <div className={styles.heroBg}>
-          <div className={styles.jaliPattern} />
-          <div className={`${styles.orb} ${styles.orb1}`} />
-          <div className={`${styles.orb} ${styles.orb2}`} />
-        </div>
-        <div className={styles.heroGrid} />
-        <div className={styles.heroBadge}><span className={styles.dot} /> The DigitalAIIndia blog</div>
-        <h1 className={styles.heroTitle}>Ideas, updates<br />&amp; AI insights</h1>
-        <p className={styles.heroSub}>What we&apos;re building, what we&apos;re learning, and where AI is headed.</p>
-      </section>
+      {/* ── Featured ── */}
+      {!loading && posts.length > 0 && (() => {
+        const featuredPosts = posts.slice(0, 5);
+        const sidePosts = posts.slice(5, 8).length ? posts.slice(5, 8) : posts.slice(1, 4);
+        const current = featuredPosts[featuredIndex] ?? featuredPosts[0];
+        return (
+          <section className={styles.section} style={{ paddingTop: "7.5rem", paddingBottom: "2rem" }}>
+             <div className={styles.heroTitle} />
+                <div className={styles.heroBadge}><span className={styles.dot} /> The DigitalAIIndia blog</div>
+                <h1 className={styles.heroTitle}>Ideas, updates<br />&amp; AI insights</h1>
+                <p className={styles.heroSub}>What we&apos;re building, what we&apos;re learning, and where AI is headed.</p>
+              <div className={blog.featuredGrid}>
+              <Link href={`/blog/${current.id}`} className={blog.featuredCard}>
+                {current.imageUrl && <img src={current.imageUrl} alt={current.title} className={blog.featuredImg} />}
+                <div className={blog.featuredOverlay} />
+                <div className={blog.featuredContent}>
+                  <div className={blog.featuredMeta}>
+                    <span>{current.author}</span>
+                    <span>·</span>
+                    <span>{current.readTime} min read</span>
+                  </div>
+                  <div className={blog.featuredTitle}>{current.title}</div>
+                  <div className={blog.featuredExcerpt}>{current.excerpt}</div>
+                </div>
+                {featuredPosts.length > 1 && (
+                  <div className={blog.featuredNav}>
+                    <span
+                      role="button"
+                      tabIndex={0}
+                      className={blog.featuredArrow}
+                      onClick={(e) => { e.preventDefault(); setFeaturedIndex((i) => (i - 1 + featuredPosts.length) % featuredPosts.length); }}
+                      aria-label="Previous featured post"
+                    >
+                      <ArrowLeftIcon />
+                    </span>
+                    <span className={blog.featuredIndex}>{featuredIndex + 1} / {featuredPosts.length}</span>
+                    <span
+                      role="button"
+                      tabIndex={0}
+                      className={blog.featuredArrow}
+                      onClick={(e) => { e.preventDefault(); setFeaturedIndex((i) => (i + 1) % featuredPosts.length); }}
+                      aria-label="Next featured post"
+                    >
+                      <ArrowRightIcon />
+                    </span>
+                  </div>
+                )}
+              </Link>
+
+              <div className={blog.sideList}>
+                {sidePosts.map((post) => (
+                  <Link href={`/blog/${post.id}`} key={post.id} className={blog.sideCard}>
+                    {post.imageUrl && <img src={post.imageUrl} alt={post.title} className={blog.sideThumb} />}
+                    <div className={blog.sideBody}>
+                      <div className={blog.sideTitle}>{post.title}</div>
+                      <div className={blog.sideMeta}>{post.author} · {post.readTime} min read</div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </section>
+        );
+      })()}
 
       {/* ── Toolbar + Grid ── */}
-      <section className={styles.section}>
+      <section className={styles.section} style={{ paddingTop: loading || posts.length === 0 ? "7.5rem" : "2rem" }}>
+        <div className={styles.sectionLabel}>All articles</div>
+        <h2 className={styles.sectionTitle}>Browse everything</h2>
         <div className={blog.toolbar}>
           <div className={blog.searchWrap}>
             <span className={blog.searchIcon}><SearchIcon /></span>
@@ -159,7 +228,18 @@ export function BlogLanding({ isLoggedIn }: { isLoggedIn: boolean }) {
         </div>
 
         {loading ? (
-          <div className={blog.empty}>Loading articles…</div>
+          <div className={blog.skeletonGrid}>
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div className={blog.skeletonCard} key={i}>
+                <div className={blog.skeletonImg} />
+                <div className={blog.skeletonBody}>
+                  <div className={blog.skeletonLine} />
+                  <div className={blog.skeletonLine} />
+                  <div className={blog.skeletonLine} />
+                </div>
+              </div>
+            ))}
+          </div>
         ) : filtered.length === 0 ? (
           <div className={blog.empty}>No articles match your search.</div>
         ) : (

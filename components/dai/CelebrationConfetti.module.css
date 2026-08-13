@@ -1,0 +1,45 @@
+.wrap {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 9999;
+}
+
+.piece {
+  position: absolute;
+  top: -6%;
+  border-radius: 2px;
+  opacity: 0.85;
+  animation-name: confettiFall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+@keyframes confettiFall {
+  0% {
+    transform: translateY(0) translateX(0) rotate(0deg);
+    opacity: 0;
+  }
+  8% {
+    opacity: 0.85;
+  }
+  50% {
+    transform: translateY(52vh) translateX(18px) rotate(180deg);
+  }
+  92% {
+    opacity: 0.85;
+  }
+  100% {
+    transform: translateY(108vh) translateX(-14px) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wrap { display: none; }
+}
+
+@media (max-width: 640px) {
+  .piece { opacity: 0.6; }
+}

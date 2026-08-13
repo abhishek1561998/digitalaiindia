@@ -30,6 +30,16 @@
   background-image: radial-gradient(circle, var(--border2) 1px, transparent 1px);
   background-size: 32px 32px;
   transition: background-color 0.3s, color 0.3s;
+  animation: shellFadeIn 0.4s ease both;
+}
+
+@keyframes shellFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shell { animation: none; }
 }
 
 .shell[data-theme="light"] {
@@ -54,6 +64,90 @@
   height: 3px;
   z-index: 110;
   background: linear-gradient(90deg, #FF9933 0%, #FF9933 33.33%, #F7F5EF 33.33%, #F7F5EF 66.66%, #138808 66.66%, #138808 100%);
+}
+
+/* ── Independence Day banner ── */
+.idBannerOuter {
+  display: flex;
+  justify-content: center;
+  padding: 1.25rem 1rem;
+  /* margin-top: 67px; */
+}
+
+.idBanner {
+  position: relative;
+  width: 100%;
+  max-width: 960px;
+  padding: 0.9rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.9rem;
+  border-radius: 100px;
+  background: linear-gradient(115deg,
+    #FF9933 0%, #FFB366 18%,
+    #FFF9F0 42%, #FFFFFF 50%, #F0FBEC 58%,
+    #5CAE52 82%, #138808 100%);
+  background-size: 240% 100%;
+  animation: bannerFlow 9s ease-in-out infinite;
+  box-shadow: 0 14px 40px rgba(255, 117, 0, 0.18), 0 2px 10px rgba(0, 0, 0, 0.06);
+  color: #1F2430;
+  overflow: hidden;
+}
+
+@keyframes bannerFlow {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.idBanner::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -35%;
+  width: 22%;
+  height: 100%;
+  background: linear-gradient(115deg, transparent, rgba(255, 255, 255, 0.7), transparent);
+  animation: idShimmer 4.5s ease-in-out infinite;
+  animation-delay: 1.2s;
+  pointer-events: none;
+}
+
+@keyframes idShimmer {
+  0% { left: -35%; }
+  55% { left: 130%; }
+  100% { left: 130%; }
+}
+
+.idBadge {
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.05rem;
+  background: rgba(255, 255, 255, 0.55);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.6), 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.idBannerText {
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.idBannerText strong {
+  font-family: var(--font-syne, sans-serif);
+  color: #0B3D91;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .idBanner, .idBanner::after { animation: none; }
+}
+
+@media (max-width: 640px) {
+  .idBanner { flex-wrap: wrap; border-radius: 24px; padding: 1rem 1.25rem; }
 }
 
 /* ── Jali pattern texture (Indian lattice motif) ── */
@@ -110,7 +204,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 0 2rem;
-  border-bottom: 1px solid var(--border);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.02), 0 8px 24px rgba(0, 0, 0, 0.03);
   backdrop-filter: blur(20px) saturate(160%);
   -webkit-backdrop-filter: blur(20px) saturate(160%);
   background: var(--navBg);
@@ -235,6 +329,33 @@
   transform: translateY(0) scale(0.99);
 }
 
+.celebrateBtn {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border-radius: 9px;
+  border: 1px solid rgba(255, 153, 51, 0.35);
+  background: linear-gradient(135deg, rgba(255, 153, 51, 0.14), rgba(19, 136, 8, 0.14));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.05rem;
+  cursor: pointer;
+  animation: celebrateBtnPulse 2.2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+.celebrateBtn:hover { transform: scale(1.08); }
+
+@keyframes celebrateBtnPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 153, 51, 0.35); }
+  50% { box-shadow: 0 0 0 6px rgba(255, 153, 51, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .celebrateBtn { animation: none; }
+}
+
 .themeToggle {
   width: 36px;
   height: 36px;
@@ -254,7 +375,7 @@
 /* ── Hero ── */
 .hero {
   min-height: 100vh;
-  padding: 8rem 2rem 5rem;
+  padding: 7rem 2rem 5rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -774,6 +895,7 @@
   border-radius: var(--radiusLg);
   background: var(--card);
   padding: 1.75rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03), 0 8px 20px rgba(0, 0, 0, 0.02);
   transition: all 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
   position: relative;
   overflow: hidden;

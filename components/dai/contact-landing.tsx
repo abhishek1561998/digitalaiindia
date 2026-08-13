@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Syne, Outfit, JetBrains_Mono } from "next/font/google";
 import { useEffect, useMemo, useState } from "react";
 import styles from "./marketing-landing.module.css";
+import { CelebrateButton } from "./CelebrateButton";
 import contact from "./contact-landing.module.css";
 
 const syne = Syne({ subsets: ["latin"], variable: "--font-syne" });
@@ -189,6 +190,7 @@ export function ContactLanding({ isLoggedIn }: { isLoggedIn: boolean }) {
           
         </div>
         <div className={styles.navRight}>
+          <CelebrateButton />
           <button type="button" className={`${styles.btn} ${styles.themeToggle}`} onClick={toggleTheme} aria-label="Toggle theme">
             {theme === "dark" ? <SunIcon /> : <MoonIcon />}
           </button>
