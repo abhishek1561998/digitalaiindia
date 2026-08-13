@@ -1,23 +1,46 @@
+/* Deliberately fixed-dark, VS Code Dark+ inspired — a code editor reads as
+   a code editor regardless of the page's light/dark toggle. */
+
 .wrap {
-  border: 1px solid var(--border);
   border-radius: var(--radiusLg);
   overflow: hidden;
-  background: var(--bg2);
+  background: #1e1e1e;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.28);
 }
 
 .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.7rem 1rem;
-  background: var(--bg3);
-  border-bottom: 1px solid var(--border);
+  padding: 0.6rem 1rem;
+  background: #252526;
+  border-bottom: 1px solid #333333;
+}
+
+.dots {
+  display: flex;
+  gap: 6px;
+}
+
+.dots span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+.dots span:nth-child(1) { background: #FF5F57; }
+.dots span:nth-child(2) { background: #FEBC2E; }
+.dots span:nth-child(3) { background: #28C840; }
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .title {
-  font-family: var(--font-mono, monospace);
-  font-size: 0.75rem;
-  color: var(--text2);
+  font-family: "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.72rem;
+  color: #9d9d9d;
 }
 
 .actions {
@@ -27,27 +50,28 @@
 
 .resetBtn {
   padding: 5px 12px;
-  border-radius: 8px;
-  border: 1px solid var(--border2);
-  background: none;
-  color: var(--text2);
+  border-radius: 6px;
+  border: 1px solid #3c3c3c;
+  background: #2d2d2d;
+  color: #cccccc;
   font-size: 0.75rem;
   cursor: pointer;
 }
 
-.resetBtn:hover { color: var(--text); }
+.resetBtn:hover { background: #383838; }
 
 .runBtn {
   padding: 5px 14px;
-  border-radius: 8px;
+  border-radius: 6px;
   border: none;
-  background: var(--accent);
-  color: #fff;
+  background: #0e639c;
+  color: #ffffff;
   font-weight: 600;
   font-size: 0.75rem;
   cursor: pointer;
 }
 
+.runBtn:hover:not(:disabled) { background: #1177bb; }
 .runBtn:disabled { opacity: 0.6; cursor: default; }
 
 .body {
@@ -59,60 +83,68 @@
   .body { grid-template-columns: 1fr; }
 }
 
+.editorWrap {
+  position: relative;
+  border-right: 1px solid #2d2d2d;
+}
+
+@media (max-width: 720px) {
+  .editorWrap { border-right: none; border-bottom: 1px solid #2d2d2d; }
+}
+
 .editor {
   width: 100%;
   min-height: 220px;
   padding: 1rem 1.1rem;
   border: none;
-  border-right: 1px solid var(--border);
-  background: var(--bg2);
-  color: var(--text);
-  font-family: var(--font-mono, monospace);
+  background: #1e1e1e;
+  color: #d4d4d4;
+  caret-color: #aeafad;
+  font-family: "SF Mono", Menlo, Consolas, "Courier New", monospace;
   font-size: 0.82rem;
   line-height: 1.7;
   resize: vertical;
   outline: none;
+  tab-size: 2;
 }
 
-@media (max-width: 720px) {
-  .editor { border-right: none; border-bottom: 1px solid var(--border); }
-}
+.editor::selection { background: #264f78; }
 
 .output {
   padding: 1rem 1.1rem;
-  background: var(--bg);
+  background: #181818;
   min-height: 220px;
   overflow-y: auto;
 }
 
 .outputLabel {
-  font-family: var(--font-mono, monospace);
-  font-size: 0.65rem;
+  font-family: "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.64rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--text3);
+  color: #6e6e6e;
   margin-bottom: 0.6rem;
 }
 
 .outputEmpty {
   font-size: 0.8rem;
-  color: var(--text3);
+  color: #6e6e6e;
   font-style: italic;
 }
 
 .outputLine {
-  font-family: var(--font-mono, monospace);
+  font-family: "SF Mono", Menlo, Consolas, monospace;
   font-size: 0.8rem;
-  color: var(--text2);
+  color: #cccccc;
   padding: 3px 0;
   white-space: pre-wrap;
   word-break: break-word;
 }
 
 .outputError {
-  font-family: var(--font-mono, monospace);
+  font-family: "SF Mono", Menlo, Consolas, monospace;
   font-size: 0.8rem;
-  color: #E5484D;
+  color: #f14c4c;
   padding: 3px 0;
   white-space: pre-wrap;
   word-break: break-word;

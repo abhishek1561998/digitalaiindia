@@ -105,6 +105,17 @@ export function verifySessionToken(token: string): SessionPayload | null {
   }
 }
 
+export const LEARN_REQUIRES_GOOGLE_ERROR = "learn_requires_google";
+
+const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || "abhishek1561998@gmail.com")
+  .split(",")
+  .map((e) => e.trim().toLowerCase())
+  .filter(Boolean);
+
+export function isAdminEmail(email: string) {
+  return ADMIN_EMAILS.includes(email.toLowerCase());
+}
+
 export async function getCurrentUser() {
   const cookieStore = await cookies();
   const token = cookieStore.get(SESSION_COOKIE)?.value;
@@ -126,6 +137,7 @@ export async function getCurrentUser() {
       plan: true,
       monthlyLimit: true,
       createdAt: true,
+      authProvider: true,
     },
   });
 }

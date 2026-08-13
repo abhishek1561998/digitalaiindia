@@ -53,7 +53,10 @@ export function Playground({ title = "Try it yourself", initialCode }: { title?:
   return (
     <div className={css.wrap}>
       <div className={css.header}>
-        <span className={css.title}>{title}</span>
+        <div className={css.titleRow}>
+          <div className={css.dots}><span /><span /><span /></div>
+          <span className={css.title}>{title}</span>
+        </div>
         <div className={css.actions}>
           <button type="button" className={css.resetBtn} onClick={reset}>Reset</button>
           <button type="button" className={css.runBtn} onClick={run} disabled={running}>
@@ -62,14 +65,16 @@ export function Playground({ title = "Try it yourself", initialCode }: { title?:
         </div>
       </div>
       <div className={css.body}>
-        <textarea
-          className={css.editor}
-          value={code}
-          onChange={(e) => setCode(e.target.value)}
-          spellCheck={false}
-          autoCapitalize="off"
-          autoCorrect="off"
-        />
+        <div className={css.editorWrap}>
+          <textarea
+            className={css.editor}
+            value={code}
+            onChange={(e) => setCode(e.target.value)}
+            spellCheck={false}
+            autoCapitalize="off"
+            autoCorrect="off"
+          />
+        </div>
         <div className={css.output}>
           <div className={css.outputLabel}>Console</div>
           {lines.length === 0 ? (

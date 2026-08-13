@@ -271,6 +271,34 @@
   background: var(--cardHover);
 }
 
+.navLinkLearn {
+  position: relative;
+  color: var(--accent) !important;
+  font-weight: 700 !important;
+}
+
+.navLinkLearn::after {
+  content: "";
+  position: absolute;
+  top: 4px;
+  right: 8px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent3);
+  box-shadow: 0 0 6px var(--accent3);
+  animation: navLearnPulse 2s ease-in-out infinite;
+}
+
+@keyframes navLearnPulse {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.3); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .navLinkLearn::after { animation: none; }
+}
+
 .navRight {
   display: flex;
   align-items: center;

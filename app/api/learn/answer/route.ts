@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { getCurrentUser } from "@/lib/server/auth";
+import { getCurrentUser, LEARN_REQUIRES_GOOGLE_ERROR } from "@/lib/server/auth";
 import { checkAnswer, JS_TRACK_QUIZ } from "@/lib/server/js-track-quiz";
 
 const POINTS_PER_STAGE = 10;
@@ -9,6 +9,9 @@ export async function POST(req: Request) {
   const user = await getCurrentUser();
   if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  if (user.authProvider !== "google") {
+    return NextResponse.json({ error: LEARN_REQUIRES_GOOGLE_ERROR }, { status: 403 });
   }
 
   const body = await req.json().catch(() => ({}));

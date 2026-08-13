@@ -1,11 +1,17 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { getCurrentUser } from "@/lib/server/auth";
+import { getCurrentUser, LEARN_REQUIRES_GOOGLE_ERROR } from "@/lib/server/auth";
 
 export async function POST(req: Request) {
   const user = await getCurrentUser();
   if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  if (user.authProvider !== "google") {
+    return NextResponse.json(
+      { error: LEARN_REQUIRES_GOOGLE_ERROR, message: "Sign in with Google to enroll — certificates are tied to a verified identity." },
+      { status: 403 },
+    );
   }
 
   const body = await req.json().catch(() => ({}));

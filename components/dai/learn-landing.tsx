@@ -321,9 +321,9 @@ export function LearnLanding({ isLoggedIn, userName }: { isLoggedIn: boolean; us
         </div>
 
         <h1 className={`${styles.heroTitle} ${learn.glowTextTitle}`}>
-          Become a developer,
+          Real skills.
           <br />
-          not just a <em className={`${styles.heroEm} ${learn.glowText}`}>certificate</em>
+          A real <em className={`${styles.heroEm} ${learn.glowText}`}>certificate</em>.
         </h1>
 
         <p className={styles.heroSub}>

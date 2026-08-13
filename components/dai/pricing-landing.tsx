@@ -96,7 +96,7 @@ export function PricingLanding({ isLoggedIn }: { isLoggedIn: boolean }) {
           <Link href="/pricing">Pricing</Link>
           <Link href="/about">About</Link>
           <a href="https://blog.digitalaiindia.com">Blog</a>
-          <a href="https://learn.digitalaiindia.com">Learn</a>
+          <a href="https://learn.digitalaiindia.com" className={styles.navLinkLearn}>Learn</a>
         </div>
         <div className={styles.navRight}>
           <CelebrateButton />

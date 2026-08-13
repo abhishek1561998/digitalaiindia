@@ -27,6 +27,7 @@ function renderCode(code: string) {
 export function CourseStepper({ trackId, userName }: { trackId: string; userName: string }) {
   const [enrollment, setEnrollment] = useState<Enrollment | null>(null);
   const [loading, setLoading] = useState(true);
+  const [blocked, setBlocked] = useState(false);
   const [activeStage, setActiveStage] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
   const [result, setResult] = useState<{ correct: boolean; explanation: string; correctIndex?: number } | null>(null);
@@ -42,6 +43,11 @@ export function CourseStepper({ trackId, userName }: { trackId: string; userName
         body: JSON.stringify({ trackId }),
       });
       const data = await res.json();
+      if (data.error === "learn_requires_google") {
+        setBlocked(true);
+        setLoading(false);
+        return;
+      }
       if (data.enrollment) {
         setEnrollment(data.enrollment);
         setActiveStage(data.enrollment.currentStage);
@@ -92,6 +98,18 @@ export function CourseStepper({ trackId, userName }: { trackId: string; userName
     if (!enrollment) return;
     if (i > enrollment.currentStage) return;
     setActiveStage(i);
+  }
+
+  if (blocked) {
+    return (
+      <div className={css.loadingState}>
+        This course requires Google sign-in to verify identity for the certificate.
+        <br />
+        <a href="/api/auth/logout" onClick={async (e) => { e.preventDefault(); await fetch("/api/auth/logout", { method: "POST" }); window.location.href = `/auth?redirect=${encodeURIComponent(`/learn/${trackId === "js" ? "javascript" : trackId}/course`)}`; }} style={{ color: "var(--accent)" }}>
+          Log out and continue with Google →
+        </a>
+      </div>
+    );
   }
 
   if (loading || !enrollment) {

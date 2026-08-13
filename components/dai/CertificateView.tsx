@@ -5,6 +5,16 @@ import { Syne, Outfit, JetBrains_Mono, Caveat } from "next/font/google";
 import { useEffect, useState } from "react";
 import styles from "./marketing-landing.module.css";
 import cert from "./CertificateView.module.css";
+import confettiStyles from "./CelebrationConfetti.module.css";
+
+const CONFETTI_COLORS = ["#FF9933", "#FFFFFF", "#138808"] as const;
+const CONFETTI_PIECES = Array.from({ length: 40 }, (_, i) => ({
+  left: (i * 2.5) % 100,
+  delay: (i % 12) * 0.3,
+  duration: 5 + (i % 5) * 1.1,
+  color: CONFETTI_COLORS[i % 3],
+  size: 6 + (i % 3) * 3,
+}));
 
 const syne = Syne({ subsets: ["latin"], variable: "--font-syne" });
 const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" });
@@ -31,10 +41,17 @@ export function CertificateView({
   certificateId: string;
 }) {
   const [theme, setTheme] = useState<"dark" | "light">("light");
+  const [celebrate, setCelebrate] = useState(false);
 
   useEffect(() => {
     const saved = window.localStorage.getItem("theme");
     setTheme(saved === "dark" ? "dark" : "light");
+  }, []);
+
+  useEffect(() => {
+    const t = setTimeout(() => setCelebrate(true), 300);
+    const clear = setTimeout(() => setCelebrate(false), 7000);
+    return () => { clearTimeout(t); clearTimeout(clear); };
   }, []);
 
   const date = new Date(completedAt).toLocaleDateString("en-IN", { day: "2-digit", month: "long", year: "numeric" });
@@ -42,7 +59,27 @@ export function CertificateView({
 
   return (
     <div className={`${styles.shell} ${syne.variable} ${outfit.variable} ${jetBrains.variable} ${caveat.variable}`} data-theme={theme}>
+      {celebrate && (
+        <div className={confettiStyles.wrap} aria-hidden="true">
+          {CONFETTI_PIECES.map((p, i) => (
+            <span
+              key={i}
+              className={confettiStyles.piece}
+              style={{
+                left: `${p.left}%`,
+                animationDelay: `${p.delay}s`,
+                animationDuration: `${p.duration}s`,
+                background: p.color,
+                width: p.size,
+                height: p.size * 2.2,
+                boxShadow: p.color === "#FFFFFF" ? "0 0 0 1px rgba(0,0,0,0.06)" : "none",
+              }}
+            />
+          ))}
+        </div>
+      )}
       <div className={cert.page}>
+        <div className={cert.hurray}>🎉 Congratulations — you earned it!</div>
         <div className={cert.actions}>
           <Link href="/learn/javascript/course" className={cert.backLink}>← Back to course</Link>
           <button type="button" className={cert.printBtn} onClick={() => window.print()}>Download / Print</button>

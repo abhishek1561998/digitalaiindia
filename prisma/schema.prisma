@@ -17,6 +17,10 @@ model User {
   name          String
   email         String        @unique
   passwordHash  String
+  // "google" | "password" — Learn enrollment/certificates require "google"
+  // (verified identity via Google's email_verified check) so a certificate
+  // can't be claimed under an arbitrary self-entered name.
+  authProvider  String        @default("password")
   plan          Plan          @default(FREE)
   monthlyLimit  Int           @default(1000)
   createdAt     DateTime      @default(now())
@@ -41,6 +45,13 @@ model TrackEnrollment {
   completedAt   DateTime?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
+
+  // "unpaid" | "pending" | "paid" — the certificate (not the course itself)
+  // is gated on this. "pending" means the learner submitted a UPI
+  // transaction ref and it's awaiting manual verification.
+  paymentStatus       String    @default("unpaid")
+  paymentRef          String?
+  paymentSubmittedAt  DateTime?
 
   @@unique([userId, trackId])
 }

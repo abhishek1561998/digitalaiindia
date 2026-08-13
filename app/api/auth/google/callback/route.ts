@@ -156,10 +156,11 @@ export async function GET(req: Request) {
 
     const user = await prisma.user.upsert({
       where: { email },
-      update: { name },
+      update: { name, authProvider: "google" },
       create: {
         name,
         email,
+        authProvider: "google",
         passwordHash: hashPassword(randomBytes(24).toString("hex")),
       },
       select: {

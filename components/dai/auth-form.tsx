@@ -37,6 +37,8 @@ const SpinIcon = () => (
 export function AuthForm() {
   const searchParams = useSearchParams();
   const initialMode = searchParams.get("mode") === "signup" ? "signup" : "login";
+  const redirectParam = searchParams.get("redirect") || "";
+  const isLearnContext = redirectParam.startsWith("/learn");
 
   const [mode, setMode]       = useState<Mode>(initialMode);
   const [name, setName]       = useState("");
@@ -112,41 +114,60 @@ export function AuthForm() {
       boxShadow: "0 8px 48px rgba(0,0,0,0.07)",
       transition: "background .3s, border-color .3s",
     }}>
-      {/* Mode toggle */}
-      <div style={{
-        display: "grid", gridTemplateColumns: "1fr 1fr",
-        borderRadius: 12,
-        border: "1px solid var(--dai-border)",
-        background: "var(--dai-bg3)",
-        padding: 4,
-        marginBottom: "1.75rem",
-        gap: 4,
-      }}>
-        {(["login", "signup"] as Mode[]).map((m) => (
-          <button
-            key={m}
-            type="button"
-            onClick={() => { setMode(m); setError(null); setSuccess(null); }}
-            style={{
-              borderRadius: 9,
-              padding: "9px 0",
-              border: "none",
-              cursor: "pointer",
-              fontSize: "0.875rem",
-              fontWeight: 600,
-              fontFamily: "inherit",
-              transition: "all 0.2s",
-              background: mode === m
-                ? "linear-gradient(135deg, #FF7500, #FF3D6B)"
-                : "transparent",
-              color: mode === m ? "#fff" : "var(--dai-text3)",
-              boxShadow: mode === m ? "0 2px 14px rgba(255,117,0,0.3)" : "none",
-            }}
-          >
-            {m === "login" ? "Sign In" : "Sign Up"}
-          </button>
-        ))}
-      </div>
+      {isLearnContext && (
+        <div style={{
+          borderRadius: 12,
+          border: "1px solid rgba(255,117,0,0.22)",
+          background: "rgba(255,117,0,0.06)",
+          padding: "12px 14px",
+          fontSize: "0.8125rem",
+          color: "var(--dai-text2)",
+          lineHeight: 1.5,
+          marginBottom: "1.5rem",
+        }}>
+          <strong style={{ color: "var(--dai-text)" }}>Learn requires Google sign-in.</strong> Certificates
+          carry your name, so we verify identity through Google rather than a self-entered email — it's
+          the only way in here.
+        </div>
+      )}
+
+      {!isLearnContext && (
+        <>
+          {/* Mode toggle */}
+          <div style={{
+            display: "grid", gridTemplateColumns: "1fr 1fr",
+            borderRadius: 12,
+            border: "1px solid var(--dai-border)",
+            background: "var(--dai-bg3)",
+            padding: 4,
+            marginBottom: "1.75rem",
+            gap: 4,
+          }}>
+            {(["login", "signup"] as Mode[]).map((m) => (
+              <button
+                key={m}
+                type="button"
+                onClick={() => { setMode(m); setError(null); setSuccess(null); }}
+                style={{
+                  borderRadius: 9,
+                  padding: "9px 0",
+                  border: "none",
+                  cursor: "pointer",
+                  fontSize: "0.875rem",
+                  fontWeight: 600,
+                  fontFamily: "inherit",
+                  transition: "all 0.2s",
+                  background: mode === m
+                    ? "linear-gradient(135deg, #FF7500, #FF3D6B)"
+                    : "transparent",
+                  color: mode === m ? "#fff" : "var(--dai-text3)",
+                  boxShadow: mode === m ? "0 2px 14px rgba(255,117,0,0.3)" : "none",
+                }}
+              >
+                {m === "login" ? "Sign In" : "Sign Up"}
+              </button>
+            ))}
+          </div>
 
       <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "0.875rem" }}>
         {mode === "signup" && (
@@ -267,6 +288,8 @@ export function AuthForm() {
         or continue with
         <div style={{ flex: 1, height: 1, background: "var(--dai-border)" }} />
       </div>
+        </>
+      )}
 
       {/* Google */}
       <a
