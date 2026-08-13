@@ -3,7 +3,12 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import css from "./CourseStepper.module.css";
+import { Playground } from "./Playground";
 import { JS_STAGES, JS_QUIZ_QUESTIONS } from "@/lib/tracks/js-track";
+
+function stripCodeMarkup(code: string) {
+  return code.replace(/<KW>(.*?)<\/KW>/g, "$1");
+}
 
 type Enrollment = {
   currentStage: number;
@@ -147,6 +152,9 @@ export function CourseStepper({ trackId, userName }: { trackId: string; userName
 
         <div className={css.miniLabel}>Code</div>
         <pre className={css.codeBlock}>{renderCode(stage.code)}</pre>
+
+        <div className={css.miniLabel}>Playground — edit and run it</div>
+        <Playground key={stage.num} title={`stage-${stage.num}.js`} initialCode={stripCodeMarkup(stage.code)} />
 
         <div className={css.buildBox}>
           <strong>Build</strong>

@@ -5,6 +5,7 @@ import { Syne, Outfit, JetBrains_Mono } from "next/font/google";
 import { useEffect, useMemo, useState } from "react";
 import styles from "./marketing-landing.module.css";
 import { CelebrateButton } from "./CelebrateButton";
+import { AccountMenu } from "./AccountMenu";
 import learn from "./learn-landing.module.css";
 
 const syne = Syne({ subsets: ["latin"], variable: "--font-syne" });
@@ -185,7 +186,7 @@ const pathStages = [
   { n: "05", label: "Job ready", sub: "Portfolio & interviews" },
 ];
 
-export function LearnLanding({ isLoggedIn }: { isLoggedIn: boolean }) {
+export function LearnLanding({ isLoggedIn, userName }: { isLoggedIn: boolean; userName: string | null }) {
   const [theme, setTheme] = useState<"dark" | "light">("light");
   const [mobileOpen, setMobileOpen] = useState(false);
   const [tab, setTab] = useState<"rag" | "voice" | "architecture">("rag");
@@ -279,6 +280,7 @@ export function LearnLanding({ isLoggedIn }: { isLoggedIn: boolean }) {
           <button type="button" className={`${styles.btn} ${styles.themeToggle}`} onClick={toggleTheme} aria-label="Toggle theme">
             {theme === "dark" ? <SunIcon /> : <MoonIcon />}
           </button>
+          {isLoggedIn && userName && <AccountMenu userName={userName} />}
         <button type="button" className={styles.navHamburger} onClick={() => setMobileOpen((v) => !v)} aria-label="Toggle menu" aria-expanded={mobileOpen}>
           {mobileOpen ? <XIcon /> : <MenuIcon />}
         </button>

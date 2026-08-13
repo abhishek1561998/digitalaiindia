@@ -10,5 +10,5 @@ export const metadata: Metadata = {
 
 export default async function LearnPage() {
   const user = await getCurrentUser();
-  return <LearnLanding isLoggedIn={Boolean(user)} />;
+  return <LearnLanding isLoggedIn={Boolean(user)} userName={user?.name ?? null} />;
 }

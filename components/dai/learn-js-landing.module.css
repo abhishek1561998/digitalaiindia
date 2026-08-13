@@ -6,6 +6,102 @@
    instead of in clear space above it. Disable it on those sections only. */
 .tight::before, .tight::after { display: none; }
 
+.certPreviewWrap {
+  position: relative;
+  margin-top: 1.5rem;
+  max-width: 620px;
+}
+
+.certPreview {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--border2);
+  border-radius: var(--radiusLg);
+  background: var(--bg2);
+  padding: 2.25rem 2rem 2rem;
+  text-align: center;
+  transition: filter 0.3s;
+}
+
+.certPreviewLocked {
+  filter: blur(2.5px) saturate(0.7);
+  user-select: none;
+}
+
+.certPreviewTricolor {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #FF9933 0 33%, #FFFFFF 33% 66%, #138808 66% 100%);
+}
+
+.certPreviewEyebrow {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.75rem;
+}
+
+.certPreviewName {
+  font-family: var(--font-syne, sans-serif);
+  font-weight: 800;
+  font-size: clamp(1.4rem, 4vw, 1.9rem);
+  color: var(--text);
+  margin-bottom: 0.5rem;
+}
+
+.certPreviewLine {
+  font-size: 0.82rem;
+  color: var(--text2);
+}
+
+.certPreviewBadges {
+  margin-top: 1rem;
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.certPreviewBadges span {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.65rem;
+  color: var(--accent);
+  border: 1px solid rgba(255, 117, 0, 0.25);
+  background: rgba(255, 117, 0, 0.06);
+  border-radius: 100px;
+  padding: 3px 10px;
+}
+
+.certPreviewOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  text-align: center;
+  padding: 1.5rem;
+  background: color-mix(in srgb, var(--bg) 45%, transparent);
+}
+
+.certPreviewLock {
+  font-size: 1.5rem;
+  filter: grayscale(1) opacity(0.8);
+}
+
+.certPreviewOverlay p {
+  margin: 0;
+  max-width: 320px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.5;
+}
+
 .ctaRow {
   margin-top: 1.75rem;
   display: flex;

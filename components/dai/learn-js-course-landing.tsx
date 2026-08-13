@@ -5,6 +5,7 @@ import { Syne, Outfit, JetBrains_Mono } from "next/font/google";
 import { useEffect, useState } from "react";
 import styles from "./marketing-landing.module.css";
 import { CourseStepper } from "./CourseStepper";
+import { AccountMenu } from "./AccountMenu";
 
 const syne = Syne({ subsets: ["latin"], variable: "--font-syne" });
 const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" });
@@ -64,6 +65,7 @@ export function LearnJsCourseLanding({ userName }: { userName: string }) {
           <button type="button" className={`${styles.btn} ${styles.themeToggle}`} onClick={toggleTheme} aria-label="Toggle theme">
             {theme === "dark" ? <SunIcon /> : <MoonIcon />}
           </button>
+          <AccountMenu userName={userName} />
           <Link href="/learn/javascript" className={`${styles.btn} ${styles.btnGhost} ${styles.btnSm}`}>Exit course</Link>
         </div>
       </nav>

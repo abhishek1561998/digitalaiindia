@@ -9,5 +9,5 @@ export const metadata: Metadata = {
 
 export default async function LearnJavaScriptPage() {
   const user = await getCurrentUser();
-  return <LearnJsLanding isLoggedIn={Boolean(user)} />;
+  return <LearnJsLanding isLoggedIn={Boolean(user)} userName={user?.name ?? null} />;
 }

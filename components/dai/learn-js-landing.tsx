@@ -5,6 +5,8 @@ import { Syne, Outfit, JetBrains_Mono } from "next/font/google";
 import { useEffect, useMemo, useState } from "react";
 import styles from "./marketing-landing.module.css";
 import { CelebrateButton } from "./CelebrateButton";
+import { AccountMenu } from "./AccountMenu";
+import { Playground } from "./Playground";
 import js from "./learn-js-landing.module.css";
 import { JS_STAGES } from "@/lib/tracks/js-track";
 
@@ -48,7 +50,7 @@ const XIcon = () => (
 
 type ProgressState = { percent: number; completed: boolean } | null;
 
-export function LearnJsLanding({ isLoggedIn }: { isLoggedIn: boolean }) {
+export function LearnJsLanding({ isLoggedIn, userName }: { isLoggedIn: boolean; userName: string | null }) {
   const [theme, setTheme] = useState<"dark" | "light">("light");
   const [mobileOpen, setMobileOpen] = useState(false);
   const [progress, setProgress] = useState<ProgressState>(null);
@@ -102,6 +104,7 @@ export function LearnJsLanding({ isLoggedIn }: { isLoggedIn: boolean }) {
           <button type="button" className={`${styles.btn} ${styles.themeToggle}`} onClick={toggleTheme} aria-label="Toggle theme">
             {theme === "dark" ? <SunIcon /> : <MoonIcon />}
           </button>
+          {isLoggedIn && userName && <AccountMenu userName={userName} />}
           <button type="button" className={styles.navHamburger} onClick={() => setMobileOpen((v) => !v)} aria-label="Toggle menu" aria-expanded={mobileOpen}>
             {mobileOpen ? <XIcon /> : <MenuIcon />}
           </button>
@@ -171,6 +174,56 @@ export function LearnJsLanding({ isLoggedIn }: { isLoggedIn: boolean }) {
           <li><strong style={{ color: "var(--text)" }}>Predict before you run.</strong> Guess the output out loud before checking — that&apos;s where the learning happens.</li>
           <li><strong style={{ color: "var(--text)" }}>Build before you feel ready.</strong> &quot;Ready&quot; is a feeling that never quite arrives.</li>
         </ul>
+      </section>
+
+      {/* ── Playground ── */}
+      <section className={styles.section + " " + js.tight} style={{ paddingTop: "1rem", paddingBottom: "1rem" }}>
+        <div className={styles.sectionLabel}>Try before you commit</div>
+        <h2 className={styles.sectionTitle} style={{ fontSize: "clamp(1.4rem, 2.6vw, 1.9rem)" }}>A live playground, right here</h2>
+        <p className={styles.sectionSub} style={{ maxWidth: "640px", marginBottom: "1.25rem" }}>
+          No setup, no account. Edit the code, hit run, see what actually happens — this is Stage 0&apos;s
+          hoisting example from the path below.
+        </p>
+        <Playground
+          title="playground.js"
+          initialCode={`console.log(a); // what does this log?\nvar a = 5;\n\nsayHi();\nfunction sayHi() {\n  console.log("hi — function declarations are fully hoisted");\n}\n`}
+        />
+      </section>
+
+      {/* ── Certificate preview ── */}
+      <section className={styles.section + " " + js.tight} style={{ paddingTop: "1rem", paddingBottom: "1rem" }}>
+        <div className={styles.sectionLabel}>What you&apos;ll earn</div>
+        <h2 className={styles.sectionTitle} style={{ fontSize: "clamp(1.4rem, 2.6vw, 1.9rem)" }}>
+          {progress?.completed ? "Your certificate is ready" : "This is what's waiting at the end"}
+        </h2>
+        <div className={js.certPreviewWrap}>
+          <div className={`${js.certPreview} ${!progress?.completed ? js.certPreviewLocked : ""}`}>
+            <div className={js.certPreviewTricolor} />
+            <div className={js.certPreviewEyebrow}>Certificate of Completion</div>
+            <div className={js.certPreviewName}>{userName || "Your Name"}</div>
+            <div className={js.certPreviewLine}>has completed JavaScript, Properly. — 9 stages, 9 passed quizzes</div>
+            <div className={js.certPreviewBadges}>
+              <span>9 / 9 stages</span>
+              <span>Real projects</span>
+              <span>Verified ID</span>
+            </div>
+          </div>
+          {!progress?.completed && (
+            <div className={js.certPreviewOverlay}>
+              <span className={js.certPreviewLock}>🔒</span>
+              <p>
+                {progress && progress.percent > 0
+                  ? `${progress.percent}% there — finish the remaining stages to unlock this.`
+                  : "Complete all 9 stages and their quizzes to unlock this — it's the artifact, not just a PDF."}
+              </p>
+            </div>
+          )}
+        </div>
+        {progress?.completed && (
+          <Link href="/learn/javascript/certificate" className={`${styles.btn} ${styles.btnPrimary}`} style={{ marginTop: "1.25rem", display: "inline-flex" }}>
+            View your certificate →
+          </Link>
+        )}
       </section>
 
       {/* ── Stages ── */}

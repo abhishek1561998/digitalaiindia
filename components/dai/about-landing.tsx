@@ -103,11 +103,11 @@ export function AboutLanding({ isLoggedIn }: { isLoggedIn: boolean }) {
         </div>
         <div className={styles.navLinks}>
           <Link href="/">Home</Link>
-          <a href="https://platform.digitalaiindia.com" target="_blank" rel="noopener noreferrer">Products</a>
+          <a href="https://platform.digitalaiindia.com">Products</a>
           <Link href="/pricing">Pricing</Link>
           <Link href="/about">About</Link>
-          <a href="https://blog.digitalaiindia.com" target="_blank" rel="noopener noreferrer">Blog</a>
-          <a href="https://learn.digitalaiindia.com" target="_blank" rel="noopener noreferrer">Learn</a>
+          <a href="https://blog.digitalaiindia.com">Blog</a>
+          <a href="https://learn.digitalaiindia.com">Learn</a>
         </div>
         <div className={styles.navRight}>
           <CelebrateButton />
@@ -123,11 +123,11 @@ export function AboutLanding({ isLoggedIn }: { isLoggedIn: boolean }) {
       {mobileOpen && (
         <div className={styles.mobileMenu}>
           <Link href="/" onClick={() => setMobileOpen(false)}>Home</Link>
-          <Link href="/platform" onClick={() => setMobileOpen(false)}>Products</Link>
+          <a href="https://platform.digitalaiindia.com" onClick={() => setMobileOpen(false)}>Products</a>
           <Link href="/pricing" onClick={() => setMobileOpen(false)}>Pricing</Link>
           <Link href="/about" onClick={() => setMobileOpen(false)}>About</Link>
-          <Link href="/blog" onClick={() => setMobileOpen(false)}>Blog</Link>
-          <Link href="/learn" onClick={() => setMobileOpen(false)}>Learn</Link>
+          <a href="https://blog.digitalaiindia.com" onClick={() => setMobileOpen(false)}>Blog</a>
+          <a href="https://learn.digitalaiindia.com" onClick={() => setMobileOpen(false)}>Learn</a>
           <div className={styles.mobileMenuActions}>
             <button type="button" className={`${styles.btn} ${styles.btnGhost} ${styles.btnSm}`} onClick={() => { toggleTheme(); setMobileOpen(false); }}>
               {theme === "dark" ? "Light mode" : "Dark mode"}
