@@ -1,5 +1,12 @@
 /* Blog — extends the Bharat Circuit tokens defined on .shell */
 
+.blogHero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
 .toolbar {
   margin-top: 2.5rem;
   display: flex;

@@ -182,10 +182,11 @@ export function BlogLanding({ isLoggedIn }: { isLoggedIn: boolean }) {
         const current = featuredPosts[featuredIndex] ?? featuredPosts[0];
         return (
           <section className={styles.section} style={{ paddingTop: "7.5rem", paddingBottom: "2rem" }}>
-             <div className={styles.heroTitle} />
-                <div className={styles.heroBadge}><span className={styles.dot} /> The DigitalAIIndia blog</div>
-                <h1 className={styles.heroTitle}>Ideas, updates<br />&amp; AI insights</h1>
-                <p className={styles.heroSub}>What we&apos;re building, what we&apos;re learning, and where AI is headed.</p>
+            <div className={blog.blogHero}>
+              <div className={styles.heroBadge}><span className={styles.dot} /> The DigitalAIIndia blog</div>
+              <h1 className={styles.heroTitle}>Ideas, updates<br />&amp; AI insights</h1>
+              <p className={styles.heroSub}>What we&apos;re building, what we&apos;re learning, and where AI is headed.</p>
+            </div>
               <div className={blog.featuredGrid}>
               <Link href={`/blog/${current.id}`} className={blog.featuredCard}>
                 {current.imageUrl && <img src={current.imageUrl} alt={current.title} className={blog.featuredImg} />}
