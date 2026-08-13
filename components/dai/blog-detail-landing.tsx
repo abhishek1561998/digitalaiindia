@@ -34,6 +34,18 @@ const LogoIcon = () => (
   </svg>
 );
 
+const MenuIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round">
+    <line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="18" x2="21" y2="18" />
+  </svg>
+);
+
+const XIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round">
+    <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+  </svg>
+);
+
 const ArrowLeftIcon = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
     <line x1="19" y1="12" x2="5" y2="12" /><polyline points="12 19 5 12 12 5" />
@@ -58,6 +70,7 @@ interface BlogPost {
 export function BlogDetailLanding({ isLoggedIn }: { isLoggedIn: boolean }) {
   const params = useParams();
   const [theme, setTheme] = useState<"dark" | "light">("light");
+  const [mobileOpen, setMobileOpen] = useState(false);
   const [post, setPost] = useState<BlogPost | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -119,8 +132,28 @@ export function BlogDetailLanding({ isLoggedIn }: { isLoggedIn: boolean }) {
           </button>
           <Link href={isLoggedIn ? "/dashboard" : "/auth"} className={`${styles.btn} ${styles.btnGhost} ${styles.btnSm}`}>Sign In</Link>
           <Link href={authLink} className={`${styles.btn} ${styles.btnPrimary} ${styles.btnSm}`}>Get API Key</Link>
+        <button type="button" className={styles.navHamburger} onClick={() => setMobileOpen((v) => !v)} aria-label="Toggle menu" aria-expanded={mobileOpen}>
+          {mobileOpen ? <XIcon /> : <MenuIcon />}
+        </button>
         </div>
       </nav>
+
+      {mobileOpen && (
+        <div className={styles.mobileMenu}>
+          <Link href="/" onClick={() => setMobileOpen(false)}>Home</Link>
+          <Link href="/platform" onClick={() => setMobileOpen(false)}>Products</Link>
+          <Link href="/pricing" onClick={() => setMobileOpen(false)}>Pricing</Link>
+          <Link href="/about" onClick={() => setMobileOpen(false)}>About</Link>
+          <Link href="/blog" onClick={() => setMobileOpen(false)}>Blog</Link>
+          <Link href="/learn" onClick={() => setMobileOpen(false)}>Learn</Link>
+          <div className={styles.mobileMenuActions}>
+            <button type="button" className={`${styles.btn} ${styles.btnGhost} ${styles.btnSm}`} onClick={() => { toggleTheme(); setMobileOpen(false); }}>
+              {theme === "dark" ? "Light mode" : "Dark mode"}
+            </button>
+            <Link href={isLoggedIn ? "/dashboard" : "/auth"} onClick={() => setMobileOpen(false)} className={`${styles.btn} ${styles.btnGhost} ${styles.btnSm}`}>Sign In</Link>
+          </div>
+        </div>
+      )}
 
       <section className={styles.section} style={{ paddingTop: "7.5rem" }}>
         {loading ? (

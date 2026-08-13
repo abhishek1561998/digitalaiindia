@@ -39,6 +39,18 @@ const LogoIcon = () => (
   </svg>
 );
 
+const MenuIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round">
+    <line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="18" x2="21" y2="18" />
+  </svg>
+);
+
+const XIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round">
+    <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+  </svg>
+);
+
 const MernIcon = () => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <rect x="3" y="4" width="18" height="4" rx="1" />
@@ -175,6 +187,7 @@ const pathStages = [
 
 export function LearnLanding({ isLoggedIn }: { isLoggedIn: boolean }) {
   const [theme, setTheme] = useState<"dark" | "light">("light");
+  const [mobileOpen, setMobileOpen] = useState(false);
   const [tab, setTab] = useState<"rag" | "voice" | "architecture">("rag");
   const [waitName, setWaitName] = useState("");
   const [waitEmail, setWaitEmail] = useState("");
@@ -264,8 +277,28 @@ export function LearnLanding({ isLoggedIn }: { isLoggedIn: boolean }) {
           <Link href={authLink} className={`${styles.btn} ${styles.btnPrimary} ${styles.btnSm}`}>
             Get API Key
           </Link>
+        <button type="button" className={styles.navHamburger} onClick={() => setMobileOpen((v) => !v)} aria-label="Toggle menu" aria-expanded={mobileOpen}>
+          {mobileOpen ? <XIcon /> : <MenuIcon />}
+        </button>
         </div>
       </nav>
+
+      {mobileOpen && (
+        <div className={styles.mobileMenu}>
+          <Link href="/" onClick={() => setMobileOpen(false)}>Home</Link>
+          <Link href="/platform" onClick={() => setMobileOpen(false)}>Products</Link>
+          <Link href="/pricing" onClick={() => setMobileOpen(false)}>Pricing</Link>
+          <Link href="/about" onClick={() => setMobileOpen(false)}>About</Link>
+          <Link href="/blog" onClick={() => setMobileOpen(false)}>Blog</Link>
+          <Link href="/learn" onClick={() => setMobileOpen(false)}>Learn</Link>
+          <div className={styles.mobileMenuActions}>
+            <button type="button" className={`${styles.btn} ${styles.btnGhost} ${styles.btnSm}`} onClick={() => { toggleTheme(); setMobileOpen(false); }}>
+              {theme === "dark" ? "Light mode" : "Dark mode"}
+            </button>
+            <Link href={isLoggedIn ? "/dashboard" : "/auth"} onClick={() => setMobileOpen(false)} className={`${styles.btn} ${styles.btnGhost} ${styles.btnSm}`}>Sign In</Link>
+          </div>
+        </div>
+      )}
 
       {/* ── Hero ── */}
       <section className={styles.hero}>

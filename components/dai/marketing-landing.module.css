@@ -1364,10 +1364,80 @@
   font-size: 0.8125rem;
 }
 
+/* ── Mobile nav ── */
+.navHamburger {
+  display: none;
+  width: 36px;
+  height: 36px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9px;
+  border: 1px solid var(--border2);
+  background: none;
+  color: var(--text);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.mobileMenu {
+  position: fixed;
+  top: 67px;
+  left: 0;
+  right: 0;
+  z-index: 99;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.75rem;
+  max-height: calc(100vh - 67px);
+  overflow-y: auto;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
+  animation: mobileMenuIn 0.2s ease both;
+}
+
+@keyframes mobileMenuIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.mobileMenu a {
+  padding: 0.85rem 1rem;
+  border-radius: 10px;
+  color: var(--text2);
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.mobileMenu a:hover { background: var(--cardHover); color: var(--text); }
+
+.mobileMenuActions {
+  display: flex;
+  gap: 0.6rem;
+  padding: 0.6rem 0.25rem 0.25rem;
+  margin-top: 0.4rem;
+  border-top: 1px solid var(--border);
+}
+
+.mobileMenuActions > a,
+.mobileMenuActions > button {
+  flex: 1;
+  justify-content: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mobileMenu { animation: none; }
+}
+
 /* ── Responsive ── */
 @media (max-width: 768px) {
   .nav { padding: 0 1rem; }
   .navLinks { display: none; }
+  .navHamburger { display: flex; }
+  .themeToggle { display: none; }
+  .navRight a.btnGhost.btnSm { display: none; }
 
   .stepsRow {
     grid-template-columns: 1fr;
