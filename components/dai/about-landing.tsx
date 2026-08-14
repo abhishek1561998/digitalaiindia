@@ -107,7 +107,7 @@ export function AboutLanding({ isLoggedIn }: { isLoggedIn: boolean }) {
           <Link href="/pricing">Pricing</Link>
           <Link href="/about">About</Link>
           <a href="https://blog.digitalaiindia.com">Blog</a>
-          <a href="https://learn.digitalaiindia.com" className={styles.navLinkLearn}>Learn</a>
+          <a href="https://learn.digitalaiindia.com" className={styles.navLinkLearn}>Learn<span className={styles.navBadgeNew}>New</span></a>
         </div>
         <div className={styles.navRight}>
           <CelebrateButton />
