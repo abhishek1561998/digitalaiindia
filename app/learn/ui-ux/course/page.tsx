@@ -24,6 +24,7 @@ export default async function LearnUiuxCoursePage() {
       stages={UIUX_STAGES}
       quizQuestions={UIUX_QUIZ_QUESTIONS}
       userName={user.name}
+      practiceTool="canvas"
     />
   );
 }

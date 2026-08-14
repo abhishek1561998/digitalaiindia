@@ -42,6 +42,7 @@ export function LearnCourseLanding({
   stages,
   quizQuestions,
   userName,
+  practiceTool,
 }: {
   trackId: string;
   trackTitle: string;
@@ -50,6 +51,7 @@ export function LearnCourseLanding({
   stages: Stage[];
   quizQuestions: QuizQuestion[];
   userName: string;
+  practiceTool?: "code" | "canvas";
 }) {
   const [theme, setTheme] = useState<"dark" | "light">("light");
 
@@ -95,6 +97,7 @@ export function LearnCourseLanding({
         stages={stages}
         quizQuestions={quizQuestions}
         userName={userName}
+        practiceTool={practiceTool}
       />
     </div>
   );

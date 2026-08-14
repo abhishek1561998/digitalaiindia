@@ -373,3 +373,129 @@
   font-weight: 600;
   color: var(--text);
 }
+
+/* ── Tool cards (UI/UX track) ── */
+.toolGrid {
+  margin-top: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+@media (max-width: 780px) {
+  .toolGrid { grid-template-columns: 1fr; }
+}
+
+.toolCard {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card);
+  padding: 1.25rem 1.35rem;
+}
+
+.toolCardPrimary { border-color: var(--border2); background: var(--bg3); }
+
+.toolName {
+  font-family: var(--font-syne, sans-serif);
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.toolTag {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.6rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 100px;
+  border: 1px solid var(--border2);
+  color: var(--text3);
+}
+
+.toolTagOn {
+  color: #fff;
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.toolCard p {
+  margin: 0.6rem 0 0;
+  font-size: 0.85rem;
+  color: var(--text2);
+  line-height: 1.6;
+}
+
+/* ── Career ladder (UI/UX track) ── */
+.ladder {
+  margin-top: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.ladderRow {
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  gap: 1rem;
+  align-items: start;
+  padding: 1.1rem 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card);
+}
+
+.ladderRowKey {
+  border-color: var(--border2);
+  background: linear-gradient(135deg, rgba(255, 117, 0, 0.07), transparent 55%), var(--bg3);
+}
+
+.ladderNum {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid var(--border2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text3);
+}
+
+.ladderRowKey .ladderNum {
+  color: #fff;
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.ladderTitle {
+  font-family: var(--font-syne, sans-serif);
+  font-weight: 700;
+  font-size: 0.98rem;
+  color: var(--text);
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.ladderNote {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.66rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.ladderDesc {
+  margin: 0.35rem 0 0;
+  font-size: 0.86rem;
+  color: var(--text2);
+  line-height: 1.6;
+}

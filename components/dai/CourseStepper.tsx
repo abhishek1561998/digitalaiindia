@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import css from "./CourseStepper.module.css";
 import { Playground } from "./Playground";
+import { WireframeCanvas } from "./WireframeCanvas";
 import type { Stage, QuizQuestion } from "@/lib/tracks/types";
 
 function stripCodeMarkup(code: string) {
@@ -32,6 +33,7 @@ export function CourseStepper({
   stages,
   quizQuestions,
   userName,
+  practiceTool = "code",
 }: {
   trackId: string;
   trackTitle: string;
@@ -40,6 +42,7 @@ export function CourseStepper({
   stages: Stage[];
   quizQuestions: QuizQuestion[];
   userName: string;
+  practiceTool?: "code" | "canvas";
 }) {
   const [enrollment, setEnrollment] = useState<Enrollment | null>(null);
   const [loading, setLoading] = useState(true);
@@ -184,11 +187,20 @@ export function CourseStepper({
           {stage.learn.map((l) => <li key={l}>{l}</li>)}
         </ul>
 
-        <div className={css.miniLabel}>Code</div>
+        <div className={css.miniLabel}>{practiceTool === "canvas" ? "Reference" : "Code"}</div>
         <pre className={css.codeBlock}>{renderCode(stage.code)}</pre>
 
-        <div className={css.miniLabel}>Playground — edit and run it</div>
-        <Playground key={stage.num} title={`stage-${stage.num}.js`} initialCode={stripCodeMarkup(stage.code)} />
+        {practiceTool === "canvas" ? (
+          <>
+            <div className={css.miniLabel}>Sketchpad — try it yourself</div>
+            <WireframeCanvas key={stage.num} title={`stage-${stage.num}`} starterHint={stage.build} />
+          </>
+        ) : (
+          <>
+            <div className={css.miniLabel}>Playground — edit and run it</div>
+            <Playground key={stage.num} title={`stage-${stage.num}.js`} initialCode={stripCodeMarkup(stage.code)} />
+          </>
+        )}
 
         <div className={css.buildBox}>
           <strong>Build</strong>

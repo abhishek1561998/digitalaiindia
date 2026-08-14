@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import styles from "./marketing-landing.module.css";
 import { CelebrateButton } from "./CelebrateButton";
 import { AccountMenu } from "./AccountMenu";
-import { Playground } from "./Playground";
+import { WireframeCanvas } from "./WireframeCanvas";
 import js from "./learn-js-landing.module.css";
 import { UIUX_STAGES } from "@/lib/tracks/uiux-track";
 
@@ -175,18 +175,111 @@ export function LearnUiuxLanding({ isLoggedIn, userName }: { isLoggedIn: boolean
         </ul>
       </section>
 
-      {/* ── Playground ── */}
+      {/* ── Sketchpad ── */}
       <section className={styles.section + " " + js.tight} style={{ paddingTop: "1rem", paddingBottom: "1rem" }}>
         <div className={styles.sectionLabel}>Try before you commit</div>
-        <h2 className={styles.sectionTitle} style={{ fontSize: "clamp(1.4rem, 2.6vw, 1.9rem)" }}>A live playground, right here</h2>
+        <h2 className={styles.sectionTitle} style={{ fontSize: "clamp(1.4rem, 2.6vw, 1.9rem)" }}>A sketchpad, right here</h2>
         <p className={styles.sectionSub} style={{ maxWidth: "640px", marginBottom: "1.25rem" }}>
-          No setup, no account. This is Stage 3&apos;s WCAG contrast calculation — the actual formula browsers
-          and auditors use. Change the hex values and watch a pair pass or fail.
+          No setup, no account, no Figma login. Sketch a screen the way you would on paper — boxes, buttons,
+          inputs, arrows. Deliberately rough, because rough is fast, and fast is the whole point of
+          low-fidelity work.
         </p>
-        <Playground
-          title="playground.js"
-          initialCode={`// The real WCAG contrast formula\nfunction luminance(hex) {\n  const rgb = [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16) / 255);\n  const [r, g, b] = rgb.map(v =>\n    v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4)\n  );\n  return 0.2126 * r + 0.7152 * g + 0.0722 * b;\n}\n\nfunction contrast(a, b) {\n  const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x);\n  return (hi + 0.05) / (lo + 0.05);\n}\n\nfunction check(fg, bg, label) {\n  const ratio = contrast(fg, bg).toFixed(2);\n  const pass = ratio >= 4.5 ? "PASS" : "FAIL";\n  console.log(label, ratio + ":1", pass + " (AA body text needs 4.5:1)");\n}\n\ncheck("#767676", "#FFFFFF", "grey on white: ");\ncheck("#999999", "#FFFFFF", "lighter grey:  ");\ncheck("#FF7500", "#FFFFFF", "orange on white:");\n`}
+        <WireframeCanvas
+          title="wireframe"
+          starterHint="Try sketching a login screen — logo, two inputs, one primary button."
         />
+      </section>
+
+      {/* ── Tools ── */}
+      <section className={styles.section + " " + js.tight} style={{ paddingTop: "1rem", paddingBottom: "1rem" }}>
+        <div className={styles.sectionLabel}>Your toolkit</div>
+        <h2 className={styles.sectionTitle} style={{ fontSize: "clamp(1.4rem, 2.6vw, 1.9rem)" }}>Which tool, and when</h2>
+        <p className={styles.sectionSub} style={{ maxWidth: "640px" }}>
+          Tool confusion wastes weeks. Stage 01 covers this properly, but here&apos;s the short version so
+          you don&apos;t invest in the wrong software.
+        </p>
+        <div className={js.toolGrid}>
+          <article className={`${js.toolCard} ${js.toolCardPrimary}`}>
+            <div className={js.toolName}>Figma <span className={`${js.toolTag} ${js.toolTagOn}`}>Learn this</span></div>
+            <p>
+              The current industry default, and the one worth real practice. Browser-based, free tier is
+              genuinely enough to get hired on. Focus on four things: Auto Layout, Components, Variants,
+              and Dev Mode.
+            </p>
+          </article>
+          <article className={js.toolCard}>
+            <div className={js.toolName}>Sketching <span className={js.toolTag}>Start here</span></div>
+            <p>
+              Paper or a rough canvas — like the sketchpad above. Deliberately ugly, therefore fast. You&apos;ll
+              throw away five layouts in ten minutes, which is exactly what you want before committing.
+            </p>
+          </article>
+          <article className={js.toolCard}>
+            <div className={js.toolName}>Adobe XD <span className={js.toolTag}>Legacy</span></div>
+            <p>
+              Adobe moved XD into maintenance mode and stopped selling it standalone — it still opens old
+              files, but new development stopped. Worth learning only if a specific employer already runs
+              on it. Penpot is the open-source alternative worth knowing.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      {/* ── Career ladder ── */}
+      <section className={styles.section + " " + js.tight} style={{ paddingTop: "1rem", paddingBottom: "1rem" }}>
+        <div className={styles.sectionLabel}>Where this takes you</div>
+        <h2 className={styles.sectionTitle} style={{ fontSize: "clamp(1.4rem, 2.6vw, 1.9rem)" }}>
+          How you actually become a designer people hire
+        </h2>
+        <p className={styles.sectionSub} style={{ maxWidth: "640px" }}>
+          Knowing the rules doesn&apos;t make you hireable — showing judgment does. Stage 10 covers the
+          portfolio format and how to get your first real work. This is the map.
+        </p>
+        <div className={js.ladder}>
+          <div className={js.ladderRow}>
+            <span className={js.ladderNum}>1</span>
+            <div>
+              <div className={js.ladderTitle}>Can use the tool</div>
+              <p className={js.ladderDesc}>
+                Knows Figma. Copies layouts that look nice. Not yet hireable as a designer — this is the
+                level most tutorials leave you at.
+              </p>
+            </div>
+          </div>
+          <div className={js.ladderRow}>
+            <span className={js.ladderNum}>2</span>
+            <div>
+              <div className={js.ladderTitle}>Can make it look good</div>
+              <p className={js.ladderDesc}>
+                Consistent spacing, a real type scale, decent taste. Hireable as a junior — the ceiling is
+                that you still need someone else to tell you what to make.
+              </p>
+            </div>
+          </div>
+          <div className={`${js.ladderRow} ${js.ladderRowKey}`}>
+            <span className={js.ladderNum}>3</span>
+            <div>
+              <div className={js.ladderTitle}>
+                Can defend every decision <span className={js.ladderNote}>the jump that pays</span>
+              </div>
+              <p className={js.ladderDesc}>
+                &quot;This is primary because it&apos;s the one action 90% of users came for — I tested the other
+                way and completion dropped.&quot; Most people never make this jump, which is exactly why it&apos;s
+                where the money is. Stages 00–10 are aimed squarely at getting you here.
+              </p>
+            </div>
+          </div>
+          <div className={js.ladderRow}>
+            <span className={js.ladderNum}>4</span>
+            <div>
+              <div className={js.ladderTitle}>Can set direction</div>
+              <p className={js.ladderDesc}>
+                Decides what <em>not</em> to build. Owns the design system. Makes the other designers around
+                them better. Years, not weeks — but the path runs through level 3, not around it.
+              </p>
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* ── Certificate preview ── */}
@@ -200,9 +293,9 @@ export function LearnUiuxLanding({ isLoggedIn, userName }: { isLoggedIn: boolean
             <div className={js.certPreviewTricolor} />
             <div className={js.certPreviewEyebrow}>Certificate of Completion</div>
             <div className={js.certPreviewName}>{userName || "Your Name"}</div>
-            <div className={js.certPreviewLine}>has completed Design You Can Defend — 9 stages, 9 passed quizzes</div>
+            <div className={js.certPreviewLine}>has completed Design You Can Defend — 11 stages, 11 passed quizzes</div>
             <div className={js.certPreviewBadges}>
-              <span>9 / 9 stages</span>
+              <span>11 / 11 stages</span>
               <span>Accessible by default</span>
               <span>Verified ID</span>
             </div>
@@ -213,7 +306,7 @@ export function LearnUiuxLanding({ isLoggedIn, userName }: { isLoggedIn: boolean
               <p>
                 {progress && progress.percent > 0
                   ? `${progress.percent}% there — finish the remaining stages to unlock this.`
-                  : "Complete all 9 stages and their quizzes to unlock this."}
+                  : "Complete all 11 stages and their quizzes to unlock this."}
               </p>
             </div>
           )}
@@ -228,7 +321,7 @@ export function LearnUiuxLanding({ isLoggedIn, userName }: { isLoggedIn: boolean
       {/* ── Stages ── */}
       <section className={styles.section + " " + js.tight} style={{ paddingTop: "1rem" }}>
         <div className={styles.sectionLabel}>The path</div>
-        <h2 className={styles.sectionTitle}>Nine stages, in this order</h2>
+        <h2 className={styles.sectionTitle}>Eleven stages, in this order</h2>
         <p className={styles.sectionSub} style={{ maxWidth: "640px" }}>
           Each stage leans on the one before it — spacing systems only make sense once you&apos;ve felt
           arbitrary values drift, and component states only matter once hierarchy is settled.
