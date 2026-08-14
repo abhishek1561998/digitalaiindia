@@ -112,6 +112,7 @@ const snippets: Record<string, string> = {
 const LIVE_TRACKS: Record<string, string> = {
   js: "/learn/javascript",
   dsa: "/learn/dsa",
+  mern: "/learn/mern",
 };
 
 const tracks = [
