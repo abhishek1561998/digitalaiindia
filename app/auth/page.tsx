@@ -10,9 +10,8 @@ const syne = Syne({ subsets: ["latin"], variable: "--font-syne" });
 const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" });
 
 const LogoIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FACC15" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96-.46 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z"/>
-    <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96-.46 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z"/>
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
   </svg>
 );
 
@@ -26,6 +25,34 @@ const errorMessages: Record<string, string> = {
 
 function AuthPageInner() {
   const searchParams = useSearchParams();
+  const redirectParam = searchParams.get("redirect") ?? "";
+  const isLearn = redirectParam.startsWith("/learn");
+  const homeUrl = isLearn ? "https://learn.digitalaiindia.com" : "https://digitalaiindia.com";
+  const copy = isLearn
+    ? {
+        badge: "Free to learn",
+        titleTop: "Start building",
+        titleAccent: "real skills today",
+        sub: "Eight project-based tracks — JavaScript, DSA, MERN, AI engineering, AWS, UI/UX, system design and project building. Every one ends with a real certificate.",
+        points: [
+          { icon: "🧭", label: "8 tracks, all free to learn" },
+          { icon: "🛠️", label: "Real projects, not just videos" },
+          { icon: "✅", label: "Quizzes that check you understood" },
+          { icon: "📜", label: "A certificate with your name on it" },
+        ],
+      }
+    : {
+        badge: "Free to start",
+        titleTop: "Build your first",
+        titleAccent: "AI app today",
+        sub: "One account. One API key. Access to Chat, Voice, 3D, and Design APIs — all free up to 1,000 requests a month.",
+        points: [
+          { icon: "⚡", label: "API key ready in 30 seconds" },
+          { icon: "🔑", label: "1 key for all 4 AI APIs" },
+          { icon: "📊", label: "Usage dashboard included" },
+          { icon: "🇮🇳", label: "Built & priced for India — from ₹0" },
+        ],
+      };
   const errorCode  = searchParams.get("error") ?? "";
   const errorReason = searchParams.get("reason") ?? "";
   const hasError   = Boolean(errorCode);
@@ -78,29 +105,28 @@ function AuthPageInner() {
         backdropFilter: "blur(20px)",
         background: "var(--dai-navBg)",
       }}>
-        <a href="https://digitalaiindia.com" style={{
+        <a href={homeUrl} style={{
           display: "flex", alignItems: "center", gap: 10,
           textDecoration: "none",
         }}>
-          {/* Logo box — matches landing page */}
-          <div style={{ position: "relative", width: 40, height: 40, flexShrink: 0 }}>
-            <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg,#FACC15,#F97316)", borderRadius: 10, opacity: 0.85 }} />
-            <div style={{ position: "absolute", inset: 2, background: "linear-gradient(135deg,#111827,#000)", borderRadius: 7, display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <LogoIcon />
-            </div>
+          <div style={{
+            width: 34, height: 34, flexShrink: 0, borderRadius: 10,
+            background: "linear-gradient(135deg,#FF7500,#FF3D6B)",
+            display: "flex", alignItems: "center", justifyContent: "center",
+          }}>
+            <LogoIcon />
           </div>
-          <div style={{ display: "flex", flexDirection: "column", lineHeight: 1.15 }}>
-            <span style={{ fontFamily: "var(--font-syne,sans-serif)", fontWeight: 700, fontSize: "1rem", letterSpacing: "-0.02em" }}>
-              <span style={{ background: "linear-gradient(90deg,#FACC15,#F97316)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Digitalai</span>
-              <span style={{ color: "var(--dai-text2)" }}>India.com</span>
-            </span>
-            <span style={{ fontSize: "0.6rem", color: "var(--dai-text3)", fontWeight: 500 }}>Future of AI</span>
-          </div>
+          <span style={{
+            fontFamily: "var(--font-syne,sans-serif)", fontWeight: 700,
+            fontSize: "1.05rem", letterSpacing: "-0.02em", color: "var(--dai-text)",
+          }}>
+            DigitalAI<span style={{ color: "#FF7500" }}>India</span>
+          </span>
         </a>
 
         <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
           <ThemeToggle />
-          <a href="https://digitalaiindia.com" style={{
+          <a href={homeUrl} style={{
             fontSize: "0.8125rem", color: "var(--dai-text3)",
             textDecoration: "none", transition: "color 0.2s",
             padding: "6px 12px", borderRadius: 8,
@@ -108,7 +134,7 @@ function AuthPageInner() {
             onMouseEnter={e => (e.currentTarget.style.color = "var(--dai-text)")}
             onMouseLeave={e => (e.currentTarget.style.color = "var(--dai-text3)")}
           >
-            ← Home
+            {isLearn ? "← Learn" : "← Home"}
           </a>
         </div>
       </nav>
@@ -137,7 +163,7 @@ function AuthPageInner() {
               textTransform: "uppercase", letterSpacing: "0.09em", marginBottom: "1.5rem",
             }}>
               <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#00E5B0", boxShadow: "0 0 8px #00E5B0", display: "block" }} />
-              Free to start
+              {copy.badge}
             </div>
 
             <h1 style={{
@@ -146,28 +172,23 @@ function AuthPageInner() {
               fontWeight: 800, letterSpacing: "-0.04em", lineHeight: 1.1,
               color: "var(--dai-text)", marginBottom: "1rem",
             }}>
-              Build your first<br />
+              {copy.titleTop}<br />
               <span style={{
                 background: "linear-gradient(130deg, #FF7500, #FF3D6B)",
                 WebkitBackgroundClip: "text", backgroundClip: "text",
                 WebkitTextFillColor: "transparent",
-              }}>AI app today</span>
+              }}>{copy.titleAccent}</span>
             </h1>
 
             <p style={{
               color: "var(--dai-text2)", fontSize: "1rem", lineHeight: 1.75,
               marginBottom: "2rem", maxWidth: 400,
-            }}>
-              One account. One API key. Access to Chat, Voice, 3D, and Design APIs — all free up to 1,000 requests a month.
+            }} className="auth-sub">
+              {copy.sub}
             </p>
 
-            <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
-              {[
-                { icon: "⚡", label: "API key ready in 30 seconds" },
-                { icon: "🔑", label: "1 key for all 4 AI APIs" },
-                { icon: "📊", label: "Usage dashboard included" },
-                { icon: "🇮🇳", label: "Built & priced for India — from ₹0" },
-              ].map(({ icon, label }) => (
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }} className="auth-points">
+              {copy.points.map(({ icon, label }) => (
                 <div key={label} style={{ display: "flex", alignItems: "center", gap: 12 }}>
                   <div style={{
                     width: 32, height: 32, borderRadius: 8,
@@ -210,14 +231,19 @@ function AuthPageInner() {
 
       {/* Responsive: collapse to single column on small screens */}
       <style>{`
-        @media (max-width: 700px) {
+        @media (max-width: 860px) {
           .auth-grid {
             grid-template-columns: 1fr !important;
             gap: 2rem !important;
+            max-width: 460px !important;
           }
-          .auth-grid > div:first-child {
-            display: none;
-          }
+        }
+        /* On phones the long paragraph goes, but the badge, headline and the
+           four benefit lines stay — they're compact and they're the reason
+           someone completes the signup. */
+        @media (max-width: 560px) {
+          .auth-sub { display: none; }
+          .auth-grid { gap: 1.5rem !important; }
         }
       `}</style>
     </div>

@@ -15,7 +15,19 @@ export async function GET(req: Request) {
   // subdomain started the flow. Remember where the user actually came
   // from (as a full origin+path) so the callback can send them back.
   const requestedRedirect = url.searchParams.get("redirect");
-  const returnTo = `${url.origin}${requestedRedirect && requestedRedirect.startsWith("/") ? requestedRedirect : "/dashboard"}`;
+  let path = requestedRedirect && requestedRedirect.startsWith("/") ? requestedRedirect : "/dashboard";
+
+  // On a content subdomain the proxy already maps / -> /<base>, so a redirect
+  // of "/learn/x" would land on the odd-looking learn.…/learn/x. Strip the
+  // duplicated prefix so the user comes back to the canonical URL.
+  const host = url.hostname;
+  const SUBDOMAIN_BASES: Record<string, string> = { learn: "/learn", blog: "/blog", platform: "/platform" };
+  const base = SUBDOMAIN_BASES[host.split(".")[0]];
+  if (base && path.startsWith(base + "/")) {
+    path = path.slice(base.length);
+  }
+
+  const returnTo = `${url.origin}${path}`;
 
   if (!clientId) {
     return NextResponse.json({ error: "Missing GOOGLE_CLIENT_ID" }, { status: 500 });
