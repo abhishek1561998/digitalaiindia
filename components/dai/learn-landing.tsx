@@ -94,6 +94,14 @@ const LayersIcon = () => (
   </svg>
 );
 
+const UiuxIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="3" y="3" width="18" height="18" rx="2" />
+    <path d="M3 9h18" />
+    <path d="M9 21V9" />
+  </svg>
+);
+
 const RocketIcon = () => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z" />
@@ -116,6 +124,7 @@ const LIVE_TRACKS: Record<string, string> = {
   ai: "/learn/ai",
   sysdesign: "/learn/system-design",
   project: "/learn/project-building",
+  uiux: "/learn/ui-ux",
 };
 
 const tracks = [
@@ -173,6 +182,17 @@ const tracks = [
     desc: "High-level and low-level design — how to structure a growing product so it doesn't fall over.",
     build: "HLD/LLD diagrams for a system that's designed to scale.",
     tags: ["HLD", "LLD", "Scaling"],
+  },
+  {
+    id: "uiux",
+    icon: <UiuxIcon />,
+    bg: "rgba(255,138,203,0.14)",
+    fg: "#FF8ACB",
+    title: "UI/UX design",
+    level: "All levels",
+    desc: "Hierarchy, type, contrast, spacing and states — design as rules you can apply, not taste you either have or don't.",
+    build: "a real project of yours, redesigned and made accessible.",
+    tags: ["Hierarchy", "Typography", "A11y", "Design systems"],
   },
   {
     id: "project",
@@ -341,7 +361,7 @@ export function LearnLanding({ isLoggedIn, userName }: { isLoggedIn: boolean; us
         </h1>
 
         <p className={styles.heroSub}>
-          MERN, JavaScript, DSA, AI engineering, project building, and system design —<br />
+          MERN, JavaScript, DSA, AI engineering, UI/UX, project building, and system design —<br />
           one path, real projects, no fluff.
         </p>
 
@@ -367,7 +387,7 @@ export function LearnLanding({ isLoggedIn, userName }: { isLoggedIn: boolean; us
       <section className={styles.section}>
         <div className={styles.sectionLabel}>Tracks</div>
         <h2 className={styles.sectionTitle}>What you&apos;ll learn</h2>
-        <p className={styles.sectionSub}>Six tracks, all live. Each one ends with a real certificate.</p>
+        <p className={styles.sectionSub}>Seven tracks, all live. Each one ends with a real certificate.</p>
         <div className={learn.trackGrid}>
           {tracks.map((t) => {
             const isLive = Boolean(LIVE_TRACKS[t.id]);
@@ -547,7 +567,7 @@ export function LearnLanding({ isLoggedIn, userName }: { isLoggedIn: boolean; us
           </div>
           <div className={learn.faqItem}>
             <div className={learn.faqQ}>Is this only about AI?</div>
-            <div className={learn.faqA}>No — MERN, JavaScript, DSA, project building, and system design are equally core to the path, not side content.</div>
+            <div className={learn.faqA}>No — MERN, JavaScript, DSA, UI/UX, project building, and system design are equally core to the path, not side content.</div>
           </div>
           <div className={learn.faqItem}>
             <div className={learn.faqQ}>How is this different from a typical bootcamp?</div>

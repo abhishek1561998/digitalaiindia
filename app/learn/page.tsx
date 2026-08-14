@@ -3,9 +3,9 @@ import { LearnLanding } from "@/components/dai/learn-landing";
 import { getCurrentUser } from "@/lib/server/auth";
 
 export const metadata: Metadata = {
-  title: "Learn to Code Free — JavaScript, DSA, MERN & AI Engineering | DigitalAIIndia Learn",
+  title: "Learn to Code Free — JavaScript, DSA, MERN, AI & UI/UX | DigitalAIIndia Learn",
   description:
-    "Free, project-based coding tracks with a real certificate on completion — JavaScript, DSA, MERN stack, and AI engineering. Learn by building, not watching.",
+    "Free, project-based tracks with a real certificate on completion — JavaScript, DSA, MERN stack, AI engineering, UI/UX, system design, and project building. Learn by building, not watching.",
   keywords: [
     "learn to code free",
     "free coding certificate",
@@ -14,13 +14,14 @@ export const metadata: Metadata = {
     "DSA course",
     "MERN stack course",
     "AI engineering course",
+    "UI UX design course",
     "project based learning",
   ],
   alternates: { canonical: "https://learn.digitalaiindia.com" },
   openGraph: {
     title: "Learn to Code Free, Earn a Real Certificate — DigitalAIIndia Learn",
     description:
-      "Project-based tracks in JavaScript, DSA, MERN, and AI engineering. Build real things, pass real quizzes, earn a real certificate.",
+      "Project-based tracks in JavaScript, DSA, MERN, AI engineering, UI/UX, system design, and project building. Build real things, pass real quizzes, earn a real certificate.",
     url: "https://learn.digitalaiindia.com",
     siteName: "DigitalAIIndia Learn",
     type: "website",
@@ -29,7 +30,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Learn to Code Free, Earn a Real Certificate — DigitalAIIndia Learn",
-    description: "Project-based tracks in JavaScript, DSA, MERN, and AI engineering.",
+    description: "Project-based tracks in JavaScript, DSA, MERN, AI engineering, UI/UX, and more.",
     images: ["https://digitalaiindia.com/banner.png"],
   },
 };

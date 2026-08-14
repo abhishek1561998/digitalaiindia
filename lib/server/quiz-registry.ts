@@ -4,6 +4,7 @@ import { MERN_TRACK_QUIZ } from "./mern-track-quiz";
 import { AI_TRACK_QUIZ } from "./ai-track-quiz";
 import { SYSDESIGN_TRACK_QUIZ } from "./sysdesign-track-quiz";
 import { PROJECT_TRACK_QUIZ } from "./project-track-quiz";
+import { UIUX_TRACK_QUIZ } from "./uiux-track-quiz";
 
 export type ServerQuizQuestion = {
   stage: number;
@@ -20,6 +21,7 @@ const QUIZ_BANKS: Record<string, ServerQuizQuestion[]> = {
   ai: AI_TRACK_QUIZ,
   sysdesign: SYSDESIGN_TRACK_QUIZ,
   project: PROJECT_TRACK_QUIZ,
+  uiux: UIUX_TRACK_QUIZ,
 };
 
 export function getQuizBank(trackId: string) {
