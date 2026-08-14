@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { CelebrationConfetti } from "@/components/dai/CelebrationConfetti";
+import { ContentProtection } from "@/components/dai/ContentProtection";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://digitalaiindia.com"),
@@ -60,6 +61,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className="min-h-screen bg-background text-foreground antialiased">
+        <ContentProtection />
         <CelebrationConfetti />
         {children}
       </body>

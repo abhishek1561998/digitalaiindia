@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/server/auth";
+import { getTrackStageCount } from "@/lib/server/quiz-registry";
 import { CertificateView } from "@/components/dai/CertificateView";
 import { PaymentGate } from "@/components/dai/PaymentGate";
 import { buildUpiQrDataUrl, UPI_VPA, CERT_AMOUNT_INR } from "@/lib/server/upi";
@@ -42,6 +43,7 @@ export default async function LearnDsaCertificatePage() {
   return (
     <CertificateView
       userName={user.name}
+      totalStages={getTrackStageCount("dsa")}
       trackTitle="Patterns, Not Problems."
       coursePath="/learn/dsa/course"
       points={enrollment.points}

@@ -167,7 +167,7 @@ export function AboutLanding({ isLoggedIn }: { isLoggedIn: boolean }) {
               And we build in public. Every architecture decision, every integration, every mistake — it&apos;s written up on <Link href="/learn" style={{ color: "var(--accent)" }}>Learn</Link> so other developers don&apos;t have to start from zero.
             </p>
             <p>
-              <span className={styles.hindiAccent}>भारत के लिए, भारत में बनाया गया।</span> That&apos;s not a tagline we bolted on — it&apos;s the reason the pricing is in rupees and the voice model speaks Hindi first.
+              India-first isn&apos;t a tagline we bolted on — it&apos;s the reason the pricing is in rupees and the voice model speaks Hindi first.
             </p>
           </div>
           <div className={styles.aboutFacts}>

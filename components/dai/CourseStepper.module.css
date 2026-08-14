@@ -23,41 +23,6 @@
   overflow-y: auto;
 }
 
-@media (max-width: 860px) {
-  .sidebar { position: static; height: auto; border-right: none; border-bottom: 1px solid var(--border); }
-
-  .stageNav {
-    flex-direction: row;
-    gap: 0.5rem;
-    overflow-x: auto;
-    padding-bottom: 0.35rem;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin;
-  }
-
-  .stageRow {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.4rem;
-    flex: 0 0 auto;
-    width: 148px;
-    padding: 0.7rem 0.75rem;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-  }
-
-  .stageRowActive { border-color: var(--accent); }
-
-  .stageRowTitle {
-    font-size: 0.74rem;
-    line-height: 1.3;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-}
-
 .sideHead {
   margin-bottom: 1.25rem;
 }
@@ -150,10 +115,6 @@
   padding: 2.5rem 3rem 4rem;
   max-width: 720px;
   min-width: 0;
-}
-
-@media (max-width: 640px) {
-  .main { padding: 1.75rem 1.25rem 3rem; }
 }
 
 .backLink {
@@ -373,4 +334,99 @@
   color: var(--text3);
   font-family: var(--font-mono, monospace);
   font-size: 0.85rem;
+}
+
+
+/* ────────────────────────────────────────────────────────────────
+   Mobile. Placed at the end deliberately: these override base rules
+   of equal specificity, so they must come last in source order.
+   ──────────────────────────────────────────────────────────────── */
+@media (max-width: 860px) {
+  .wrap { grid-template-columns: 1fr; min-height: 0; }
+
+  .sidebar {
+    position: static;
+    height: auto;
+    padding: 1.25rem 1.25rem 1rem;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sideHead { margin-bottom: 0; text-align: center; }
+  .sideTitle { font-size: 0.95rem; margin-bottom: 0.5rem; }
+  .overallMeta { font-size: 0.68rem; }
+
+  /* Compact centred step badges. Titles are dropped here on purpose —
+     the stage heading directly below already names the stage. Wrapping
+     beats scrolling: nothing ends up half-clipped at an edge. */
+  .stageNav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    margin-top: 1rem;
+  }
+
+  .stageRow {
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    justify-content: center;
+    border-radius: 50%;
+    background: none;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  .stageRowActive {
+    background: none;
+    box-shadow: 0 0 0 2px var(--accent);
+  }
+
+  .stageRowTitle { display: none; }
+
+  .main { padding: 1.5rem 1.15rem 3rem; }
+
+  .stageHeading { font-size: 1.35rem; line-height: 1.25; }
+  .stageEyebrow { font-size: 0.68rem; }
+  .stageWhy { font-size: 0.9rem; padding-left: 0.75rem; }
+  .miniLabel { margin: 1.25rem 0 0.5rem; }
+
+  .codeBlock {
+    font-size: 0.72rem;
+    padding: 0.85rem 0.9rem;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Comfortable tap targets — 44px is the accessible minimum. */
+  .quiz { padding: 1.15rem 1rem 1.35rem; }
+  .quizQuestion { font-size: 0.94rem; }
+
+  .quizOption {
+    min-height: 44px;
+    align-items: center;
+    padding: 0.7rem 0.8rem;
+    font-size: 0.85rem;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  .footNav { gap: 0.6rem; margin-top: 2rem; }
+  .footNav button { flex: 1; min-height: 44px; }
+
+  .completeBanner {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+    gap: 0.85rem;
+  }
+
+  .completeBanner a { text-align: center; }
+}
+
+@media (max-width: 380px) {
+  .stageRow { width: 30px; height: 30px; }
+  .stageBadge { width: 24px; height: 24px; font-size: 0.56rem; }
+  .main { padding: 1.25rem 0.9rem 2.5rem; }
 }

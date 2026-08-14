@@ -225,6 +225,29 @@
   color: var(--text);
 }
 
+/* A photographed signature carries its paper background. multiply drops the
+   white on a light certificate; dark mode inverts it to stay visible. A
+   transparent PNG works too — both paths look right. */
+.certSignImg {
+  display: block;
+  height: 56px;
+  width: auto;
+  max-width: 200px;
+  margin-left: auto;
+  object-fit: contain;
+  object-position: right bottom;
+  mix-blend-mode: multiply;
+}
+
+[data-theme="dark"] .certSignImg {
+  mix-blend-mode: screen;
+  filter: invert(1) brightness(1.7) contrast(1.1);
+}
+
+@media (max-width: 700px) {
+  .certSignImg { margin-left: auto; margin-right: auto; height: 48px; }
+}
+
 .certSignRule {
   height: 1px;
   background: var(--border2);

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import css from "./CourseStepper.module.css";
 import { Playground } from "./Playground";
 import { WireframeCanvas } from "./WireframeCanvas";
@@ -52,6 +52,8 @@ export function CourseStepper({
   const [result, setResult] = useState<{ correct: boolean; explanation: string; correctIndex?: number } | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
+  const stageNavRef = useRef<HTMLElement>(null);
+
   const totalStages = stages.length;
 
   useEffect(() => {
@@ -92,6 +94,19 @@ export function CourseStepper({
     setResult(null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeStage]);
+
+  // On mobile the stage list is a horizontal strip; keep the active card
+  // centred so it's never sitting half-clipped at an edge.
+  useEffect(() => {
+    const nav = stageNavRef.current;
+    if (!nav || nav.scrollWidth <= nav.clientWidth) return;
+    const active = nav.querySelector<HTMLElement>('[data-active="true"]');
+    if (!active) return;
+    nav.scrollTo({
+      left: active.offsetLeft - nav.clientWidth / 2 + active.clientWidth / 2,
+      behavior: "smooth",
+    });
+  }, [activeStage, enrollment]);
 
   const overallPercent = useMemo(() => {
     if (!enrollment) return 0;
@@ -153,7 +168,7 @@ export function CourseStepper({
             <span>{enrollment.points} pts</span>
           </div>
         </div>
-        <nav className={css.stageNav}>
+        <nav className={css.stageNav} ref={stageNavRef}>
           {stages.map((s, i) => {
             const pct = enrollment.stageProgress[String(i)] || 0;
             const locked = i > enrollment.currentStage;
@@ -162,6 +177,7 @@ export function CourseStepper({
                 type="button"
                 key={s.num}
                 className={`${css.stageRow} ${i === activeStage ? css.stageRowActive : ""}`}
+                data-active={i === activeStage}
                 disabled={locked}
                 onClick={() => goToStage(i)}
               >

@@ -267,7 +267,6 @@ export function MarketingLanding({ isLoggedIn }: { isLoggedIn: boolean }) {
             <p>
               Most AI infrastructure is built for the US market first and adapted for India later. We built DigitalAIIndia the other way round: India-first pricing from day one, bring-your-own-key by default, and Hindi-native voice AI as a core feature, not an afterthought.
             </p>
-            <p className={styles.hindiAccent}>भारत के लिए, भारत में बनाया गया।</p>
             <Link href="/about" className={`${styles.btn} ${styles.btnGhost}`} style={{ marginTop: "0.5rem" }}>
               Read our full story <ArrowIcon />
             </Link>

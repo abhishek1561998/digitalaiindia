@@ -31,6 +31,7 @@ export function CertificateView({
   userName,
   trackTitle,
   coursePath,
+  totalStages,
   points,
   completedAt,
   certificateId,
@@ -38,12 +39,15 @@ export function CertificateView({
   userName: string;
   trackTitle: string;
   coursePath: string;
+  totalStages: number;
   points: number;
   completedAt: string;
   certificateId: string;
 }) {
   const [theme, setTheme] = useState<"dark" | "light">("light");
   const [celebrate, setCelebrate] = useState(false);
+  // Falls back to the styled wordmark signature if /signature.png isn't present.
+  const [hasSignatureImage, setHasSignatureImage] = useState(true);
 
   useEffect(() => {
     const saved = window.localStorage.getItem("theme");
@@ -107,10 +111,10 @@ export function CertificateView({
             <div className={cert.certName}>{userName}</div>
             <p className={cert.certLine}>
               has successfully completed the <strong>{trackTitle}</strong> track on DigitalAIIndia Learn —
-              nine stages, nine passed quizzes, {points} points earned.
+              {totalStages} stages, {totalStages} passed quizzes, {points} points earned.
             </p>
             <div className={cert.certBadgeRow}>
-              <span className={cert.certBadge}>9 / 9 stages</span>
+              <span className={cert.certBadge}>{totalStages} / {totalStages} stages</span>
               <span className={cert.certBadge}>{points} points</span>
               <span className={cert.certBadge}>Project-based</span>
             </div>
@@ -122,9 +126,19 @@ export function CertificateView({
               Certificate #{shortId}
             </div>
             <div className={cert.certSign}>
-              <div className={cert.certSignName}>Abhishek Dandriyal</div>
+              {hasSignatureImage ? (
+                /* eslint-disable-next-line @next/next/no-img-element */
+                <img
+                  src="/signature.png"
+                  alt=""
+                  className={cert.certSignImg}
+                  onError={() => setHasSignatureImage(false)}
+                />
+              ) : (
+                <div className={cert.certSignName}>Abhishek Dandriyal</div>
+              )}
               <div className={cert.certSignRule} />
-              <div className={cert.certSignTitle}>Founder, DigitalAIIndia</div>
+              <div className={cert.certSignTitle}>Abhishek Dandriyal · Founder</div>
             </div>
             <div className={cert.seal} aria-hidden="true">
               <svg viewBox="0 0 100 100" width="64" height="64">
