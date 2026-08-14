@@ -51,7 +51,7 @@ export function LearnCourseLanding({
   stages: Stage[];
   quizQuestions: QuizQuestion[];
   userName: string;
-  practiceTool?: "code" | "canvas";
+  practiceTool?: "code" | "canvas" | "none";
 }) {
   const [theme, setTheme] = useState<"dark" | "light">("light");
 

@@ -42,7 +42,7 @@ export function CourseStepper({
   stages: Stage[];
   quizQuestions: QuizQuestion[];
   userName: string;
-  practiceTool?: "code" | "canvas";
+  practiceTool?: "code" | "canvas" | "none";
 }) {
   const [enrollment, setEnrollment] = useState<Enrollment | null>(null);
   const [loading, setLoading] = useState(true);
@@ -190,7 +190,7 @@ export function CourseStepper({
         <div className={css.miniLabel}>{practiceTool === "canvas" ? "Reference" : "Code"}</div>
         <pre className={css.codeBlock}>{renderCode(stage.code)}</pre>
 
-        {practiceTool === "canvas" ? (
+        {practiceTool === "none" ? null : practiceTool === "canvas" ? (
           <>
             <div className={css.miniLabel}>Sketchpad — try it yourself</div>
             <WireframeCanvas key={stage.num} title={`stage-${stage.num}`} starterHint={stage.build} />
@@ -198,7 +198,11 @@ export function CourseStepper({
         ) : (
           <>
             <div className={css.miniLabel}>Playground — edit and run it</div>
-            <Playground key={stage.num} title={`stage-${stage.num}.js`} initialCode={stripCodeMarkup(stage.code)} />
+            <Playground
+              key={stage.num}
+              title={`stage-${stage.num}.js`}
+              initialCode={stage.playground ?? stripCodeMarkup(stage.code)}
+            />
           </>
         )}
 

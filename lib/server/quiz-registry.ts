@@ -5,6 +5,7 @@ import { AI_TRACK_QUIZ } from "./ai-track-quiz";
 import { SYSDESIGN_TRACK_QUIZ } from "./sysdesign-track-quiz";
 import { PROJECT_TRACK_QUIZ } from "./project-track-quiz";
 import { UIUX_TRACK_QUIZ } from "./uiux-track-quiz";
+import { AWS_TRACK_QUIZ } from "./aws-track-quiz";
 
 export type ServerQuizQuestion = {
   stage: number;
@@ -22,6 +23,7 @@ const QUIZ_BANKS: Record<string, ServerQuizQuestion[]> = {
   sysdesign: SYSDESIGN_TRACK_QUIZ,
   project: PROJECT_TRACK_QUIZ,
   uiux: UIUX_TRACK_QUIZ,
+  aws: AWS_TRACK_QUIZ,
 };
 
 export function getQuizBank(trackId: string) {

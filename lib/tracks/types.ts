@@ -9,6 +9,10 @@ export type Stage = {
   why: string;
   learn: string[];
   code: string;
+  // Optional runnable JS for the playground. Tracks whose `code` block is
+  // reference material (CLI commands, config) supply a separate executable
+  // exercise here instead of trying to run the reference as JavaScript.
+  playground?: string;
   build: string;
   check: string;
 };

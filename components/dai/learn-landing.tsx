@@ -102,6 +102,13 @@ const UiuxIcon = () => (
   </svg>
 );
 
+const CloudIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M17.5 19a4.5 4.5 0 0 0 .5-8.97 6 6 0 0 0-11.64-1.6A4 4 0 0 0 6.5 19z" />
+    <path d="M8 14h8" />
+  </svg>
+);
+
 const RocketIcon = () => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z" />
@@ -125,6 +132,7 @@ const LIVE_TRACKS: Record<string, string> = {
   sysdesign: "/learn/system-design",
   project: "/learn/project-building",
   uiux: "/learn/ui-ux",
+  aws: "/learn/aws",
 };
 
 const tracks = [
@@ -193,6 +201,17 @@ const tracks = [
     desc: "Hierarchy, type, contrast, spacing and states — design as rules you can apply, not taste you either have or don't.",
     build: "a real project of yours, redesigned and made accessible.",
     tags: ["Hierarchy", "Typography", "A11y", "Design systems"],
+  },
+  {
+    id: "aws",
+    icon: <CloudIcon />,
+    bg: "rgba(255,153,51,0.16)",
+    fg: "#FF9933",
+    title: "AWS & cloud",
+    level: "Intermediate",
+    desc: "IAM, EC2, VPC, Docker, ECS Fargate, Lambda, EventBridge, S3, RDS and CodeArtifact — the services that actually matter, step by step.",
+    build: "a containerised app running on AWS, with a teardown checklist.",
+    tags: ["EC2", "IAM", "Docker", "Lambda"],
   },
   {
     id: "project",
@@ -361,7 +380,7 @@ export function LearnLanding({ isLoggedIn, userName }: { isLoggedIn: boolean; us
         </h1>
 
         <p className={styles.heroSub}>
-          MERN, JavaScript, DSA, AI engineering, UI/UX, project building, and system design —<br />
+          MERN, JavaScript, DSA, AI engineering, AWS, UI/UX, project building, and system design —<br />
           one path, real projects, no fluff.
         </p>
 
@@ -387,7 +406,7 @@ export function LearnLanding({ isLoggedIn, userName }: { isLoggedIn: boolean; us
       <section className={styles.section}>
         <div className={styles.sectionLabel}>Tracks</div>
         <h2 className={styles.sectionTitle}>What you&apos;ll learn</h2>
-        <p className={styles.sectionSub}>Seven tracks, all live. Each one ends with a real certificate.</p>
+        <p className={styles.sectionSub}>Eight tracks, all live. Each one ends with a real certificate.</p>
         <div className={learn.trackGrid}>
           {tracks.map((t) => {
             const isLive = Boolean(LIVE_TRACKS[t.id]);
