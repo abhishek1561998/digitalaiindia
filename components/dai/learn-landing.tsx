@@ -114,6 +114,8 @@ const LIVE_TRACKS: Record<string, string> = {
   dsa: "/learn/dsa",
   mern: "/learn/mern",
   ai: "/learn/ai",
+  sysdesign: "/learn/system-design",
+  project: "/learn/project-building",
 };
 
 const tracks = [
@@ -365,7 +367,7 @@ export function LearnLanding({ isLoggedIn, userName }: { isLoggedIn: boolean; us
       <section className={styles.section}>
         <div className={styles.sectionLabel}>Tracks</div>
         <h2 className={styles.sectionTitle}>What you&apos;ll learn</h2>
-        <p className={styles.sectionSub}>Six tracks in progress. New write-ups publish here first.</p>
+        <p className={styles.sectionSub}>Six tracks, all live. Each one ends with a real certificate.</p>
         <div className={learn.trackGrid}>
           {tracks.map((t) => {
             const isLive = Boolean(LIVE_TRACKS[t.id]);

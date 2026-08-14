@@ -8,6 +8,8 @@ const TRACK_META: Record<string, { title: string; certPath: string }> = {
   dsa: { title: "Patterns, Not Problems.", certPath: "/learn/dsa/certificate" },
   mern: { title: "A Real App, End to End.", certPath: "/learn/mern/certificate" },
   ai: { title: "Ship AI That Actually Works.", certPath: "/learn/ai/certificate" },
+  sysdesign: { title: "Defend Every Box You Draw.", certPath: "/learn/system-design/certificate" },
+  project: { title: "Finish Something Real.", certPath: "/learn/project-building/certificate" },
 };
 
 // Owner-only: flips a pending certificate payment to "paid" after manually
