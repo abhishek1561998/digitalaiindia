@@ -2,11 +2,11 @@
 // overview page (/learn/javascript) and the course stepper
 // (/learn/javascript/course), so the two never drift out of sync.
 
+import type { Stage, QuizQuestion } from "./types";
+
 // Client-safe quiz questions (no correct answers — those stay server-side
 // in lib/server/js-track-quiz.ts and are checked via /api/learn/answer).
-export type JsQuizQuestion = { stage: number; question: string; options: string[] };
-
-export const JS_QUIZ_QUESTIONS: JsQuizQuestion[] = [
+export const JS_QUIZ_QUESTIONS: QuizQuestion[] = [
   { stage: 0, question: "What does console.log(a) print, given `console.log(a); var a = 5;`?", options: ["5", "undefined", "ReferenceError", "null"] },
   { stage: 1, question: "Why does 0 == \"0\" evaluate to true?", options: ["Because 0 and \"0\" are the same type", "Because == coerces one side so both sides can be compared as numbers", "It's actually false", "Because JavaScript ignores leading zeros"] },
   { stage: 2, question: "If you call debounce(fn, 300) three times within 100ms of each other, how many times does fn run?", options: ["3 times", "0 times", "1 time, after the last call", "1 time, immediately on the first call"] },
@@ -18,18 +18,7 @@ export const JS_QUIZ_QUESTIONS: JsQuizQuestion[] = [
   { stage: 8, question: "What's a bug in debounce() that an automated test would catch but manual clicking often wouldn't?", options: ["Syntax errors", "Timing edge cases — e.g. calling it exactly at the delay boundary, or with 0 calls", "Automated tests can't catch more than manual testing", "Debounce functions can't have bugs"] },
 ];
 
-export type JsStage = {
-  num: string;
-  title: string;
-  time: string;
-  why: string;
-  learn: string[];
-  code: string;
-  build: string;
-  check: string;
-};
-
-export const JS_STAGES: JsStage[] = [
+export const JS_STAGES: Stage[] = [
   {
     num: "00",
     title: "How JavaScript actually runs",

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import css from "./CourseStepper.module.css";
 import { Playground } from "./Playground";
-import { JS_STAGES, JS_QUIZ_QUESTIONS } from "@/lib/tracks/js-track";
+import type { Stage, QuizQuestion } from "@/lib/tracks/types";
 
 function stripCodeMarkup(code: string) {
   return code.replace(/<KW>(.*?)<\/KW>/g, "$1");
@@ -24,7 +24,23 @@ function renderCode(code: string) {
   });
 }
 
-export function CourseStepper({ trackId, userName }: { trackId: string; userName: string }) {
+export function CourseStepper({
+  trackId,
+  trackTitle,
+  overviewPath,
+  certificatePath,
+  stages,
+  quizQuestions,
+  userName,
+}: {
+  trackId: string;
+  trackTitle: string;
+  overviewPath: string;
+  certificatePath: string;
+  stages: Stage[];
+  quizQuestions: QuizQuestion[];
+  userName: string;
+}) {
   const [enrollment, setEnrollment] = useState<Enrollment | null>(null);
   const [loading, setLoading] = useState(true);
   const [blocked, setBlocked] = useState(false);
@@ -33,7 +49,7 @@ export function CourseStepper({ trackId, userName }: { trackId: string; userName
   const [result, setResult] = useState<{ correct: boolean; explanation: string; correctIndex?: number } | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
-  const totalStages = JS_STAGES.length;
+  const totalStages = stages.length;
 
   useEffect(() => {
     (async () => {
@@ -105,7 +121,7 @@ export function CourseStepper({ trackId, userName }: { trackId: string; userName
       <div className={css.loadingState}>
         This course requires Google sign-in to verify identity for the certificate.
         <br />
-        <a href="/api/auth/logout" onClick={async (e) => { e.preventDefault(); await fetch("/api/auth/logout", { method: "POST" }); window.location.href = `/auth?redirect=${encodeURIComponent(`/learn/${trackId === "js" ? "javascript" : trackId}/course`)}`; }} style={{ color: "var(--accent)" }}>
+        <a href="/api/auth/logout" onClick={async (e) => { e.preventDefault(); await fetch("/api/auth/logout", { method: "POST" }); window.location.href = `/auth?redirect=${encodeURIComponent(`${overviewPath}/course`)}`; }} style={{ color: "var(--accent)" }}>
           Log out and continue with Google →
         </a>
       </div>
@@ -116,8 +132,8 @@ export function CourseStepper({ trackId, userName }: { trackId: string; userName
     return <div className={css.loadingState}>Loading your course…</div>;
   }
 
-  const stage = JS_STAGES[activeStage];
-  const quiz = JS_QUIZ_QUESTIONS[activeStage];
+  const stage = stages[activeStage];
+  const quiz = quizQuestions[activeStage];
   const stagePassed = (enrollment.stageProgress[String(activeStage)] || 0) === 100;
   const isLastStage = activeStage === totalStages - 1;
   const courseComplete = Boolean(enrollment.completedAt);
@@ -127,7 +143,7 @@ export function CourseStepper({ trackId, userName }: { trackId: string; userName
       {/* ── Sidebar ── */}
       <aside className={css.sidebar}>
         <div className={css.sideHead}>
-          <div className={css.sideTitle}>JavaScript, properly.</div>
+          <div className={css.sideTitle}>{trackTitle}</div>
           <div className={css.overallBar}><div className={css.overallFill} style={{ width: `${overallPercent}%` }} /></div>
           <div className={css.overallMeta}>
             <span>{overallPercent}% complete</span>
@@ -135,7 +151,7 @@ export function CourseStepper({ trackId, userName }: { trackId: string; userName
           </div>
         </div>
         <nav className={css.stageNav}>
-          {JS_STAGES.map((s, i) => {
+          {stages.map((s, i) => {
             const pct = enrollment.stageProgress[String(i)] || 0;
             const locked = i > enrollment.currentStage;
             return (
@@ -158,7 +174,7 @@ export function CourseStepper({ trackId, userName }: { trackId: string; userName
 
       {/* ── Main ── */}
       <main className={css.main}>
-        <Link href="/learn/javascript" className={css.backLink}>← Back to curriculum</Link>
+        <Link href={overviewPath} className={css.backLink}>← Back to curriculum</Link>
         <div className={css.stageEyebrow}>Stage {stage.num} · {stage.time}</div>
         <h1 className={css.stageHeading}>{stage.title}</h1>
         <p className={css.stageWhy}>{stage.why}</p>
@@ -249,7 +265,7 @@ export function CourseStepper({ trackId, userName }: { trackId: string; userName
         {courseComplete && (
           <div className={css.completeBanner}>
             <p><strong>{userName}</strong>, you&apos;ve completed this track — {enrollment.points} points earned.</p>
-            <Link href="/learn/javascript/certificate" className="btn" style={{ padding: "9px 18px", borderRadius: "10px", background: "var(--accent)", color: "#fff", fontWeight: 600, fontSize: "0.85rem", textDecoration: "none" }}>
+            <Link href={certificatePath} className="btn" style={{ padding: "9px 18px", borderRadius: "10px", background: "var(--accent)", color: "#fff", fontWeight: 600, fontSize: "0.85rem", textDecoration: "none" }}>
               View certificate →
             </Link>
           </div>

@@ -30,12 +30,14 @@ const LogoIcon = () => (
 export function CertificateView({
   userName,
   trackTitle,
+  coursePath,
   points,
   completedAt,
   certificateId,
 }: {
   userName: string;
   trackTitle: string;
+  coursePath: string;
   points: number;
   completedAt: string;
   certificateId: string;
@@ -81,7 +83,7 @@ export function CertificateView({
       <div className={cert.page}>
         <div className={cert.hurray}>🎉 Congratulations — you earned it!</div>
         <div className={cert.actions}>
-          <Link href="/learn/javascript/course" className={cert.backLink}>← Back to course</Link>
+          <Link href={coursePath} className={cert.backLink}>← Back to course</Link>
           <button type="button" className={cert.printBtn} onClick={() => window.print()}>Download / Print</button>
         </div>
 

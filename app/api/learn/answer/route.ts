@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser, LEARN_REQUIRES_GOOGLE_ERROR } from "@/lib/server/auth";
-import { checkAnswer, JS_TRACK_QUIZ } from "@/lib/server/js-track-quiz";
+import { checkAnswer, getTrackStageCount } from "@/lib/server/quiz-registry";
 
 const POINTS_PER_STAGE = 10;
 
@@ -22,9 +22,9 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "trackId, stage and selectedIndex are required" }, { status: 400 });
   }
 
-  const result = checkAnswer(stage, selectedIndex);
+  const result = checkAnswer(trackId, stage, selectedIndex);
   if (!result) {
-    return NextResponse.json({ error: "Unknown stage" }, { status: 400 });
+    return NextResponse.json({ error: "Unknown track or stage" }, { status: 400 });
   }
 
   const enrollment = await prisma.trackEnrollment.findUnique({
@@ -42,7 +42,7 @@ export async function POST(req: Request) {
   const alreadyPassed = stageProgress[String(stage)] === 100;
   stageProgress[String(stage)] = 100;
 
-  const totalStages = JS_TRACK_QUIZ.length;
+  const totalStages = getTrackStageCount(trackId);
   const allDone = Array.from({ length: totalStages }, (_, i) => stageProgress[String(i)] === 100).every(Boolean);
 
   const updated = await prisma.trackEnrollment.update({

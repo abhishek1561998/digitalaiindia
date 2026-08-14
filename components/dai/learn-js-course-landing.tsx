@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import styles from "./marketing-landing.module.css";
 import { CourseStepper } from "./CourseStepper";
 import { AccountMenu } from "./AccountMenu";
+import type { Stage, QuizQuestion } from "@/lib/tracks/types";
 
 const syne = Syne({ subsets: ["latin"], variable: "--font-syne" });
 const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" });
@@ -33,7 +34,23 @@ const MoonIcon = () => (
   </svg>
 );
 
-export function LearnJsCourseLanding({ userName }: { userName: string }) {
+export function LearnCourseLanding({
+  trackId,
+  trackTitle,
+  overviewPath,
+  certificatePath,
+  stages,
+  quizQuestions,
+  userName,
+}: {
+  trackId: string;
+  trackTitle: string;
+  overviewPath: string;
+  certificatePath: string;
+  stages: Stage[];
+  quizQuestions: QuizQuestion[];
+  userName: string;
+}) {
   const [theme, setTheme] = useState<"dark" | "light">("light");
 
   useEffect(() => {
@@ -66,11 +83,19 @@ export function LearnJsCourseLanding({ userName }: { userName: string }) {
             {theme === "dark" ? <SunIcon /> : <MoonIcon />}
           </button>
           <AccountMenu userName={userName} />
-          <Link href="/learn/javascript" className={`${styles.btn} ${styles.btnGhost} ${styles.btnSm}`}>Exit course</Link>
+          <Link href={overviewPath} className={`${styles.btn} ${styles.btnGhost} ${styles.btnSm}`}>Exit course</Link>
         </div>
       </nav>
 
-      <CourseStepper trackId="js" userName={userName} />
+      <CourseStepper
+        trackId={trackId}
+        trackTitle={trackTitle}
+        overviewPath={overviewPath}
+        certificatePath={certificatePath}
+        stages={stages}
+        quizQuestions={quizQuestions}
+        userName={userName}
+      />
     </div>
   );
 }

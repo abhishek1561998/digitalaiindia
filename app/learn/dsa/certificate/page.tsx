@@ -7,30 +7,30 @@ import { PaymentGate } from "@/components/dai/PaymentGate";
 import { buildUpiQrDataUrl, UPI_VPA, CERT_AMOUNT_INR } from "@/lib/server/upi";
 
 export const metadata: Metadata = {
-  title: "Certificate — JavaScript, Properly. | DigitalAIIndia Learn",
-  description: "Course completion certificate for the DigitalAIIndia Learn JavaScript track.",
+  title: "Certificate — Patterns, Not Problems | DigitalAIIndia Learn",
+  description: "Course completion certificate for the DigitalAIIndia Learn DSA track.",
 };
 
-export default async function LearnJsCertificatePage() {
+export default async function LearnDsaCertificatePage() {
   const user = await getCurrentUser();
   if (!user) {
-    redirect("/auth?redirect=/learn/javascript/certificate");
+    redirect("/auth?redirect=/learn/dsa/certificate");
   }
 
   const enrollment = await prisma.trackEnrollment.findUnique({
-    where: { userId_trackId: { userId: user.id, trackId: "js" } },
+    where: { userId_trackId: { userId: user.id, trackId: "dsa" } },
   });
 
   if (!enrollment || !enrollment.completedAt) {
-    redirect("/learn/javascript/course");
+    redirect("/learn/dsa/course");
   }
 
   if (enrollment.paymentStatus !== "paid") {
-    const qrDataUrl = await buildUpiQrDataUrl(`DAI-JS-${user.id.slice(-6)}`);
+    const qrDataUrl = await buildUpiQrDataUrl(`DAI-DSA-${user.id.slice(-6)}`);
     return (
       <PaymentGate
-        trackId="js"
-        coursePath="/learn/javascript/course"
+        trackId="dsa"
+        coursePath="/learn/dsa/course"
         qrDataUrl={qrDataUrl}
         upiId={UPI_VPA}
         amount={CERT_AMOUNT_INR}
@@ -42,8 +42,8 @@ export default async function LearnJsCertificatePage() {
   return (
     <CertificateView
       userName={user.name}
-      trackTitle="JavaScript, Properly."
-      coursePath="/learn/javascript/course"
+      trackTitle="Patterns, Not Problems."
+      coursePath="/learn/dsa/course"
       points={enrollment.points}
       completedAt={enrollment.completedAt.toISOString()}
       certificateId={enrollment.id}

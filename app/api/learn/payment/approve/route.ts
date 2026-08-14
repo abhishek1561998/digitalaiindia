@@ -5,6 +5,7 @@ import { sendCertificateReadyEmail } from "@/lib/server/email";
 
 const TRACK_META: Record<string, { title: string; certPath: string }> = {
   js: { title: "JavaScript, Properly.", certPath: "/learn/javascript/certificate" },
+  dsa: { title: "Patterns, Not Problems.", certPath: "/learn/dsa/certificate" },
 };
 
 // Owner-only: flips a pending certificate payment to "paid" after manually

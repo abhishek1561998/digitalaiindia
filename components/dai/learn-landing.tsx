@@ -109,6 +109,11 @@ const snippets: Record<string, string> = {
   architecture: `digitalaiindia/\n├── app/api/v1/voice/tts/   → public endpoint\n├── lib/server/\n│   ├── voice-integrations.ts → resolve active key\n│   └── tts-providers.ts      → call Sarvam/ElevenLabs\n└── prisma/schema.prisma      → VoiceIntegration model`,
 };
 
+const LIVE_TRACKS: Record<string, string> = {
+  js: "/learn/javascript",
+  dsa: "/learn/dsa",
+};
+
 const tracks = [
   {
     id: "js",
@@ -193,20 +198,25 @@ export function LearnLanding({ isLoggedIn, userName }: { isLoggedIn: boolean; us
   const [waitName, setWaitName] = useState("");
   const [waitEmail, setWaitEmail] = useState("");
   const [waitStatus, setWaitStatus] = useState<"idle" | "sending" | "done" | "error">("idle");
-  const [jsProgress, setJsProgress] = useState<{ percent: number; completed: boolean } | null>(null);
+  const [trackProgress, setTrackProgress] = useState<Record<string, { percent: number; completed: boolean }>>({});
 
   useEffect(() => {
     if (!isLoggedIn) return;
-    fetch("/api/learn/progress?trackId=js")
-      .then((r) => r.json())
-      .then((data) => {
-        if (!data.enrollment) return;
-        const sp = data.enrollment.stageProgress as Record<string, number>;
-        const stageCount = 9;
-        const sum = Array.from({ length: stageCount }, (_, i) => sp[String(i)] || 0).reduce((a: number, b: number) => a + b, 0);
-        setJsProgress({ percent: Math.round(sum / stageCount), completed: Boolean(data.enrollment.completedAt) });
-      })
-      .catch(() => {});
+    Object.keys(LIVE_TRACKS).forEach((trackId) => {
+      fetch(`/api/learn/progress?trackId=${trackId}`)
+        .then((r) => r.json())
+        .then((data) => {
+          if (!data.enrollment) return;
+          const sp = data.enrollment.stageProgress as Record<string, number>;
+          const stageCount = 9;
+          const sum = Array.from({ length: stageCount }, (_, i) => sp[String(i)] || 0).reduce((a: number, b: number) => a + b, 0);
+          setTrackProgress((prev) => ({
+            ...prev,
+            [trackId]: { percent: Math.round(sum / stageCount), completed: Boolean(data.enrollment.completedAt) },
+          }));
+        })
+        .catch(() => {});
+    });
   }, [isLoggedIn]);
 
   async function submitWaitlist(e: React.FormEvent) {
@@ -356,7 +366,8 @@ export function LearnLanding({ isLoggedIn, userName }: { isLoggedIn: boolean; us
         <p className={styles.sectionSub}>Six tracks in progress. New write-ups publish here first.</p>
         <div className={learn.trackGrid}>
           {tracks.map((t) => {
-            const isLive = t.id === "js";
+            const isLive = Boolean(LIVE_TRACKS[t.id]);
+            const progress = trackProgress[t.id];
             const cardContent = (
               <>
                 <div className={learn.trackIconWrap} style={{ "--icon-bg": t.bg, "--icon-fg": t.fg } as React.CSSProperties}>
@@ -374,10 +385,10 @@ export function LearnLanding({ isLoggedIn, userName }: { isLoggedIn: boolean; us
                   ))}
                 </div>
                 <div className={learn.trackFooter}>
-                  {isLive && jsProgress?.completed ? (
+                  {isLive && progress?.completed ? (
                     <span className={learn.trackStatus} style={{ color: "var(--accent)" }}>● Completed — certificate earned</span>
-                  ) : isLive && jsProgress && jsProgress.percent > 0 ? (
-                    <span className={learn.trackStatus} style={{ color: "var(--accent)" }}>● {jsProgress.percent}% complete — continue →</span>
+                  ) : isLive && progress && progress.percent > 0 ? (
+                    <span className={learn.trackStatus} style={{ color: "var(--accent)" }}>● {progress.percent}% complete — continue →</span>
                   ) : isLive ? (
                     <span className={learn.trackStatus} style={{ color: "var(--accent)" }}>● View curriculum →</span>
                   ) : (
@@ -387,7 +398,7 @@ export function LearnLanding({ isLoggedIn, userName }: { isLoggedIn: boolean; us
               </>
             );
             return isLive ? (
-              <Link href="/learn/javascript" className={learn.trackCard} key={t.id}>
+              <Link href={LIVE_TRACKS[t.id]} className={learn.trackCard} key={t.id}>
                 {cardContent}
               </Link>
             ) : (

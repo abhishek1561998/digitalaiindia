@@ -12,12 +12,14 @@ const jetBrains = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono" }
 
 export function PaymentGate({
   trackId,
+  coursePath,
   qrDataUrl,
   upiId,
   amount,
   status,
 }: {
   trackId: string;
+  coursePath: string;
   qrDataUrl: string;
   upiId: string;
   amount: number;
@@ -59,7 +61,7 @@ export function PaymentGate({
   return (
     <div className={`${styles.shell} ${syne.variable} ${outfit.variable} ${jetBrains.variable}`} data-theme={theme}>
       <div className={css.page}>
-        <Link href="/learn/javascript/course" className={css.backLink}>← Back to course</Link>
+        <Link href={coursePath} className={css.backLink}>← Back to course</Link>
 
         <div className={css.card}>
           <div className={css.eyebrow}>You&apos;ve completed the course 🎉</div>

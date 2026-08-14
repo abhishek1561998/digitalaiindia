@@ -13,6 +13,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
     { url: "https://learn.digitalaiindia.com", lastModified: now, changeFrequency: "weekly", priority: 0.9 },
     { url: "https://learn.digitalaiindia.com/javascript", lastModified: now, changeFrequency: "weekly", priority: 0.9 },
+    { url: "https://learn.digitalaiindia.com/dsa", lastModified: now, changeFrequency: "weekly", priority: 0.9 },
 
     { url: "https://blog.digitalaiindia.com", lastModified: now, changeFrequency: "daily", priority: 0.7 },
   ];
