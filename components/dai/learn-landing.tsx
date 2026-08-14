@@ -113,6 +113,7 @@ const LIVE_TRACKS: Record<string, string> = {
   js: "/learn/javascript",
   dsa: "/learn/dsa",
   mern: "/learn/mern",
+  ai: "/learn/ai",
 };
 
 const tracks = [

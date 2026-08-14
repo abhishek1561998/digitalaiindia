@@ -1,6 +1,7 @@
 import { JS_TRACK_QUIZ } from "./js-track-quiz";
 import { DSA_TRACK_QUIZ } from "./dsa-track-quiz";
 import { MERN_TRACK_QUIZ } from "./mern-track-quiz";
+import { AI_TRACK_QUIZ } from "./ai-track-quiz";
 
 export type ServerQuizQuestion = {
   stage: number;
@@ -14,6 +15,7 @@ const QUIZ_BANKS: Record<string, ServerQuizQuestion[]> = {
   js: JS_TRACK_QUIZ,
   dsa: DSA_TRACK_QUIZ,
   mern: MERN_TRACK_QUIZ,
+  ai: AI_TRACK_QUIZ,
 };
 
 export function getQuizBank(trackId: string) {

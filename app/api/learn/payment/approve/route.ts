@@ -7,6 +7,7 @@ const TRACK_META: Record<string, { title: string; certPath: string }> = {
   js: { title: "JavaScript, Properly.", certPath: "/learn/javascript/certificate" },
   dsa: { title: "Patterns, Not Problems.", certPath: "/learn/dsa/certificate" },
   mern: { title: "A Real App, End to End.", certPath: "/learn/mern/certificate" },
+  ai: { title: "Ship AI That Actually Works.", certPath: "/learn/ai/certificate" },
 };
 
 // Owner-only: flips a pending certificate payment to "paid" after manually
