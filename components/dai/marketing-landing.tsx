@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Syne, Outfit, JetBrains_Mono } from "next/font/google";
 import { useEffect, useMemo, useState } from "react";
 import styles from "./marketing-landing.module.css";
+import { BrandLogo } from "./BrandLogo";
 import { CelebrateButton } from "./CelebrateButton";
 import { Reveal } from "./Reveal";
 
@@ -50,12 +51,6 @@ const MoonIcon = () => (
 const ArrowIcon = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
     <line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" />
-  </svg>
-);
-
-const LogoIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
   </svg>
 );
 
@@ -131,10 +126,7 @@ export function MarketingLanding({ isLoggedIn }: { isLoggedIn: boolean }) {
       <div className={styles.tricolorBar} />
       {/* ── Nav ── */}
       <nav className={styles.nav}>
-        <div className={styles.navLogo}>
-          <div className={styles.logoIcon}><LogoIcon /></div>
-          <span>DigitalAI<span className={styles.logoIndia}>India</span></span>
-        </div>
+        <BrandLogo />
         <div className={styles.navLinks}>
           <Link href="/">Home</Link>
           <a href="https://platform.digitalaiindia.com">Products</a>
@@ -324,10 +316,7 @@ export function MarketingLanding({ isLoggedIn }: { isLoggedIn: boolean }) {
       {/* ── Footer ── */}
       <div className={styles.footerMain}>
         <div className={styles.footerAbout}>
-          <div className={styles.navLogo}>
-            <div className={styles.logoIcon}><LogoIcon /></div>
-            <span>DigitalAI<span className={styles.logoIndia}>India</span></span>
-          </div>
+          <BrandLogo />
           <p>An India-first AI company — one platform for Chat, Voice, 3D and Design, built and priced for Indian developers.</p>
         </div>
         <div>

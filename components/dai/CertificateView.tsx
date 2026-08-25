@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import styles from "./marketing-landing.module.css";
 import cert from "./CertificateView.module.css";
 import confettiStyles from "./CelebrationConfetti.module.css";
+import { BrandMark } from "./BrandLogo";
 
 const CONFETTI_COLORS = ["#FF9933", "#FFFFFF", "#138808"] as const;
 const CONFETTI_PIECES = Array.from({ length: 40 }, (_, i) => ({
@@ -21,11 +22,7 @@ const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" });
 const jetBrains = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono" });
 const caveat = Caveat({ subsets: ["latin"], variable: "--font-signature", weight: ["600", "700"] });
 
-const LogoIcon = () => (
-  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
-  </svg>
-);
+const LogoIcon = () => <BrandMark size={15} />;
 
 export function CertificateView({
   userName,

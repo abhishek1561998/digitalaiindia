@@ -1520,3 +1520,16 @@
     animation: none;
   }
 }
+
+/* Image variant of the brand lockup (BrandLogo, USE_IMAGE_LOGO). */
+.logoImage {
+  height: 34px;
+  width: auto;
+  max-width: 190px;
+  object-fit: contain;
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .logoImage { height: 30px; max-width: 150px; }
+}

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Syne, Outfit, JetBrains_Mono } from "next/font/google";
 import { useEffect, useState } from "react";
 import styles from "./marketing-landing.module.css";
+import { BrandLogo } from "./BrandLogo";
 import { CourseStepper } from "./CourseStepper";
 import { AccountMenu } from "./AccountMenu";
 import type { Stage, QuizQuestion } from "@/lib/tracks/types";
@@ -11,12 +12,6 @@ import type { Stage, QuizQuestion } from "@/lib/tracks/types";
 const syne = Syne({ subsets: ["latin"], variable: "--font-syne" });
 const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" });
 const jetBrains = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono" });
-
-const LogoIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
-  </svg>
-);
 
 const SunIcon = () => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -76,10 +71,7 @@ export function LearnCourseLanding({
   return (
     <div className={`${styles.shell} ${syne.variable} ${outfit.variable} ${jetBrains.variable}`} data-theme={theme}>
       <nav className={styles.nav}>
-        <div className={styles.navLogo}>
-          <div className={styles.logoIcon}><LogoIcon /></div>
-          <span>DigitalAI<span className={styles.logoIndia}>India</span></span>
-        </div>
+        <BrandLogo />
         <div className={styles.navRight}>
           <button type="button" className={`${styles.btn} ${styles.themeToggle}`} onClick={toggleTheme} aria-label="Toggle theme">
             {theme === "dark" ? <SunIcon /> : <MoonIcon />}

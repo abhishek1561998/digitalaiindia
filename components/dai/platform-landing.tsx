@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Syne, Outfit, JetBrains_Mono } from "next/font/google";
 import { useEffect, useMemo, useState } from "react";
 import styles from "./marketing-landing.module.css";
+import { BrandLogo } from "./BrandLogo";
 import { CelebrateButton } from "./CelebrateButton";
 import { Reveal } from "./Reveal";
 
@@ -71,12 +72,6 @@ const ArrowIcon = () => (
   </svg>
 );
 
-const LogoIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
-  </svg>
-);
-
 const MenuIcon = () => (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round">
     <line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="18" x2="21" y2="18" />
@@ -130,10 +125,7 @@ export function PlatformLanding({ isLoggedIn }: { isLoggedIn: boolean }) {
       <div className={styles.tricolorBar} />
       {/* ── Nav ── */}
       <nav className={styles.nav}>
-        <div className={styles.navLogo}>
-          <div className={styles.logoIcon}><LogoIcon /></div>
-          <span>DigitalAI<span className={styles.logoIndia}>India</span></span>
-        </div>
+        <BrandLogo />
         <div className={styles.navLinks}>
           <a href="https://digitalaiindia.com" className={styles.navBackLink}>← digitalaiindia.com</a>
           <Link href="/pricing">Pricing</Link>
@@ -399,10 +391,7 @@ export function PlatformLanding({ isLoggedIn }: { isLoggedIn: boolean }) {
       {/* ── Footer ── */}
       <div className={styles.footerMain}>
         <div className={styles.footerAbout}>
-          <div className={styles.navLogo}>
-            <div className={styles.logoIcon}><LogoIcon /></div>
-            <span>DigitalAI<span className={styles.logoIndia}>India</span></span>
-          </div>
+          <BrandLogo />
           <p>An India-first AI company — one platform for Chat, Voice, 3D and Design, built and priced for Indian developers.</p>
         </div>
         <div>

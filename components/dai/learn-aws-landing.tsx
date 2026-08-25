@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Syne, Outfit, JetBrains_Mono } from "next/font/google";
 import { useEffect, useState } from "react";
 import styles from "./marketing-landing.module.css";
+import { BrandLogo } from "./BrandLogo";
 import { CelebrateButton } from "./CelebrateButton";
 import { AccountMenu } from "./AccountMenu";
 import { Playground } from "./Playground";
@@ -27,12 +28,6 @@ const SunIcon = () => (
 const MoonIcon = () => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-  </svg>
-);
-
-const LogoIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
   </svg>
 );
 
@@ -91,10 +86,7 @@ export function LearnAwsLanding({ isLoggedIn, userName }: { isLoggedIn: boolean;
       <div className={styles.tricolorBar} />
       {/* ── Nav ── */}
       <nav className={styles.nav}>
-        <div className={styles.navLogo}>
-          <div className={styles.logoIcon}><LogoIcon /></div>
-          <span>DigitalAI<span className={styles.logoIndia}>India</span></span>
-        </div>
+        <BrandLogo />
         <div className={styles.navLinks}>
           <a href="https://digitalaiindia.com" className={styles.navBackLink}>← digitalaiindia.com</a>
           <Link href="/learn">All tracks</Link>
@@ -325,10 +317,7 @@ export function LearnAwsLanding({ isLoggedIn, userName }: { isLoggedIn: boolean;
 
       {/* ── Footer ── */}
       <footer className={styles.footer}>
-        <div className={styles.navLogo}>
-          <div className={styles.logoIcon}><LogoIcon /></div>
-          <span>DigitalAI<span className={styles.logoIndia}>India</span></span>
-        </div>
+        <BrandLogo />
         <div className={styles.footerLinks}>
           <Link href="/learn">All tracks</Link>
           <Link href="/blog">Blog</Link>

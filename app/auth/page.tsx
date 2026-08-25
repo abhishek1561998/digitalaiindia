@@ -5,15 +5,12 @@ import { ThemeToggle } from "@/components/dai/theme-toggle";
 import { Syne, Outfit } from "next/font/google";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
+import { BrandMark } from "@/components/dai/BrandLogo";
 
 const syne = Syne({ subsets: ["latin"], variable: "--font-syne" });
 const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" });
 
-const LogoIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
-  </svg>
-);
+const LogoIcon = () => <BrandMark size={18} />;
 
 const errorMessages: Record<string, string> = {
   google_oauth_state_invalid:    "Session expired. Please try Google sign-in again.",
