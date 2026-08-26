@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser, LEARN_REQUIRES_GOOGLE_ERROR } from "@/lib/server/auth";
+import { validTrack } from "@/lib/server/validate";
 
 export async function POST(req: Request) {
   const user = await getCurrentUser();
@@ -15,9 +16,9 @@ export async function POST(req: Request) {
   }
 
   const body = await req.json().catch(() => ({}));
-  const trackId = String(body.trackId || "").trim();
+  const trackId = validTrack(body.trackId);
   if (!trackId) {
-    return NextResponse.json({ error: "trackId is required" }, { status: 400 });
+    return NextResponse.json({ error: "Unknown track" }, { status: 400 });
   }
 
   const enrollment = await prisma.trackEnrollment.upsert({

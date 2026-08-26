@@ -29,6 +29,12 @@ model User {
   usageRecords  UsageRecord[]
   voiceIntegrations VoiceIntegration[]
   enrollments   TrackEnrollment[]
+  learnProfile  LearnProfile?
+  learnActivity LearnActivity[]
+  subscription  Subscription?
+  leagueEntries LeagueEntry[]
+  learnPrefs    LearnPreferences?
+  earnedBadges  EarnedBadge[]
 }
 
 // One row per (user, track). stageProgress maps stage index -> 0 | 50 | 100
@@ -113,4 +119,162 @@ model UsageRecord {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, month])
+}
+
+// One row per learner. Everything the Learn app's habit loop reads on every
+// page load — XP total, current streak, freezes — lives here so the header
+// never has to aggregate across enrollments.
+model LearnProfile {
+  id            String    @id @default(cuid())
+  userId        String    @unique
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  xp            Int       @default(0)
+  streak        Int       @default(0)
+  longestStreak Int       @default(0)
+  // UTC midnight of the day the learner last completed a lesson. Compared
+  // against today to decide whether the streak continues, freezes, or resets.
+  lastActiveOn  DateTime?
+  // Spent automatically to cover one missed day before the streak resets.
+  freezes       Int       @default(2)
+  // The one lesson a free learner claimed today, as "trackId:stage". Free
+  // access is a lesson a day, so the claim has to be remembered across a
+  // refresh — otherwise reloading the page buys another lesson.
+  dailyLessonKey String?
+  // UTC midnight of the day dailyLessonKey belongs to.
+  dailyLessonOn  DateTime?
+  // Streak length the learner is currently aiming for: 7, 14, 21 or 30.
+  // Null until they pick one — we don't assume a goal on their behalf.
+  goalDays      Int?
+  // When the current goal was set, so a goal restarted after a broken streak
+  // is measured from the restart rather than from the first time they chose it.
+  goalSetAt     DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+// One row per (learner, day) with activity. Powers the week strip and the
+// activity heatmap on /learn/you without scanning lesson completions.
+model LearnActivity {
+  id      String   @id @default(cuid())
+  userId  String
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // UTC midnight of the day.
+  day     DateTime
+  xp      Int      @default(0)
+  lessons Int      @default(0)
+
+  @@unique([userId, day])
+  @@index([userId, day])
+}
+
+// Premium access. Deliberately provider-agnostic: `provider`/`providerRef`
+// hold whatever the payment flow used (manual UPI today, a gateway later),
+// and every gate in the app only ever reads `status` and `currentPeriodEnd`.
+model Subscription {
+  id               String    @id @default(cuid())
+  userId           String    @unique
+  user             User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // "none" | "trialing" | "active" | "past_due" | "canceled"
+  status           String    @default("none")
+  // "monthly" | "annual"
+  interval         String    @default("annual")
+  trialEndsAt      DateTime?
+  currentPeriodEnd DateTime?
+  provider         String?
+  providerRef      String?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  @@index([status])
+}
+
+// A learner's placement in one weekly league cycle.
+//
+// Leagues are cohorts of ~30 people competing on XP earned that week. There
+// is no League table: a cycle is identified by the Monday it starts plus a
+// tier, and membership is just the set of entries sharing both. That keeps
+// the weekly rollover a single insert per learner instead of a schema dance.
+model LeagueEntry {
+  id       String   @id @default(cuid())
+  userId   String
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // UTC midnight of the cycle's Monday.
+  weekStart DateTime
+  // 0 = Hydrogen, 1 = Carbon, 2 = Silicon, 3 = Titanium, 4 = Diamond.
+  tier     Int      @default(0)
+  // Which cohort within the tier — cohorts are capped so a league stays small
+  // enough that a rank means something.
+  cohort   Int      @default(0)
+  // XP earned inside this cycle only, kept separate from LearnProfile.xp.
+  xp       Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, weekStart])
+  @@index([weekStart, tier, cohort, xp])
+}
+
+// Per-learner settings for the Learn app.
+//
+// Deliberately explicit columns rather than a JSON blob: the email flags are
+// read by send-time queries ("everyone with streakAlerts on whose streak
+// expires tonight"), and that has to be a WHERE clause, not a scan.
+model LearnPreferences {
+  id     String @id @default(cuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // ── Appearance ──
+  // "auto" | "light" | "dark"
+  theme         String @default("auto")
+  // "auto" | "on" | "off" — "auto" defers to prefers-reduced-motion.
+  reduceMotion  String @default("auto")
+
+  // ── Sound ──
+  narrationEnabled Boolean @default(false)
+  // "melodic" | "deep"
+  narratorVoice    String  @default("melodic")
+  soundEffects     Boolean @default(true)
+
+  // ── Email: streaks ──
+  emailStreakReminders Boolean @default(true)
+  emailStreakAlerts    Boolean @default(true)
+
+  // ── Email: leagues ──
+  emailLeagueReminders Boolean @default(true)
+  emailLeagueAlerts    Boolean @default(true)
+
+  // ── Email: learning ──
+  emailDailyPractice   Boolean @default(true)
+  emailRecommendations Boolean @default(true)
+
+  // ── Email: news ──
+  emailNewsletter      Boolean @default(true)
+  emailContentLaunches Boolean @default(true)
+  emailPromotions      Boolean @default(false)
+
+  // Master switch. When true, nothing but vital account mail is sent,
+  // whatever the individual flags say.
+  emailOptOutAll Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// A badge the learner has earned. Definitions live in lib/learn/badges.ts,
+// not here: a badge is content, and content in a table means a migration
+// every time we want to add one.
+model EarnedBadge {
+  id      String   @id @default(cuid())
+  userId  String
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // Matches an id in the badge catalogue.
+  badgeId String
+  earnedAt DateTime @default(now())
+  // Value that triggered it (streak length, XP total, course count), kept so
+  // the badge can show what it was actually for.
+  value   Int?
+
+  @@unique([userId, badgeId])
+  @@index([userId, earnedAt])
 }

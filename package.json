@@ -7,8 +7,12 @@
     "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
-    "prisma:generate": "prisma generate",
-    "prisma:migrate": "prisma migrate dev"
+    "prisma:generate": "node scripts/with-env.mjs npx prisma generate",
+    "prisma:migrate": "node scripts/with-env.mjs npx prisma migrate dev",
+    "prisma:status": "node scripts/with-env.mjs npx prisma migrate status",
+    "prisma:studio": "node scripts/with-env.mjs npx prisma studio",
+    "prisma:push": "node scripts/with-env.mjs npx prisma db push",
+    "check:samples": "node scripts/check-code-samples.mjs"
   },
   "dependencies": {
     "@clerk/clerk-react": "^5.24.0",

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser, LEARN_REQUIRES_GOOGLE_ERROR } from "@/lib/server/auth";
+import { validTrack, validLesson } from "@/lib/server/validate";
 
 export async function GET(req: Request) {
   const user = await getCurrentUser();
@@ -9,9 +10,9 @@ export async function GET(req: Request) {
   }
 
   const { searchParams } = new URL(req.url);
-  const trackId = searchParams.get("trackId") || "";
+  const trackId = validTrack(searchParams.get("trackId"));
   if (!trackId) {
-    return NextResponse.json({ error: "trackId is required" }, { status: 400 });
+    return NextResponse.json({ error: "Unknown track" }, { status: 400 });
   }
 
   const enrollment = await prisma.trackEnrollment.findUnique({
@@ -33,11 +34,11 @@ export async function POST(req: Request) {
   }
 
   const body = await req.json().catch(() => ({}));
-  const trackId = String(body.trackId || "").trim();
-  const stage = Number(body.stage);
-  if (!trackId || Number.isNaN(stage)) {
-    return NextResponse.json({ error: "trackId and stage are required" }, { status: 400 });
+  const lesson = validLesson(body.trackId, body.stage);
+  if (!lesson) {
+    return NextResponse.json({ error: "Unknown track or lesson" }, { status: 400 });
   }
+  const { trackId, stage } = lesson;
 
   const enrollment = await prisma.trackEnrollment.findUnique({
     where: { userId_trackId: { userId: user.id, trackId } },

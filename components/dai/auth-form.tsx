@@ -125,9 +125,9 @@ export function AuthForm() {
           lineHeight: 1.5,
           marginBottom: "1.5rem",
         }}>
-          <strong style={{ color: "var(--dai-text)" }}>Learn requires Google sign-in.</strong> Certificates
-          carry your name, so we verify identity through Google rather than a self-entered email — it's
-          the only way in here.
+          <strong style={{ color: "var(--dai-text)" }}>Learn requires Google sign-in.</strong> One
+          account, nothing to remember, and no password of yours for us to lose — it&apos;s the only
+          way in here.
         </div>
       )}
 

@@ -1,0 +1,922 @@
+/* ================================================================
+   Lesson player — a full-screen takeover.
+   One idea per step, one obvious button. Nothing else on screen.
+   ================================================================ */
+
+.player {
+  --bg:         #FCFBF9;
+  --surface:    #FFFFFF;
+  --surfaceAlt: #F6F4F0;
+  --line:       #EAE6DF;
+  --lineStrong: #D9D3C9;
+  --text:       #1E1B16;
+  --text2:      #746E62;
+  --text3:      #A9A296;
+  --accent:     #FF7500;
+  --accentSoft: rgba(255, 117, 0, 0.10);
+  --done:       #00A97F;
+  --wrong:      #E23D5B;
+  --xp:         #7BC62D;
+  --radius:     16px;
+  --radiusLg:   24px;
+
+  font-family: var(--font-body, ui-sans-serif, system-ui, sans-serif);
+  font-feature-settings: "cv11", "ss01";
+  letter-spacing: -0.006em;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+.player[data-theme="dark"] {
+  --bg:         #0C0B10;
+  --surface:    #16151C;
+  --surfaceAlt: #1E1D26;
+  --line:       #262532;
+  --lineStrong: #3A3948;
+  --text:       #F2EFE9;
+  --text2:      #9C97A8;
+  --text3:      #625E70;
+  --accentSoft: rgba(255, 117, 0, 0.18);
+}
+
+/* ── Top bar ─────────────────────────────────────────────────── */
+
+.top {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1.1rem 1.5rem;
+  flex-shrink: 0;
+}
+
+.close {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text2);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s, color 0.15s;
+}
+
+.close:hover { background: var(--surfaceAlt); color: var(--text); }
+
+/* One segment per step, so the learner can see how much of *this lesson*
+   is left — a single continuous bar hides that. */
+.segs {
+  flex: 1;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.seg {
+  flex: 1;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--surfaceAlt);
+  overflow: hidden;
+}
+
+.segFill {
+  display: block;
+  height: 100%;
+  width: 0;
+  border-radius: 999px;
+  background: var(--done);
+  transition: width 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.topXp {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: var(--text2);
+  flex-shrink: 0;
+}
+
+/* ── Body ────────────────────────────────────────────────────── */
+
+.body {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  /* flex-start, not stretch: a short step shouldn't produce a sheet with
+     half a screen of empty white below the button. */
+  align-items: flex-start;
+  padding: 0.5rem 1.5rem 2rem;
+}
+
+.sheet {
+  width: 100%;
+  max-width: 760px;
+  padding: 2.5rem 2.5rem 2rem;
+  border-radius: 28px;
+  border: 1.5px solid var(--line);
+  background: var(--surface);
+  box-shadow: 0 1px 2px rgba(20, 18, 15, 0.04), 0 12px 32px -18px rgba(20, 18, 15, 0.14);
+  animation: sheetIn 0.32s cubic-bezier(0.2, 0.7, 0.3, 1) both;
+}
+
+@media (max-width: 640px) {
+  .sheet { padding: 1.75rem 1.35rem 1.5rem; border-radius: 22px; }
+}
+
+@keyframes sheetIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  background: var(--accentSoft);
+  color: var(--accent);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 1.1rem;
+}
+
+.h1 {
+  font-family: var(--font-display, inherit);
+  font-size: clamp(1.6rem, 3.4vw, 2.15rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  margin: 0 0 1rem;
+}
+
+.h2 {
+  font-family: var(--font-display, inherit);
+  font-size: 1.375rem;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  margin: 0 0 1rem;
+}
+
+.lead {
+  font-size: 1.125rem;
+  line-height: 1.6;
+  color: var(--text2);
+  margin: 0 0 1.5rem;
+}
+
+.list {
+  list-style: none;
+  margin: 0 0 1.5rem;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.listItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  font-size: 1.0625rem;
+  line-height: 1.5;
+}
+
+.listBullet {
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  margin-top: 1px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--accentSoft);
+  color: var(--accent);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+/* ── Code ────────────────────────────────────────────────────── */
+
+.code {
+  margin: 0 0 1.5rem;
+  padding: 1.25rem 1.35rem;
+  border-radius: var(--radius);
+  background: #14120F;
+  color: #E9E4DC;
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.875rem;
+  line-height: 1.7;
+  overflow-x: auto;
+  white-space: pre;
+  tab-size: 2;
+}
+
+.player[data-theme="dark"] .code { background: #08070C; }
+
+.codeComment { color: #FFA45C; }
+
+/* ── Quiz ────────────────────────────────────────────────────── */
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin: 0 0 1.5rem;
+}
+
+.option {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.9rem;
+  width: 100%;
+  padding: 1.05rem 1.15rem;
+  border: 2px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 1rem;
+  line-height: 1.5;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, transform 0.12s;
+}
+
+.option:hover:not(:disabled) { border-color: var(--lineStrong); }
+.option:active:not(:disabled) { transform: scale(0.995); }
+.option:disabled { cursor: default; }
+
+.option[data-state="selected"] {
+  border-color: var(--accent);
+  background: var(--accentSoft);
+}
+
+.option[data-state="correct"] {
+  border-color: var(--done);
+  background: color-mix(in srgb, var(--done) 10%, transparent);
+}
+
+.option[data-state="wrong"] {
+  border-color: var(--wrong);
+  background: color-mix(in srgb, var(--wrong) 10%, transparent);
+}
+
+.optionKey {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  border: 2px solid var(--line);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--text3);
+}
+
+.option[data-state="selected"] .optionKey { border-color: var(--accent); color: var(--accent); }
+.option[data-state="correct"] .optionKey { border-color: var(--done); background: var(--done); color: #fff; }
+.option[data-state="wrong"] .optionKey { border-color: var(--wrong); background: var(--wrong); color: #fff; }
+
+/* ── Verdict ─────────────────────────────────────────────────── */
+
+.verdict {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.9rem;
+  padding: 1.15rem 1.25rem;
+  border-radius: var(--radius);
+  margin-bottom: 1.5rem;
+  animation: sheetIn 0.28s ease both;
+}
+
+.verdict[data-ok="true"] {
+  background: color-mix(in srgb, var(--done) 12%, transparent);
+  color: var(--text);
+}
+
+.verdict[data-ok="false"] {
+  background: color-mix(in srgb, var(--wrong) 12%, transparent);
+  color: var(--text);
+}
+
+.verdictIcon {
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  color: #fff;
+}
+
+.verdictTitle {
+  font-weight: 600;
+  font-size: 1.0625rem;
+  margin: 0 0 0.25rem;
+}
+
+.verdictText {
+  font-size: 0.9875rem;
+  line-height: 1.55;
+  color: var(--text2);
+  margin: 0;
+}
+
+/* ── Footer ──────────────────────────────────────────────────── */
+
+.foot {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.back {
+  height: 54px;
+  padding: 0 1.4rem;
+  border: 2px solid var(--line);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--text2);
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 550;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.back:hover { border-color: var(--lineStrong); color: var(--text); }
+
+.cta {
+  flex: 1;
+  height: 54px;
+  display: grid;
+  place-items: center;
+  border: none;
+  border-radius: var(--radius);
+  background: var(--text);
+  color: var(--bg);
+  font-family: inherit;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  box-shadow: 0 3px 0 color-mix(in srgb, var(--text) 55%, var(--bg));
+  transition: filter 0.15s, transform 0.1s, box-shadow 0.1s;
+}
+
+.cta:hover { filter: brightness(1.12); }
+.cta:active { transform: translateY(3px); box-shadow: none; }
+.cta:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
+
+.ctaGo {
+  background: var(--done);
+  color: #fff;
+  box-shadow: 0 3px 0 color-mix(in srgb, var(--done) 70%, #000);
+}
+
+/* ── XP burst ────────────────────────────────────────────────── */
+
+.burst {
+  position: fixed;
+  left: 50%;
+  top: 28%;
+  transform: translateX(-50%);
+  z-index: 80;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.75rem 1.4rem;
+  border-radius: 999px;
+  background: var(--xp);
+  color: #14120F;
+  font-size: 1.25rem;
+  font-weight: 600;
+  box-shadow: 0 12px 32px -10px rgba(123, 198, 45, 0.7);
+  animation: burst 1.5s cubic-bezier(0.2, 0.8, 0.3, 1) both;
+  pointer-events: none;
+}
+
+@keyframes burst {
+  0%   { opacity: 0; transform: translateX(-50%) translateY(14px) scale(0.85); }
+  18%  { opacity: 1; transform: translateX(-50%) translateY(0) scale(1.06); }
+  30%  { transform: translateX(-50%) translateY(0) scale(1); }
+  78%  { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateX(-50%) translateY(-26px) scale(0.95); }
+}
+
+/* ── Practice slot ───────────────────────────────────────────── */
+
+.practice { margin-bottom: 1.5rem; }
+
+.note {
+  padding: 1.15rem 1.25rem;
+  border-radius: var(--radius);
+  border-left: 4px solid var(--accent);
+  background: var(--surfaceAlt);
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--text2);
+  margin: 0 0 1.5rem;
+}
+
+.noteLabel {
+  display: block;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.4rem;
+}
+
+/* ── Done screen ─────────────────────────────────────────────── */
+
+.done {
+  text-align: center;
+  padding: 1rem 0 0;
+}
+
+.doneArt {
+  display: grid;
+  place-items: center;
+  margin: 0 0 1.75rem;
+}
+
+.doneStats {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin: 0 0 2rem;
+}
+
+.doneStat {
+  flex: 1;
+  max-width: 160px;
+  padding: 1rem;
+  border-radius: var(--radius);
+  background: var(--surfaceAlt);
+}
+
+.doneStatValue {
+  font-family: var(--font-display, inherit);
+  font-size: 1.75rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.doneStatLabel {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--text3);
+  margin-top: 0.35rem;
+}
+
+/* Two sources, one rule: the OS setting and the in-app Reduce motion
+   preference (which the provider stamps onto <html>). */
+@media (prefers-reduced-motion: reduce) {
+  .player *, .player *::before, .player *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+:global(html[data-reduce-motion]) .player *,
+:global(html[data-reduce-motion]) .player *::before,
+:global(html[data-reduce-motion]) .player *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+
+/* Inline code inside prose — question stems and bullets are authored with
+   markdown-style backticks. */
+.inline {
+  padding: 0.1em 0.38em;
+  border-radius: 6px;
+  background: var(--surfaceAlt);
+  border: 1px solid var(--line);
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.88em;
+  white-space: nowrap;
+}
+
+/* ── Fill-in-the-blanks exercise ─────────────────────────────────
+   Two ways in: drag a tile, or click a tile then click a slot. The
+   click path is the one that works on a phone and with a keyboard,
+   so it's the primary and drag is the enhancement. */
+
+.fill { margin-bottom: 1.5rem; }
+
+.fillExpr {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 1.5rem 1.35rem;
+  border-radius: var(--radius);
+  background: var(--surfaceAlt);
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.9375rem;
+  line-height: 2.2;
+  margin-bottom: 1.1rem;
+  white-space: pre-wrap;
+}
+
+.fillToken { color: var(--text2); }
+
+.fillSlot {
+  display: inline-grid;
+  place-items: center;
+  min-width: 74px;
+  height: 40px;
+  padding: 0 0.7rem;
+  border-radius: 10px;
+  border: 2px dashed var(--lineStrong);
+  background: transparent;
+  font-family: inherit;
+  font-size: inherit;
+  color: var(--text);
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, transform 0.25s cubic-bezier(0.2, 1.3, 0.4, 1);
+}
+
+.fillSlot:hover:not(:disabled) { border-color: var(--accent); }
+
+/* Armed = a tile is picked up, so every empty slot is a target. */
+.fillSlot[data-armed="true"] {
+  border-color: var(--accent);
+  background: var(--accentSoft);
+}
+
+.fillSlot[data-over="true"] {
+  border-color: var(--accent);
+  background: var(--accentSoft);
+  transform: scale(1.05);
+}
+
+.fillSlot[data-filled="true"] {
+  border-style: solid;
+  border-color: var(--lineStrong);
+  background: var(--surface);
+  font-weight: 500;
+}
+
+.fillSlot[data-result="right"] {
+  border-color: var(--done);
+  background: color-mix(in srgb, var(--done) 12%, transparent);
+}
+
+.fillSlot[data-result="wrong"] {
+  border-color: var(--wrong);
+  background: color-mix(in srgb, var(--wrong) 12%, transparent);
+}
+
+.fillSlot:disabled { cursor: default; }
+
+.fillBankLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin: 0 0 0.65rem;
+}
+
+.fillBank {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  padding: 0.9rem;
+  border-radius: var(--radius);
+  border: 1.5px dashed var(--line);
+}
+
+.fillTile {
+  display: inline-grid;
+  place-items: center;
+  min-width: 74px;
+  height: 40px;
+  padding: 0 0.7rem;
+  border-radius: 10px;
+  border: 1.5px solid var(--line);
+  background: var(--surface);
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--text);
+  cursor: grab;
+  transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.3, 1), border-color 0.18s, opacity 0.2s;
+}
+
+.fillTile:hover:not(:disabled) { transform: translateY(-2px); border-color: var(--lineStrong); }
+.fillTile:active:not(:disabled) { cursor: grabbing; }
+
+.fillTile[data-picked="true"] {
+  border-color: var(--accent);
+  background: var(--accentSoft);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 18px -8px rgba(255, 117, 0, 0.6);
+}
+
+.fillTile[data-used="true"] {
+  opacity: 0.3;
+  cursor: default;
+  border-style: dashed;
+}
+
+.fillTile:disabled { cursor: default; }
+
+.fillHint {
+  font-size: 0.875rem;
+  color: var(--text3);
+  margin: 0.85rem 0 0;
+}
+
+/* The exercise's own Check button. It can't reuse .cta — that one is a flex
+   child of the footer and collapses to its text anywhere else. */
+.fillCheck {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  max-width: 260px;
+  height: 50px;
+  margin-top: 1.25rem;
+  border: none;
+  border-radius: var(--radius);
+  background: var(--text);
+  color: var(--bg);
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 3px 0 color-mix(in srgb, var(--text) 55%, var(--bg));
+  transition: filter 0.15s, transform 0.1s, box-shadow 0.1s;
+}
+
+.fillCheck:hover:not(:disabled) { filter: brightness(1.15); }
+.fillCheck:active:not(:disabled) { transform: translateY(3px); box-shadow: none; }
+
+.fillCheck:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.fillCheckReady {
+  background: var(--done);
+  color: #fff;
+  box-shadow: 0 3px 0 color-mix(in srgb, var(--done) 70%, #000);
+}
+
+/* ── Badge earned ────────────────────────────────────────────────
+   Sits on the done screen. A badge is rarer than XP, so it gets its
+   own moment rather than another line in the stats row. */
+
+.badgeWon {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.15rem 1.25rem;
+  margin: 0 0 1.5rem;
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  text-align: left;
+  animation: badgeWon 0.7s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+}
+
+@keyframes badgeWon {
+  0%   { opacity: 0; transform: translateY(14px) scale(0.94); }
+  60%  { opacity: 1; transform: translateY(-3px) scale(1.02); }
+  100% { opacity: 1; transform: none; }
+}
+
+.badgeWonLabel {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 0.2rem;
+}
+
+.badgeWonName {
+  font-size: 1.0625rem;
+  font-weight: 600;
+  margin: 0 0 0.2rem;
+}
+
+.badgeWonDesc {
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: var(--text2);
+  margin: 0;
+}
+
+/* ── Narrator control ────────────────────────────────────────────
+   Sits in the top bar next to the XP counter. Present only when the
+   browser can actually speak. */
+
+.narrate {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  height: 36px;
+  padding: 0 0.85rem;
+  border: 1.5px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text2);
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+
+.narrate:hover { border-color: var(--lineStrong); color: var(--text); }
+
+.narrate[data-speaking="true"] {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accentSoft);
+}
+
+/* Three bars that rise and fall while the narrator is talking, so it's
+   obvious the sound is coming from the page. */
+.wave {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 14px;
+}
+
+.waveBar {
+  width: 3px;
+  border-radius: 2px;
+  background: currentColor;
+  height: 4px;
+}
+
+.narrate[data-speaking="true"] .waveBar {
+  animation: wave 0.9s ease-in-out infinite;
+}
+
+.narrate[data-speaking="true"] .waveBar:nth-child(2) { animation-delay: 0.15s; }
+.narrate[data-speaking="true"] .waveBar:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes wave {
+  0%, 100% { height: 4px; }
+  50%      { height: 14px; }
+}
+
+@media (max-width: 600px) {
+  .narrateLabel { display: none; }
+  .narrate { padding: 0 0.6rem; }
+}
+
+/* ── Predict / spot exercises ────────────────────────────────────
+   Read code, commit to an answer, then find out. The commitment is
+   the point — being told the answer teaches far less than being
+   wrong about it first. */
+
+.exPrompt {
+  font-size: 1.0625rem;
+  font-weight: 500;
+  line-height: 1.5;
+  margin: 0 0 1.1rem;
+}
+
+.exCode {
+  margin: 0 0 1.35rem;
+  padding: 1.15rem 1.25rem;
+  border-radius: var(--radius);
+  background: #14120F;
+  color: #E9E4DC;
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.875rem;
+  line-height: 1.75;
+  overflow-x: auto;
+  white-space: pre;
+}
+
+.player[data-theme="dark"] .exCode { background: #08070C; }
+
+/* Options are candidate outputs, so they're monospace and pre-wrapped —
+   whitespace is frequently the thing being asked about. */
+.exOption {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  width: 100%;
+  padding: 0.9rem 1.05rem;
+  border: 2px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, transform 0.12s;
+}
+
+.exOption:hover:not(:disabled) { border-color: var(--lineStrong); }
+.exOption:active:not(:disabled) { transform: scale(0.995); }
+.exOption:disabled { cursor: default; }
+
+.exOption[data-state="picked"] { border-color: var(--accent); background: var(--accentSoft); }
+.exOption[data-state="right"] {
+  border-color: var(--done);
+  background: color-mix(in srgb, var(--done) 11%, transparent);
+}
+.exOption[data-state="wrong"] {
+  border-color: var(--wrong);
+  background: color-mix(in srgb, var(--wrong) 11%, transparent);
+}
+
+.exKey {
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  border: 2px solid var(--line);
+  font-family: var(--font-body, inherit);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text3);
+}
+
+.exOption[data-state="picked"] .exKey { border-color: var(--accent); color: var(--accent); }
+.exOption[data-state="right"] .exKey { border-color: var(--done); background: var(--done); color: #fff; }
+.exOption[data-state="wrong"] .exKey { border-color: var(--wrong); background: var(--wrong); color: #fff; }
+
+/* ── Spot-the-bug ────────────────────────────────────────────── */
+
+.exLines {
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-bottom: 1.35rem;
+  background: var(--surfaceAlt);
+}
+
+.exLine {
+  display: flex;
+  align-items: baseline;
+  gap: 0.9rem;
+  width: 100%;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-left: 3px solid transparent;
+  background: transparent;
+  color: var(--text);
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.875rem;
+  line-height: 1.7;
+  text-align: left;
+  white-space: pre;
+  cursor: pointer;
+  transition: background 0.14s, border-color 0.14s;
+}
+
+.exLine:hover:not(:disabled) { background: color-mix(in srgb, var(--text) 4%, transparent); }
+.exLine:disabled { cursor: default; }
+
+.exLine[data-state="picked"] { background: var(--accentSoft); border-left-color: var(--accent); }
+.exLine[data-state="right"] {
+  background: color-mix(in srgb, var(--done) 13%, transparent);
+  border-left-color: var(--done);
+}
+.exLine[data-state="wrong"] {
+  background: color-mix(in srgb, var(--wrong) 13%, transparent);
+  border-left-color: var(--wrong);
+}
+
+.exLineNum {
+  width: 1.4em;
+  flex-shrink: 0;
+  color: var(--text3);
+  font-size: 0.8125rem;
+  user-select: none;
+}

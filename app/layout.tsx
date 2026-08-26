@@ -51,7 +51,9 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    // The inline script below sets data-theme/class on <html> before React
+    // hydrates, so the server markup deliberately differs from the client's.
+    <html lang="en" suppressHydrationWarning>
       {/* Apply stored theme immediately to prevent flash of wrong theme */}
       <head>
         <script

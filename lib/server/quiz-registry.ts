@@ -1,11 +1,10 @@
 import { JS_TRACK_QUIZ } from "./js-track-quiz";
+import { PYTHON_TRACK_QUIZ } from "./python-track-quiz";
 import { DSA_TRACK_QUIZ } from "./dsa-track-quiz";
-import { MERN_TRACK_QUIZ } from "./mern-track-quiz";
-import { AI_TRACK_QUIZ } from "./ai-track-quiz";
-import { SYSDESIGN_TRACK_QUIZ } from "./sysdesign-track-quiz";
-import { PROJECT_TRACK_QUIZ } from "./project-track-quiz";
-import { UIUX_TRACK_QUIZ } from "./uiux-track-quiz";
-import { AWS_TRACK_QUIZ } from "./aws-track-quiz";
+import { GENAI_TRACK_QUIZ } from "./genai-track-quiz";
+import { PROMPTING_TRACK_QUIZ } from "./prompting-track-quiz";
+import { RAG_TRACK_QUIZ } from "./rag-track-quiz";
+import { LLMAPPS_TRACK_QUIZ } from "./llmapps-track-quiz";
 
 export type ServerQuizQuestion = {
   stage: number;
@@ -17,13 +16,12 @@ export type ServerQuizQuestion = {
 
 const QUIZ_BANKS: Record<string, ServerQuizQuestion[]> = {
   js: JS_TRACK_QUIZ,
+  python: PYTHON_TRACK_QUIZ,
   dsa: DSA_TRACK_QUIZ,
-  mern: MERN_TRACK_QUIZ,
-  ai: AI_TRACK_QUIZ,
-  sysdesign: SYSDESIGN_TRACK_QUIZ,
-  project: PROJECT_TRACK_QUIZ,
-  uiux: UIUX_TRACK_QUIZ,
-  aws: AWS_TRACK_QUIZ,
+  genai: GENAI_TRACK_QUIZ,
+  prompting: PROMPTING_TRACK_QUIZ,
+  rag: RAG_TRACK_QUIZ,
+  llmapps: LLMAPPS_TRACK_QUIZ,
 };
 
 export function getQuizBank(trackId: string) {

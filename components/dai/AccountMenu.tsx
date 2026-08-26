@@ -1,7 +1,8 @@
 "use client";
 
+import Link from "next/link";
+
 import { useEffect, useRef, useState } from "react";
-import styles from "./marketing-landing.module.css";
 import css from "./AccountMenu.module.css";
 
 export function AccountMenu({ userName }: { userName: string }) {
@@ -40,13 +41,10 @@ export function AccountMenu({ userName }: { userName: string }) {
         <div className={css.menu}>
           <div className={css.menuLabel}>Signed in as</div>
           <div className={css.menuName}>{userName}</div>
-          <button
-            type="button"
-            className={`${styles.btn} ${styles.btnGhost} ${styles.btnSm}`}
-            style={{ width: "100%", justifyContent: "center", marginTop: "0.6rem" }}
-            onClick={logout}
-            disabled={loggingOut}
-          >
+          <Link href="/learn/settings" className={css.item} onClick={() => setOpen(false)}>
+            Settings
+          </Link>
+          <button type="button" className={css.item} onClick={logout} disabled={loggingOut}>
             {loggingOut ? "Logging out…" : "Log out"}
           </button>
           <p className={css.menuHint}>Logging out lets you sign in with a different Google account.</p>

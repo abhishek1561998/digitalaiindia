@@ -1,0 +1,267 @@
+/* Settings — a long form that has to stay scannable. Every row is the same
+   shape: label on the left, control on the right, one hairline between. */
+
+.wrap {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 6rem;
+}
+
+.title {
+  font-family: var(--font-display, inherit);
+  font-size: clamp(1.75rem, 3vw, 2.25rem);
+  font-weight: 600;
+  letter-spacing: -0.028em;
+  margin: 0 0 2.25rem;
+}
+
+.group {
+  margin-bottom: 2.5rem;
+}
+
+.groupTitle {
+  font-family: var(--font-display, inherit);
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin: 0 0 0.25rem;
+}
+
+.groupNote {
+  font-size: 0.9375rem;
+  color: var(--text2);
+  margin: 0 0 1.1rem;
+}
+
+.panel {
+  border: 1.5px solid var(--line);
+  border-radius: var(--radiusLg);
+  background: var(--surface);
+  overflow: hidden;
+}
+
+.subhead {
+  padding: 1rem 1.25rem 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin: 0;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1.1rem 1.25rem;
+  border-top: 1.5px solid var(--line);
+}
+
+/* The first row in a panel, and any row straight after a subhead, shouldn't
+   carry a divider — there's nothing above it to divide from. */
+.panel > .row:first-child,
+.subhead + .row {
+  border-top: none;
+}
+
+.rowBody { flex: 1; min-width: 0; }
+
+.rowLabel {
+  font-size: 1rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+.rowNote {
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: var(--text2);
+  margin: 0.2rem 0 0;
+}
+
+.rowControl { flex-shrink: 0; }
+
+/* A disabled row still shows its state; it just can't be changed. */
+.row[data-disabled="true"] .rowLabel,
+.row[data-disabled="true"] .rowNote { opacity: 0.45; }
+
+/* ── Segmented control ───────────────────────────────────────── */
+
+.segmented {
+  display: inline-flex;
+  padding: 3px;
+  border-radius: 999px;
+  background: var(--surfaceAlt);
+  border: 1.5px solid var(--line);
+}
+
+.segmentedItem {
+  appearance: none;
+  border: none;
+  background: transparent;
+  padding: 0.45rem 0.95rem;
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text2);
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s;
+  white-space: nowrap;
+}
+
+.segmentedItem:hover { color: var(--text); }
+
+.segmentedItem[aria-pressed="true"] {
+  background: var(--surface);
+  color: var(--text);
+  font-weight: 550;
+  box-shadow: 0 1px 2px rgba(20, 18, 15, 0.08);
+}
+
+/* ── Toggle ──────────────────────────────────────────────────── */
+
+.toggle {
+  position: relative;
+  width: 50px;
+  height: 30px;
+  flex-shrink: 0;
+  border: none;
+  border-radius: 999px;
+  background: var(--lineStrong);
+  cursor: pointer;
+  transition: background 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.toggle[aria-checked="true"] { background: var(--done); }
+
+.toggle:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.toggleKnob {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(20, 18, 15, 0.3);
+  transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.toggle[aria-checked="true"] .toggleKnob { transform: translateX(20px); }
+
+/* ── Voice picker ────────────────────────────────────────────── */
+
+.voices {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.75rem;
+  padding: 0 1.25rem 1.25rem;
+}
+
+.voice {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 1rem 1.1rem;
+  border: 2px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.16s, background 0.16s;
+}
+
+.voice:hover { border-color: var(--lineStrong); }
+
+.voice[aria-pressed="true"] {
+  border-color: var(--accent);
+  background: var(--accentSoft);
+}
+
+.voiceName {
+  font-size: 1rem;
+  font-weight: 550;
+  color: var(--text);
+}
+
+.voiceNote {
+  font-size: 0.8125rem;
+  color: var(--text2);
+}
+
+.voicePreview {
+  align-self: flex-start;
+  margin-top: 0.5rem;
+  padding: 0.3rem 0.7rem;
+  border: 1.5px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  font-family: inherit;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--text2);
+  cursor: pointer;
+}
+
+.voicePreview:hover { color: var(--text); border-color: var(--lineStrong); }
+
+/* ── Account rows ────────────────────────────────────────────── */
+
+.accountValue {
+  font-size: 0.9375rem;
+  color: var(--text2);
+}
+
+.linkBtn {
+  font-size: 0.9375rem;
+  font-weight: 550;
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.linkBtn:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+/* ── Saving indicator ────────────────────────────────────────── */
+
+.saving {
+  position: fixed;
+  left: 50%;
+  bottom: 5.5rem;
+  transform: translateX(-50%);
+  z-index: 70;
+  padding: 0.55rem 1.1rem;
+  border-radius: 999px;
+  background: var(--text);
+  color: var(--bg);
+  font-size: 0.875rem;
+  font-weight: 500;
+  pointer-events: none;
+  animation: savingIn 0.2s ease both;
+}
+
+@keyframes savingIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(6px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+/* ── Footer links ────────────────────────────────────────────── */
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  padding-top: 2rem;
+  border-top: 1.5px solid var(--line);
+}
+
+.footerLink {
+  font-size: 0.9375rem;
+  color: var(--text2);
+  text-decoration: none;
+}
+
+.footerLink:hover { color: var(--text); }

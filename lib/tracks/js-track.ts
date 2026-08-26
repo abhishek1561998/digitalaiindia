@@ -21,6 +21,254 @@ export const JS_QUIZ_QUESTIONS: QuizQuestion[] = [
 export const JS_STAGES: Stage[] = [
   {
     num: "00",
+    title: "Where your code actually runs",
+    time: "8 min",
+    why: "Before syntax, one idea: JavaScript is a set of instructions, and something has to read them. Knowing what that something is — a browser tab, or Node on a server — explains most of the confusion beginners hit in their first week.",
+    learn: [
+      "What a program actually is: instructions, run in order, by an engine",
+      "The two places JavaScript runs — the browser and Node — and what changes between them",
+      "console.log: how you get the machine to tell you what it's thinking",
+    ],
+    code: `console.log("Hello");
+console.log("This runs second");
+
+<KW>// Everything runs top to bottom, one line at a time.</KW>
+<KW>// console.log doesn't change anything — it just reports.</KW>
+
+console.log(2 + 2);   <KW>// 4 — it evaluates first, then prints</KW>`,
+    build: "Open your browser's console (right-click, Inspect, Console) and print your own name. Then print a sum. That's a program.",
+    check: "If a file has three console.log lines, in what order do they print — and why is that not obvious?",
+  },
+  {
+    num: "01",
+    title: "Giving values names",
+    time: "10 min",
+    why: "A program that can't remember anything can't do much. A variable is a name pointing at a value, and the difference between `let` and `const` is the first real decision you'll make in every file you write.",
+    learn: [
+      "let for values that change, const for values that don't",
+      "Why const is the sensible default, and what it actually protects",
+      "Naming: why a good name saves more time than a clever line of code",
+    ],
+    code: `const name = "Abhishek";   <KW>// won't be reassigned</KW>
+let score = 0;             <KW>// will be</KW>
+
+score = score + 10;
+console.log(name, score);  <KW>// Abhishek 10</KW>
+
+<KW>// name = "someone else";  ← TypeError: Assignment to constant</KW>`,
+    build: "Make three constants about yourself and one let that you change twice. Print the result after each change.",
+    check: "When would you reach for let instead of const, and why is const the better starting point?",
+  },
+  {
+    num: "02",
+    title: "Numbers that don't add up",
+    time: "10 min",
+    why: "Every counter, price, score and progress bar is arithmetic. The operators are obvious; the two things that catch people out are the remainder operator and the fact that decimals aren't exact.",
+    learn: [
+      "The five operators: + - * / and % (remainder)",
+      "Why 0.1 + 0.2 isn't 0.3, and when that actually matters",
+      "Turning a string like \"42\" into a real number",
+    ],
+    code: `const total = 7;
+const perPage = 3;
+
+console.log(total / perPage);   <KW>// 2.333...</KW>
+console.log(total % perPage);   <KW>// 1 — what's left over</KW>
+
+console.log(0.1 + 0.2);         <KW>// 0.30000000000000004</KW>
+<KW>// Floats are approximations. Fine for a progress bar, not for money.</KW>
+
+console.log(Number("42") + 1);  <KW>// 43</KW>
+console.log("42" + 1);          <KW>// "421" — that's string joining</KW>`,
+    build: "Write a snippet that takes a number of minutes and prints it as hours and minutes, using / and %.",
+    check: "What does 7 % 3 give you, and what's a real situation where you'd want that instead of 7 / 3?",
+  },
+  {
+    num: "03",
+    title: "Text you can shape",
+    time: "10 min",
+    why: "Most of what a user sees is text you assembled. Template literals make that readable instead of a mess of plus signs, and the handful of string methods below cover almost everything you'll do to text.",
+    learn: [
+      "Template literals: backticks and ${} instead of concatenation",
+      "length, toUpperCase, trim, includes, split — the ones you'll actually use",
+      "Strings are immutable: methods return a new string, they don't edit the old one",
+    ],
+    code: `const first = "Abhishek";
+const city = "Dehradun";
+
+<KW>// Hard to read:</KW>
+const a = "Hi " + first + ", from " + city + "!";
+
+<KW>// Same thing, readable:</KW>
+const b = \`Hi \${first}, from \${city}!\`;
+
+console.log(b.toUpperCase());   <KW>// a NEW string</KW>
+console.log(b);                 <KW>// unchanged</KW>
+console.log(city.includes("Dehra"));  <KW>// true</KW>`,
+    build: "Take a full name in one string and print the initials — split it, take the first letter of each part, and join them.",
+    check: "After calling toUpperCase() on a string, why is the original variable still lowercase?",
+  },
+  {
+    num: "04",
+    title: "Comparing two things",
+    time: "10 min",
+    why: "Every decision a program makes comes down to a boolean. The trap here is JavaScript's willingness to compare things of different types — which is why one comparison operator is safe and the other quietly isn't.",
+    learn: [
+      "=== and !== compare without converting; == and != convert first",
+      "Which values are 'falsy': 0, \"\", null, undefined, NaN, false",
+      "&& and || — and how they short-circuit",
+    ],
+    code: `console.log(5 === 5);      <KW>// true</KW>
+console.log("5" === 5);    <KW>// false — different types</KW>
+console.log("5" == 5);     <KW>// true — == converted "5" to 5</KW>
+
+<KW>// Use === unless you have a specific reason not to.</KW>
+
+const name = "";
+console.log(Boolean(name)); <KW>// false — empty string is falsy</KW>
+
+const isReady = true && "go";   <KW>// "go"</KW>
+const fallback = "" || "default"; <KW>// "default"</KW>`,
+    build: "Write a check that treats an empty name and a name of only spaces as equally invalid. (Hint: trim first.)",
+    check: "Why is === the safer default, and what is == actually doing before it compares?",
+  },
+  {
+    num: "05",
+    title: "Making the code choose",
+    time: "10 min",
+    why: "This is where a program stops being a list and starts being a decision. Most beginner bugs at this stage aren't syntax — they're conditions that are subtly wrong, so learn to read one out loud before you trust it.",
+    learn: [
+      "if / else if / else, and why order matters",
+      "The ternary — a one-line if that returns a value",
+      "Early return: leaving a function as soon as you know the answer",
+    ],
+    code: `const score = 72;
+
+if (score >= 90) {
+  console.log("Excellent");
+} else if (score >= 60) {
+  console.log("Passed");     <KW>// this one runs</KW>
+} else {
+  console.log("Try again");
+}
+
+<KW>// Same decision, as a value:</KW>
+const label = score >= 60 ? "Passed" : "Try again";
+
+<KW>// Early return keeps the happy path un-indented:</KW>
+function grade(n) {
+  if (n < 0) return "Invalid";
+  return n >= 60 ? "Passed" : "Try again";
+}`,
+    build: "Write a function that turns a score out of 100 into a grade, and handle a negative or missing score before anything else.",
+    check: "If you swap the first two branches of the chain above, what breaks — and why?",
+  },
+  {
+    num: "06",
+    title: "Doing it a thousand times",
+    time: "12 min",
+    why: "Anything you'd copy-paste is a loop. Once you can see the shape — start, condition, step — you'll spot it everywhere, and you'll stop writing the same three lines five times.",
+    learn: [
+      "for: when you know how many times, and for...of: when you just want each item",
+      "while: when the end depends on something you discover",
+      "break and continue, and why an infinite loop happens",
+    ],
+    code: `<KW>// Three parts: where to start, when to stop, how to step.</KW>
+for (let i = 0; i < 3; i++) {
+  console.log(i);   <KW>// 0, 1, 2</KW>
+}
+
+const names = ["Asha", "Ravi", "Meera"];
+for (const n of names) {
+  if (n === "Ravi") continue;   <KW>// skip this one</KW>
+  console.log(n);
+}
+
+let left = 3;
+while (left > 0) {
+  left--;           <KW>// forget this line and it never ends</KW>
+}`,
+    build: "Print a times table for a number of your choice, 1 through 10, using a for loop.",
+    check: "What is the one line in a while loop that, if you forget it, hangs the page — and why?",
+  },
+  {
+    num: "07",
+    title: "Naming a job",
+    time: "12 min",
+    why: "A function is how you stop repeating yourself and start naming ideas. The habit worth building now: one function, one job, and a name that says what it returns.",
+    learn: [
+      "Parameters and arguments, and default values",
+      "return: why a function without it gives you undefined",
+      "Arrow functions, and when the shorter form is genuinely clearer",
+    ],
+    code: `function greet(name, greeting = "Hi") {
+  return \`\${greeting}, \${name}!\`;
+}
+
+console.log(greet("Asha"));          <KW>// Hi, Asha!</KW>
+console.log(greet("Ravi", "Namaste"));
+
+<KW>// No return means undefined comes back:</KW>
+function silent(n) { n * 2; }
+console.log(silent(4));              <KW>// undefined</KW>
+
+<KW>// Same function, arrow form:</KW>
+const double = (n) => n * 2;`,
+    build: "Write a function that takes a price and a discount percent and returns the final price. Give the discount a sensible default.",
+    check: "A function does its calculation but the caller keeps getting undefined. What's the one missing keyword?",
+  },
+  {
+    num: "08",
+    title: "Lists",
+    time: "12 min",
+    why: "Almost all real data is a list: rows, messages, products, search results. Arrays are how you hold one, and the indexing-from-zero convention is the source of a genuinely large share of off-by-one bugs.",
+    learn: [
+      "Index from 0, .length, and why the last item is length - 1",
+      "push, pop, shift, unshift — adding and removing at each end",
+      "indexOf, includes, slice — finding and copying without mutating",
+    ],
+    code: `const tasks = ["write", "test", "ship"];
+
+console.log(tasks[0]);              <KW>// "write"</KW>
+console.log(tasks[tasks.length - 1]); <KW>// "ship"</KW>
+console.log(tasks[3]);              <KW>// undefined — not an error</KW>
+
+tasks.push("deploy");               <KW>// adds to the end, changes the array</KW>
+const firstTwo = tasks.slice(0, 2); <KW>// copies, leaves tasks alone</KW>
+
+console.log(tasks.includes("test")); <KW>// true</KW>`,
+    build: "Build a small to-do list: add three items, remove the middle one, and print what's left with a loop.",
+    check: "An array has 4 items. What's the index of the last one, and what do you get if you ask for index 4?",
+  },
+  {
+    num: "09",
+    title: "Data with names on it",
+    time: "12 min",
+    why: "An array holds a list; an object holds one thing with named parts. Nearly every API response you'll ever handle is objects inside arrays, so this is the shape you'll be reading for the rest of your career.",
+    learn: [
+      "Key–value pairs, dot access, and bracket access when the key is a variable",
+      "Nesting: objects inside arrays inside objects",
+      "Optional chaining (?.) so a missing key doesn't crash the page",
+    ],
+    code: `const user = {
+  name: "Asha",
+  city: "Pune",
+  skills: ["JS", "CSS"],
+};
+
+console.log(user.name);        <KW>// "Asha"</KW>
+const key = "city";
+console.log(user[key]);        <KW>// "Pune" — bracket, because key is a variable</KW>
+
+console.log(user.address.pin);   <KW>// TypeError — address is undefined</KW>
+console.log(user.address?.pin);  <KW>// undefined — safe</KW>
+
+user.skills.push("React");`,
+    build: "Model yourself as an object with a nested object inside it, then print one value from the nested part safely.",
+    check: "When must you use bracket access instead of a dot — and what does ?. save you from?",
+  },
+  {
+    num: "10",
     title: "How JavaScript actually runs",
     time: "Week 1",
     why: "Most courses jump straight into syntax and skip this — which is exactly why so many self-taught developers can write code that works but can't explain why a bug is happening.",
@@ -41,7 +289,7 @@ var sayBye = function() { console.log("bye"); };`,
     check: "What does the first line log — undefined, 5, or a ReferenceError? Explain hoisting in one sentence before you scroll up to check.",
   },
   {
-    num: "01",
+    num: "11",
     title: "Values, types & coercion",
     time: "Week 1–2",
     why: "“Just use ===” is advice you can follow without understanding. This stage makes sure you know the actual coercion rules underneath it.",
@@ -59,7 +307,7 @@ console.log(0 === "0"); <KW>// false — no coercion, different types</KW>`,
     check: "Why does 0 == [] evaluate to true? Trace the coercion steps by hand before looking it up.",
   },
   {
-    num: "02",
+    num: "12",
     title: "Functions & closures",
     time: "Week 2–3",
     why: "Closures are usually taught as “a function remembers its outer variables,” which is true and useless until you build something that only works because of it.",
@@ -81,7 +329,7 @@ console.log(0 === "0"); <KW>// false — no coercion, different types</KW>`,
     check: "If you call debounce(fn, 300) three times in quick succession, how many times does fn actually run — and when?",
   },
   {
-    num: "03",
+    num: "13",
     title: "Arrays, objects & shaping data",
     time: "Week 3",
     why: "Almost every real frontend task is “I have data shaped like X, I need it shaped like Y.” This stage makes that fast instead of painful.",
@@ -105,7 +353,7 @@ const byCity = orders.reduce((acc, order) => {
     check: "When should you reach for reduce() instead of a plain for loop — and when does reduce actually make the code harder to read?",
   },
   {
-    num: "04",
+    num: "14",
     title: "The DOM & events, done right",
     time: "Week 4",
     why: "Everyone eventually reaches for a framework — but if you've never manipulated the real DOM by hand, you won't understand what the framework is doing for you.",
@@ -128,7 +376,7 @@ document.querySelector(".board").addEventListener("click", (e) => {
     check: "Why exactly does the “bad” example break when a new card is added to the board after the listeners were attached?",
   },
   {
-    num: "05",
+    num: "15",
     title: "Async JavaScript",
     time: "Week 5",
     why: "Async/await hides the event loop from you — which is great, until a bug forces you to understand it anyway. This stage builds it the historical way so the “why” sticks.",
@@ -149,7 +397,7 @@ console.log("4");
     check: "Rewrite the code above using async/await instead of .then(). Does the logged order change? Why or why not?",
   },
   {
-    num: "06",
+    num: "16",
     title: "Modules & modern tooling",
     time: "Week 6",
     why: "This is the stage that makes every tutorial you've seen with a vite.config.js or a package.json actually make sense, instead of being magic you copy.",
@@ -169,7 +417,7 @@ console.log(add(2, PI));`,
     check: "What's the actual difference between a default export and a named export — and when would you reach for each?",
   },
   {
-    num: "07",
+    num: "17",
     title: "Prototypes, classes & this",
     time: "Week 7",
     why: "class syntax hides the prototype chain underneath it. Understanding what it compiles to is what lets you debug this-binding bugs instead of guessing.",
@@ -191,7 +439,7 @@ greetFn.call(user);  <KW>// "Hi, I'm Asha" — this restored explicitly</KW>`,
     check: "Why does greetFn() lose its this binding, but user.greet() doesn't?",
   },
   {
-    num: "08",
+    num: "18",
     title: "Testing & debugging like a professional",
     time: "Week 8",
     why: "This is the stage that's usually skipped entirely in beginner paths — and it's the single biggest tell of who's actually shipped production code.",

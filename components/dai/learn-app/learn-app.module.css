@@ -1,0 +1,2127 @@
+/* ================================================================
+   DigitalAIIndia Learn — app surface
+   Light-first, calm, generous. The marketing site is dark and loud;
+   a place you study in should be neither.
+   ================================================================ */
+
+.app {
+  --bg:          #FCFBF9;
+  --surface:     #FFFFFF;
+  --surfaceAlt:  #F6F4F0;
+  --line:        #EAE6DF;
+  --lineStrong:  #D9D3C9;
+  --text:        #1E1B16;
+  --text2:       #746E62;
+  --text3:       #A9A296;
+
+  --accent:      #FF7500;
+  --accentInk:   #FFFFFF;
+  --accentSoft:  rgba(255, 117, 0, 0.10);
+
+  --streak:      #E8890C;
+  --xp:          #7BC62D;
+  --done:        #00A97F;
+
+  --radius:      16px;
+  --radiusLg:    24px;
+  --radiusXl:    32px;
+
+  --shadow:      0 1px 2px rgba(20, 18, 15, 0.04), 0 8px 24px -12px rgba(20, 18, 15, 0.10);
+  --shadowLift:  0 2px 4px rgba(20, 18, 15, 0.05), 0 18px 40px -16px rgba(20, 18, 15, 0.18);
+
+  --nav:         72px;
+
+  font-family: var(--font-body, ui-sans-serif, system-ui, sans-serif);
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  /* cv11 gives Inter a single-storey "a"-adjacent set that reads softer at
+     UI sizes; ss01 tidies the disambiguation glyphs. */
+  font-feature-settings: "cv11", "ss01";
+  letter-spacing: -0.006em;
+}
+
+/* Numbers that change in place — XP, ranks, streak counts — must not reflow
+   the layout around them as digits swap. */
+.pill,
+.statValue,
+.streakCount,
+.leagueRank,
+.leagueXp,
+.progressPct,
+.topXp,
+.planPrice {
+  font-variant-numeric: tabular-nums;
+}
+
+.app[data-theme="dark"] {
+  --bg:          #0C0B10;
+  --surface:     #16151C;
+  --surfaceAlt:  #1E1D26;
+  --line:        #262532;
+  --lineStrong:  #363543;
+  --text:        #F2EFE9;
+  --text2:       #9C97A8;
+  --text3:       #625E70;
+  --accentSoft:  rgba(255, 117, 0, 0.16);
+  --shadow:      0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px -12px rgba(0, 0, 0, 0.6);
+  --shadowLift:  0 2px 4px rgba(0, 0, 0, 0.5), 0 18px 40px -16px rgba(0, 0, 0, 0.7);
+}
+
+/* ── Nav ─────────────────────────────────────────────────────── */
+
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  height: var(--nav);
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 0 1.5rem;
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  backdrop-filter: saturate(160%) blur(14px);
+  border-bottom: 1px solid var(--line);
+}
+
+.navLogo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-display, inherit);
+  font-weight: 680;
+  font-size: 1.0625rem;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.navLogoMark {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+  background: var(--accent);
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.navLogoIndia { color: var(--accent); }
+
+.navTabs {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  height: 100%;
+}
+
+.navTab {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  height: 100%;
+  padding: 0 0.85rem;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--text2);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.navTab:hover { color: var(--text); }
+
+.navTab[data-active="true"] { color: var(--text); }
+
+.navTab[data-active="true"]::after {
+  content: "";
+  position: absolute;
+  left: 0.85rem;
+  right: 0.85rem;
+  bottom: -1px;
+  height: 2.5px;
+  border-radius: 2px 2px 0 0;
+  background: var(--text);
+}
+
+.navSpacer { flex: 1; }
+
+.navRight {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* ── Pills & buttons ─────────────────────────────────────────── */
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  height: 38px;
+  padding: 0 0.85rem;
+  border-radius: 999px;
+  border: 1.5px solid var(--line);
+  background: var(--surface);
+  font-size: 0.9375rem;
+  font-weight: 550;
+  color: var(--text);
+  text-decoration: none;
+  transition: border-color 0.15s, transform 0.15s;
+}
+
+.pill:hover { border-color: var(--lineStrong); }
+
+.pillTrial {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.pillTrial:hover { background: var(--accentSoft); }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  height: 46px;
+  padding: 0 1.4rem;
+  border: none;
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 550;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.12s, filter 0.15s, background 0.15s;
+}
+
+.btn:active { transform: scale(0.985); }
+
+.btnPrimary {
+  background: var(--accent);
+  color: var(--accentInk);
+  box-shadow: 0 2px 0 color-mix(in srgb, var(--accent) 65%, #000);
+}
+
+.btnPrimary:hover { filter: brightness(1.05); }
+
+.btnGhost {
+  background: var(--surface);
+  color: var(--text);
+  border: 1.5px solid var(--line);
+}
+
+.btnGhost:hover { border-color: var(--lineStrong); }
+
+.iconBtn {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  border: 1.5px solid var(--line);
+  background: var(--surface);
+  color: var(--text2);
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.iconBtn:hover { color: var(--text); border-color: var(--lineStrong); }
+
+/* ── Promo strip ─────────────────────────────────────────────── */
+
+.promo {
+  /* Sticks under the nav rather than scrolling away — the offer is the one
+     thing on a course page that has to stay reachable while the learner is
+     halfway down a 26-lesson roadmap. */
+  position: sticky;
+  top: var(--nav);
+  z-index: 49;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: saturate(160%) blur(14px);
+  gap: 0.6rem;
+  padding: 0.85rem 1.25rem;
+  font-size: 0.9375rem;
+  font-weight: 450;
+  color: var(--text);
+  background:
+    linear-gradient(90deg,
+      rgba(255, 117, 0, 0.10) 0%,
+      rgba(232, 93, 158, 0.10) 50%,
+      rgba(108, 92, 231, 0.10) 100%),
+    color-mix(in srgb, var(--surface) 90%, transparent);
+  border-bottom: 1px solid var(--line);
+  text-align: center;
+}
+
+.promoLink {
+  color: var(--text);
+  font-weight: 550;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 2px;
+  text-decoration-color: var(--accent);
+}
+
+/* ── Page frame ──────────────────────────────────────────────── */
+
+.page {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 2.5rem 2rem 5rem;
+}
+
+@media (max-width: 760px) {
+  .page { padding: 1.5rem 1rem 5rem; }
+}
+
+.pageHead {
+  margin-bottom: 2.25rem;
+}
+
+.pageTitle {
+  font-family: var(--font-display, inherit);
+  font-size: clamp(1.75rem, 3vw, 2.25rem);
+  font-weight: 600;
+  letter-spacing: -0.028em;
+  line-height: 1.15;
+  margin: 0 0 0.4rem;
+}
+
+.pageSub {
+  font-size: 1.0625rem;
+  color: var(--text2);
+  margin: 0;
+}
+
+/* Home is a two-column layout: the rail carries habit (streak, plan),
+   the stage carries the single next action. */
+.homeGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 340px) minmax(0, 1fr);
+  gap: 1.75rem;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .homeGrid { grid-template-columns: minmax(0, 1fr); }
+}
+
+.rail {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  position: sticky;
+  top: calc(var(--nav) + 1.5rem);
+}
+
+@media (max-width: 900px) {
+  .rail { position: static; }
+}
+
+/* ── Card ────────────────────────────────────────────────────── */
+
+.card {
+  background: var(--surface);
+  border: 1.5px solid var(--line);
+  border-radius: var(--radiusLg);
+  box-shadow: var(--shadow);
+}
+
+.cardPad { padding: 1.5rem; }
+
+.cardTitle {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin: 0 0 1rem;
+}
+
+/* ── Search / ask ────────────────────────────────────────────── */
+
+.search {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  height: 56px;
+  padding: 0 0.5rem 0 1.15rem;
+  background: var(--surface);
+  border: 1.5px solid var(--line);
+  border-radius: 999px;
+  box-shadow: var(--shadow);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.search:focus-within {
+  border-color: var(--accent);
+  box-shadow: var(--shadow), 0 0 0 4px var(--accentSoft);
+}
+
+.searchInput {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: 1rem;
+  color: var(--text);
+}
+
+.searchInput::placeholder { color: var(--text3); }
+
+.searchGo {
+  height: 40px;
+  padding: 0 1.1rem;
+  border: none;
+  border-radius: 999px;
+  background: var(--surfaceAlt);
+  color: var(--text3);
+  font-family: inherit;
+  font-size: 0.9375rem;
+  font-weight: 550;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.searchGo[data-ready="true"] {
+  background: var(--accent);
+  color: var(--accentInk);
+}
+
+/* ── Streak ──────────────────────────────────────────────────── */
+
+.streakTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.streakCount {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: var(--font-display, inherit);
+  font-size: 2.75rem;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.streakLabel {
+  font-size: 0.875rem;
+  color: var(--text2);
+  margin-top: 0.4rem;
+}
+
+.streakFreezes {
+  display: flex;
+  gap: 0.3rem;
+  color: var(--text3);
+}
+
+.week {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.35rem;
+}
+
+.day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.dayDot {
+  width: 100%;
+  max-width: 40px;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--surfaceAlt);
+  color: var(--text3);
+  transition: transform 0.2s;
+}
+
+.dayDot[data-state="done"] {
+  background: var(--xp);
+  color: #14120F;
+}
+
+.dayDot[data-state="today"] {
+  background: var(--surface);
+  border: 2px dashed var(--lineStrong);
+  color: var(--text3);
+}
+
+.dayName {
+  font-size: 0.8125rem;
+  font-weight: 550;
+  color: var(--text3);
+}
+
+.day[data-state="done"] .dayName,
+.day[data-state="today"] .dayName { color: var(--text2); }
+
+/* ── Premium upsell ──────────────────────────────────────────── */
+
+.upsell {
+  padding: 1.4rem;
+  border-radius: var(--radiusLg);
+  border: 1.5px solid var(--line);
+  background:
+    linear-gradient(135deg,
+      rgba(255, 117, 0, 0.08) 0%,
+      rgba(232, 93, 158, 0.07) 55%,
+      rgba(108, 92, 231, 0.09) 100%);
+}
+
+.upsellTitle {
+  font-family: var(--font-display, inherit);
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin: 0 0 0.2rem;
+}
+
+.upsellSub {
+  font-size: 0.9375rem;
+  color: var(--text2);
+  margin: 0 0 1.1rem;
+}
+
+.upsellBtn {
+  display: block;
+  width: 100%;
+  height: 48px;
+  line-height: 48px;
+  text-align: center;
+  border-radius: 999px;
+  font-size: 1rem;
+  font-weight: 550;
+  color: #fff;
+  text-decoration: none;
+  background: linear-gradient(90deg, #FF7500 0%, #E85D9E 52%, #6C5CE7 100%);
+  box-shadow: 0 6px 18px -8px rgba(232, 93, 158, 0.8);
+  transition: transform 0.12s, filter 0.15s;
+}
+
+.upsellBtn:hover { filter: brightness(1.06); }
+.upsellBtn:active { transform: scale(0.99); }
+
+/* ── Locked / meta row ───────────────────────────────────────── */
+
+.metaRow {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 1.1rem 1.25rem;
+}
+
+.metaIcon {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: var(--surfaceAlt);
+  color: var(--text3);
+  flex-shrink: 0;
+}
+
+.metaTitle {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text2);
+  margin: 0 0 0.15rem;
+}
+
+.metaValue {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text3);
+  margin: 0;
+}
+
+/* ── Next-up card (the stage) ────────────────────────────────── */
+
+/* Stacked-paper effect: two offset sheets behind the real card, so the
+   deck reads as "more where this came from" without any extra markup. */
+.deck { position: relative; }
+
+.deck::before,
+.deck::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radiusXl);
+  border: 1.5px solid var(--line);
+  background: var(--surface);
+  z-index: 0;
+}
+
+/* Scale from the top edge so the sheets shrink inward at the sides but
+   still extend past the bottom of the real card, which is where the stack
+   needs to be visible. */
+.deck::before { transform: scale(0.96) translateY(22px); transform-origin: top center; opacity: 1; }
+.deck::after  { transform: scale(0.92) translateY(46px); transform-origin: top center; opacity: 1; }
+
+@media (max-width: 640px) {
+  .deck::before, .deck::after { display: none; }
+}
+
+.next {
+  position: relative;
+  z-index: 1;
+  background: var(--surface);
+  border: 1.5px solid var(--line);
+  border-radius: var(--radiusXl);
+  box-shadow: var(--shadow);
+  padding: 2rem 2rem 1.75rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.nextBadge {
+  display: inline-block;
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  background: var(--accentSoft);
+  color: var(--accent);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.nextTitle {
+  font-family: var(--font-display, inherit);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  margin: 1rem 0 0.4rem;
+}
+
+.nextLevel {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text2);
+  margin: 0;
+}
+
+.nextArt {
+  margin: 2rem 0;
+  display: grid;
+  place-items: center;
+}
+
+.nextLesson {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  width: 100%;
+  margin-bottom: 1.4rem;
+  text-align: left;
+}
+
+.nextLessonTitle {
+  flex: 1;
+  min-width: 0;
+  font-size: 1.0625rem;
+  font-weight: 550;
+}
+
+.nextLessonMeta {
+  font-size: 0.875rem;
+  color: var(--text3);
+  font-weight: 500;
+}
+
+.nextCta {
+  width: 100%;
+  height: 54px;
+  border: none;
+  border-radius: var(--radius);
+  background: var(--done);
+  color: #fff;
+  font-family: inherit;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 3px 0 color-mix(in srgb, var(--done) 70%, #000);
+  transition: transform 0.12s, filter 0.15s;
+}
+
+.nextCta:hover { filter: brightness(1.06); }
+.nextCta:active { transform: translateY(2px); box-shadow: 0 1px 0 color-mix(in srgb, var(--done) 70%, #000); }
+
+/* ── Course thumb strip under the deck ───────────────────────── */
+
+.thumbs {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.75rem;
+  overflow-x: auto;
+  padding: 0.25rem 0.25rem 0.75rem;
+  scrollbar-width: none;
+}
+
+.thumbs::-webkit-scrollbar { display: none; }
+
+.thumb {
+  position: relative;
+  flex: 0 0 auto;
+  width: 84px;
+  height: 84px;
+  display: grid;
+  place-items: center;
+  border-radius: 18px;
+  border: 1.5px solid var(--line);
+  background: var(--surface);
+  cursor: pointer;
+  transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+}
+
+.thumb:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+
+.thumb[data-active="true"] {
+  border-color: var(--accent);
+  border-width: 2px;
+  background: var(--accentSoft);
+}
+
+.thumbCheck {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--done);
+  color: #fff;
+  border: 2px solid var(--surface);
+}
+
+/* ── Progress bar ────────────────────────────────────────────── */
+
+.bar {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--surfaceAlt);
+  overflow: hidden;
+}
+
+.barFill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--accent);
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── Utility ─────────────────────────────────────────────────── */
+
+.srOnly {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Two sources, one rule: the OS setting and the in-app Reduce motion
+   preference (which the provider stamps onto <html>). */
+@media (prefers-reduced-motion: reduce) {
+  .app *, .app *::before, .app *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+:global(html[data-reduce-motion]) .app *,
+:global(html[data-reduce-motion]) .app *::before,
+:global(html[data-reduce-motion]) .app *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+
+/* ── Courses: header row ─────────────────────────────────────── */
+
+.coursesHead {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-bottom: 2.75rem;
+  flex-wrap: wrap;
+}
+
+.coursesSearch {
+  flex: 0 1 420px;
+  min-width: 260px;
+}
+
+/* ── Path block ──────────────────────────────────────────────── */
+
+.path {
+  margin-bottom: 3.75rem;
+}
+
+.pathHead {
+  display: flex;
+  align-items: center;
+  gap: 1.35rem;
+  margin-bottom: 1.25rem;
+}
+
+.pathGlyph {
+  width: 92px;
+  height: 92px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+}
+
+.pathTier {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin: 0 0 0.15rem;
+}
+
+.pathTitle {
+  font-family: var(--font-display, inherit);
+  font-size: 1.75rem;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  margin: 0;
+}
+
+.pathSub {
+  font-size: 1rem;
+  color: var(--text2);
+  margin: 0.1rem 0 0;
+}
+
+.pathMeta {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.pathPercent {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  height: 42px;
+  padding: 0 1.05rem;
+  border-radius: 999px;
+  background: var(--surfaceAlt);
+  font-size: 0.9375rem;
+  font-weight: 550;
+  color: var(--text2);
+  white-space: nowrap;
+}
+
+/* Small ring that fills clockwise with the path's completion. */
+.ring {
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+
+/* The rail is a scroll container so a long path never squashes its cards. */
+.pathRail {
+  position: relative;
+  display: flex;
+  gap: 0;
+  padding: 2rem 1.75rem;
+  border-radius: var(--radiusXl);
+  background: var(--surfaceAlt);
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.pathRail::-webkit-scrollbar { height: 6px; }
+.pathRail::-webkit-scrollbar-thumb { background: var(--lineStrong); border-radius: 999px; }
+
+.railItem {
+  position: relative;
+  flex: 0 0 auto;
+  width: 216px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.9rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+/* The connector between consecutive courses in a path. It sits behind the
+   tiles and stops short of each one so it reads as a track, not a border. */
+.railItem:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: 95px;
+  left: calc(50% + 96px);
+  width: calc(100% - 192px);
+  height: 2px;
+  background: var(--lineStrong);
+}
+
+.railTile {
+  position: relative;
+  width: 184px;
+  height: 184px;
+  display: grid;
+  place-items: center;
+  border-radius: 28px;
+  border: 1.5px solid var(--line);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  transition: transform 0.16s, box-shadow 0.16s;
+}
+
+.railItem:hover .railTile {
+  transform: translateY(-3px);
+  box-shadow: var(--shadowLift);
+}
+
+.railTileBar {
+  position: absolute;
+  left: 20px;
+  right: 20px;
+  bottom: 16px;
+  height: 5px;
+  border-radius: 999px;
+  background: var(--surfaceAlt);
+  overflow: hidden;
+}
+
+.railLabel {
+  font-size: 1.0625rem;
+  font-weight: 500;
+  line-height: 1.35;
+  text-align: center;
+  color: var(--text);
+  padding: 0 0.5rem;
+}
+
+.railDone {
+  position: absolute;
+  top: -7px;
+  right: -7px;
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--done);
+  color: #fff;
+  border: 2.5px solid var(--surface);
+}
+
+/* ── All-courses grid ────────────────────────────────────────── */
+
+.sectionTitle {
+  font-family: var(--font-display, inherit);
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.022em;
+  margin: 0 0 1.25rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 1.1rem;
+}
+
+.courseCard {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1.35rem;
+  border-radius: var(--radiusLg);
+  border: 1.5px solid var(--line);
+  background: var(--surface);
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.16s, box-shadow 0.16s, border-color 0.16s;
+}
+
+.courseCard:hover {
+  transform: translateY(-2px);
+  border-color: var(--lineStrong);
+  box-shadow: var(--shadowLift);
+}
+
+.courseCardArt {
+  width: 88px;
+  height: 88px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 18px;
+  background: var(--surfaceAlt);
+}
+
+.courseCardBody { min-width: 0; flex: 1; }
+
+.courseCardLevel {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin: 0 0 0.2rem;
+}
+
+.courseCardTitle {
+  font-size: 1.125rem;
+  font-weight: 550;
+  letter-spacing: -0.01em;
+  margin: 0 0 0.35rem;
+}
+
+.courseCardMeta {
+  font-size: 0.875rem;
+  color: var(--text3);
+  margin: 0;
+}
+
+.empty {
+  padding: 3rem 1rem;
+  text-align: center;
+  color: var(--text2);
+}
+
+/* ── Course detail: two columns, the card and the road ───────── */
+
+.courseGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 360px) minmax(0, 1fr);
+  gap: 2.5rem;
+  align-items: start;
+}
+
+@media (max-width: 940px) {
+  .courseGrid { grid-template-columns: minmax(0, 1fr); gap: 1.75rem; }
+}
+
+.courseAside {
+  position: sticky;
+  top: calc(var(--nav) + 1.5rem);
+  padding: 2rem;
+  border-radius: var(--radiusXl);
+  border: 1.5px solid var(--line);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+@media (max-width: 940px) {
+  .courseAside { position: static; }
+}
+
+.courseAsideArt {
+  display: grid;
+  place-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.courseAsideTitle {
+  font-family: var(--font-display, inherit);
+  font-size: 1.875rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin: 0 0 0.65rem;
+}
+
+.courseAsideDesc {
+  font-size: 1rem;
+  line-height: 1.55;
+  color: var(--text2);
+  margin: 0 0 1.5rem;
+}
+
+.courseStats {
+  display: flex;
+  gap: 1.75rem;
+  padding-top: 1.25rem;
+  border-top: 1.5px solid var(--line);
+}
+
+.courseStat {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--text2);
+}
+
+.courseTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1.5rem;
+}
+
+.tag {
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  background: var(--surfaceAlt);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--text2);
+}
+
+.courseCta {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 54px;
+  margin-top: 1.5rem;
+  border-radius: var(--radius);
+  color: #fff;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: filter 0.15s, transform 0.12s;
+}
+
+.courseCta:hover { filter: brightness(1.06); }
+.courseCta:active { transform: translateY(2px); }
+
+/* ── The road ────────────────────────────────────────────────── */
+
+.level { margin-bottom: 1rem; }
+
+.levelHead {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.9rem 1.4rem;
+  border-radius: 999px;
+  border: 2px solid var(--line);
+  background: var(--surface);
+  margin-bottom: 0.5rem;
+}
+
+.levelHead[data-current="true"] { border-color: var(--accent); }
+
+.levelNum {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text3);
+}
+
+.levelName {
+  font-family: var(--font-display, inherit);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.levelCount {
+  margin-left: auto;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text3);
+}
+
+/* ── The road ────────────────────────────────────────────────────
+   A dashed trail that snakes through a narrow wave column, with every
+   label in a fixed column to its right. Labels were previously placed
+   relative to each node, so they moved with the wave and could land on
+   the curve. Anchoring them to a column instead makes overlap
+   impossible rather than merely unlikely. */
+
+.road {
+  position: relative;
+  padding: 1.25rem 0 1.75rem;
+}
+
+.roadPath {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: visible;
+}
+
+.roadTrack {
+  fill: none;
+  stroke: var(--lineStrong);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-dasharray: 2 10;
+  opacity: 0.85;
+}
+
+.roadDone {
+  fill: none;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-dasharray: 2 10;
+  opacity: 0.9;
+}
+
+/* ── Node ────────────────────────────────────────────────────── */
+
+.roadStop {
+  position: absolute;
+  z-index: 1;
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  transform: translate(-50%, -50%);
+}
+
+.node {
+  position: relative;
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  /* A ring, not a disc: the page has enough weight in it already, and an
+     outline reads as a station on a line rather than a button. */
+  border: 2px solid var(--lineStrong);
+  background: var(--bg);
+  color: var(--text3);
+  transition: transform 0.16s cubic-bezier(0.2, 0.8, 0.3, 1), border-color 0.16s, color 0.16s;
+}
+
+.roadStop:hover .node { transform: scale(1.12); border-color: var(--text3); }
+
+.node[data-state="done"] {
+  border-color: var(--done);
+  color: var(--done);
+  background: color-mix(in srgb, var(--done) 9%, var(--bg));
+}
+
+.roadStop:hover .node[data-state="done"] { border-color: var(--done); }
+
+.node[data-state="current"] {
+  border-color: var(--nodeColor, var(--accent));
+  border-width: 3px;
+  color: var(--nodeColor, var(--accent));
+  background: var(--surface);
+}
+
+.node[data-state="open"] { border-color: var(--lineStrong); color: var(--text2); }
+
+.node[data-state="ahead"],
+.node[data-state="tomorrow"] { opacity: 0.6; }
+
+/* The dot inside an unvisited stop — quieter than a number, and it stops
+   the ring reading as an empty input. */
+.nodeDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.55;
+}
+
+.node[data-state="current"] .nodeDot {
+  width: 12px;
+  height: 12px;
+  opacity: 1;
+}
+
+/* One slow halo on the stop the learner is on. */
+.node[data-state="current"]::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 2px solid var(--nodeColor, var(--accent));
+  animation: nodePulse 2.6s cubic-bezier(0.2, 0.6, 0.4, 1) infinite;
+  pointer-events: none;
+}
+
+@keyframes nodePulse {
+  0%   { transform: scale(1);    opacity: 0.7; }
+  70%  { transform: scale(1.4);  opacity: 0; }
+  100% { transform: scale(1.4);  opacity: 0; }
+}
+
+.roadStop[data-locked="true"] { cursor: default; }
+.roadStop[data-locked="true"]:active .node { animation: nudge 0.4s ease; }
+
+@keyframes nudge {
+  0%, 100% { transform: translateX(0); }
+  20%      { transform: translateX(-5px); }
+  45%      { transform: translateX(4px); }
+  70%      { transform: translateX(-2px); }
+}
+
+/* ── "Start here" flag ───────────────────────────────────────── */
+
+.flag {
+  position: absolute;
+  bottom: calc(100% + 11px);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.3rem 0.7rem;
+  border-radius: 8px;
+  background: var(--nodeColor, var(--accent));
+  color: #fff;
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  animation: flagBob 2.4s ease-in-out infinite;
+}
+
+.flag::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: var(--nodeColor, var(--accent));
+}
+
+@keyframes flagBob {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50%      { transform: translateX(-50%) translateY(-4px); }
+}
+
+/* ── Label column ────────────────────────────────────────────────
+   Fixed left edge, so no label can ever reach the wave. */
+
+.roadLabel {
+  position: absolute;
+  z-index: 1;
+  transform: translateY(-50%);
+  text-decoration: none;
+  color: inherit;
+  padding-right: 1rem;
+}
+
+.roadNum {
+  font-size: 0.625rem;
+  font-weight: 550;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin: 0 0 0.2rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.roadTitle {
+  font-size: 0.9375rem;
+  font-weight: 450;
+  line-height: 1.35;
+  color: var(--text);
+  margin: 0 0 0.15rem;
+}
+
+.roadLabel:hover .roadTitle { color: var(--accent); }
+
+.roadMeta {
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--text3);
+  margin: 0;
+}
+
+.roadLabel[data-state="current"] .roadTitle { font-weight: 550; }
+.roadLabel[data-locked="true"] { pointer-events: none; }
+.roadLabel[data-locked="true"] .roadTitle { color: var(--text2); }
+
+@media (prefers-reduced-motion: reduce) {
+  .flag, .node[data-state="current"]::after { animation: none; }
+}
+
+:global(html[data-reduce-motion]) .flag,
+:global(html[data-reduce-motion]) .node[data-state="current"]::after {
+  animation: none;
+}
+
+/* ── Certificate strip at the end of the road ────────────────── */
+
+.finish {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  padding: 1.5rem;
+  border-radius: var(--radiusLg);
+  border: 2px dashed var(--lineStrong);
+  background: var(--surface);
+}
+
+.finishBody { flex: 1; min-width: 0; }
+
+.finishTitle {
+  font-family: var(--font-display, inherit);
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin: 0 0 0.2rem;
+}
+
+.finishSub {
+  font-size: 0.9375rem;
+  color: var(--text2);
+  margin: 0;
+}
+
+/* ── Premium ─────────────────────────────────────────────────── */
+
+.premiumHero {
+  text-align: center;
+  max-width: 640px;
+  margin: 0 auto 3rem;
+}
+
+.premiumBadge {
+  display: inline-block;
+  padding: 0.4rem 1rem;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #FF7500, #E85D9E 55%, #6C5CE7);
+  color: #fff;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 1.25rem;
+}
+
+.plans {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.25rem;
+  max-width: 860px;
+  margin: 0 auto 3rem;
+  align-items: start;
+}
+
+.plan {
+  position: relative;
+  padding: 2rem;
+  border-radius: var(--radiusXl);
+  border: 2px solid var(--line);
+  background: var(--surface);
+  transition: border-color 0.16s, box-shadow 0.16s;
+}
+
+.plan[data-featured="true"] {
+  border-color: var(--accent);
+  box-shadow: var(--shadowLift);
+}
+
+.planFlag {
+  position: absolute;
+  top: -13px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.35rem 0.9rem;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.planName {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin: 0 0 0.85rem;
+}
+
+.planPrice {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  font-family: var(--font-display, inherit);
+  font-size: 2.75rem;
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  margin-bottom: 0.35rem;
+}
+
+.planPer {
+  font-family: var(--font-body, inherit);
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text3);
+  letter-spacing: 0;
+}
+
+.planNote {
+  font-size: 0.9375rem;
+  color: var(--text2);
+  margin: 0 0 1.5rem;
+}
+
+.planList {
+  list-style: none;
+  margin: 0 0 1.75rem;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.planItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  font-size: 0.9875rem;
+  line-height: 1.45;
+  color: var(--text2);
+}
+
+.planTick {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  margin-top: 1px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--done) 16%, transparent);
+  color: var(--done);
+}
+
+.faq {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.faqItem {
+  padding: 1.35rem 0;
+  border-top: 1.5px solid var(--line);
+}
+
+.faqQ {
+  font-size: 1.0625rem;
+  font-weight: 550;
+  margin: 0 0 0.4rem;
+}
+
+.faqA {
+  font-size: 0.9875rem;
+  line-height: 1.6;
+  color: var(--text2);
+  margin: 0;
+}
+
+/* ── You ─────────────────────────────────────────────────────── */
+
+.youGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 1.1rem;
+  margin-bottom: 2.5rem;
+}
+
+.stat {
+  padding: 1.5rem;
+  border-radius: var(--radiusLg);
+  border: 1.5px solid var(--line);
+  background: var(--surface);
+}
+
+.statValue {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-display, inherit);
+  font-size: 2.25rem;
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+.statLabel {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text3);
+  margin-top: 0.5rem;
+}
+
+.youHead {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-bottom: 2.25rem;
+}
+
+.avatar {
+  width: 72px;
+  height: 72px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  font-family: var(--font-display, inherit);
+  font-size: 1.75rem;
+  font-weight: 600;
+}
+
+.progressList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.progressRow {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius);
+  border: 1.5px solid var(--line);
+  background: var(--surface);
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.15s;
+}
+
+.progressRow:hover { border-color: var(--lineStrong); }
+
+.progressBody { flex: 1; min-width: 0; }
+
+.progressName {
+  font-size: 1rem;
+  font-weight: 550;
+  margin: 0 0 0.5rem;
+}
+
+.progressPct {
+  font-size: 0.9375rem;
+  font-weight: 550;
+  color: var(--text2);
+  width: 48px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* ── Mobile navigation ───────────────────────────────────────── */
+
+/* Below the tablet breakpoint the three sections stop fitting on one row, so
+   navigation moves to a bottom bar — which is where a thumb expects it in an
+   app anyway — and the header keeps only identity and status. */
+.mobileTabs { display: none; }
+
+@media (max-width: 760px) {
+  .navTabs { display: none; }
+
+  .nav {
+    gap: 0.75rem;
+    padding: 0 1rem;
+  }
+
+  .navLogo { font-size: 0.95rem; }
+
+  .navRight { gap: 0.35rem; }
+
+  .pill {
+    height: 34px;
+    padding: 0 0.6rem;
+    font-size: 0.875rem;
+  }
+
+  .iconBtn { width: 34px; height: 34px; }
+
+  /* The trial pill duplicates the promo strip and the upsell card on a
+     screen this narrow. */
+  .pillTrial { display: none; }
+
+  .mobileTabs {
+    position: fixed;
+    z-index: 60;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    background: color-mix(in srgb, var(--surface) 94%, transparent);
+    backdrop-filter: saturate(160%) blur(14px);
+    border-top: 1px solid var(--line);
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+
+  .mobileTab {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.2rem;
+    padding: 0.6rem 0 0.55rem;
+    font-size: 0.6875rem;
+    font-weight: 550;
+    color: var(--text3);
+    text-decoration: none;
+  }
+
+  .mobileTab[data-active="true"] { color: var(--accent); }
+
+  /* Clear the bar so the last card is never trapped under it. */
+  .page { padding-bottom: 6.5rem; }
+
+  .promo {
+    font-size: 0.875rem;
+    padding: 0.7rem 1rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .navLogoWord { display: none; }
+}
+
+/* ── League ──────────────────────────────────────────────────── */
+
+.leagueHead {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 1.25rem 1.25rem 1rem;
+}
+
+.leagueBadge {
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 12px 12px 16px 16px;
+  color: #fff;
+}
+
+.leagueName {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin: 0 0 0.15rem;
+}
+
+.leagueMeta {
+  font-size: 0.875rem;
+  color: var(--text2);
+  margin: 0;
+}
+
+.leagueExpand {
+  margin-left: auto;
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+  border: 1.5px solid var(--line);
+  background: transparent;
+  color: var(--text3);
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.leagueExpand:hover { color: var(--text); border-color: var(--lineStrong); }
+
+.leagueRows {
+  display: flex;
+  flex-direction: column;
+  padding: 0 0.6rem 0.6rem;
+}
+
+.leagueRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.7rem 0.65rem;
+  border-radius: 12px;
+}
+
+.leagueRow[data-me="true"] {
+  background: color-mix(in srgb, var(--done) 12%, transparent);
+}
+
+.leagueRank {
+  width: 22px;
+  flex-shrink: 0;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--text3);
+  text-align: center;
+}
+
+.leagueRow[data-me="true"] .leagueRank { color: var(--done); }
+
+.leagueAvatar {
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  color: #fff;
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.leagueWho {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.leagueXp {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 550;
+  color: var(--text2);
+  flex-shrink: 0;
+  /* The number and its bolt are one token — without this they wrap apart in
+     a narrow rail. */
+  white-space: nowrap;
+}
+
+/* The line a learner is racing to stay above. */
+.leagueCut {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.55rem 0.65rem;
+  font-size: 0.8125rem;
+  font-weight: 550;
+  color: var(--done);
+}
+
+.leagueCut::before,
+.leagueCut::after {
+  content: "";
+  flex: 1;
+  height: 2px;
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--done) 35%, transparent);
+}
+
+.leagueEmpty {
+  padding: 0 1.25rem 1.4rem;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--text2);
+  margin: 0;
+}
+
+@media (max-width: 620px) {
+  .railItem { width: 156px; gap: 0.7rem; }
+  .railTile { width: 132px; height: 132px; border-radius: 22px; }
+  .railLabel { font-size: 0.9375rem; }
+  .railItem:not(:last-child)::after {
+    top: 69px;
+    left: calc(50% + 70px);
+    width: calc(100% - 140px);
+  }
+  .pathGlyph { width: 68px; height: 68px; }
+  .pathTitle { font-size: 1.375rem; }
+}
+
+/* ── Floating pill nav (landing only) ────────────────────────────
+   The landing page has no app chrome to anchor a full-width bar, so the
+   nav becomes an object floating over the page instead of a lid on it. */
+
+.nav[data-minimal="true"] {
+  position: fixed;
+  top: clamp(0.75rem, 2vh, 1.35rem);
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - clamp(1.5rem, 5vw, 4rem));
+  max-width: 1280px;
+  height: 68px;
+  padding: 0 0.65rem 0 1.5rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--text) 7%, transparent);
+  background: color-mix(in srgb, var(--surface) 72%, transparent);
+  backdrop-filter: saturate(180%) blur(22px);
+  -webkit-backdrop-filter: saturate(180%) blur(22px);
+  box-shadow:
+    0 1px 2px rgba(20, 18, 15, 0.03),
+    0 16px 40px -20px rgba(20, 18, 15, 0.28);
+  animation: navDrop 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes navDrop {
+  from { opacity: 0; transform: translateX(-50%) translateY(-14px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+/* The fixed pill floats over the hero, so the hero needs its own headroom. */
+.app:has(.nav[data-minimal="true"]) { padding-top: 0; }
+
+.nav[data-minimal="true"] + div,
+.nav[data-minimal="true"] ~ div > :global(main) {
+  padding-top: 0;
+}
+
+.nav[data-minimal="true"] .navLogo { font-size: 1.125rem; }
+
+/* A pill nav's sign-in button is the only action on it, so it carries the
+   weight a plain outline button wouldn't. */
+.navSignIn {
+  display: inline-grid;
+  place-items: center;
+  height: 46px;
+  padding: 0 1.6rem;
+  border: none;
+  border-radius: 999px;
+  background: var(--text);
+  color: var(--bg);
+  font-family: inherit;
+  font-size: 0.9875rem;
+  font-weight: 550;
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.3, 1), filter 0.18s;
+}
+
+.navSignIn:hover { transform: translateY(-1px); filter: brightness(1.2); }
+.navSignIn:active { transform: translateY(0); }
+
+@media (max-width: 560px) {
+  .nav[data-minimal="true"] {
+    height: 60px;
+    padding: 0 0.5rem 0 1.1rem;
+  }
+  .navSignIn { height: 42px; padding: 0 1.2rem; font-size: 0.9375rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav[data-minimal="true"] { animation: none; }
+}
+
+/* ── Daily goal ──────────────────────────────────────────────── */
+
+.goalTop {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.9rem;
+}
+
+.goalCount {
+  font-family: var(--font-display, inherit);
+  font-size: 1.75rem;
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.goalOf {
+  font-size: 0.9375rem;
+  color: var(--text3);
+  font-weight: 450;
+}
+
+.goalOptions {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.45rem;
+}
+
+.goalOption {
+  display: grid;
+  place-items: center;
+  padding: 0.7rem 0.25rem;
+  border: 2px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+  font-family: inherit;
+  font-size: 0.9375rem;
+  font-weight: 550;
+  color: var(--text2);
+  cursor: pointer;
+  transition: border-color 0.16s, background 0.16s, color 0.16s, transform 0.14s;
+}
+
+.goalOption:hover:not(:disabled) { border-color: var(--lineStrong); color: var(--text); }
+.goalOption:active:not(:disabled) { transform: scale(0.97); }
+
+.goalOption[aria-pressed="true"] {
+  border-color: var(--accent);
+  background: var(--accentSoft);
+  color: var(--accent);
+}
+
+.goalUnit {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  opacity: 0.7;
+  margin-top: 0.1rem;
+}
+
+.goalHint {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--text2);
+  margin: 0.9rem 0 0;
+}
+
+.goalReward {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1.5px solid var(--line);
+}
+
+.goalRewardText {
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: var(--text2);
+}
+
+/* ── Badge grid ──────────────────────────────────────────────── */
+
+.badgeFamily { margin-bottom: 2rem; }
+
+.badgeFamilyName {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin: 0 0 1rem;
+}
+
+.badgeGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
+  gap: 1rem;
+}
+
+.badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 1.35rem 0.85rem 1.15rem;
+  border: 1.5px solid var(--line);
+  border-radius: var(--radiusLg);
+  background: var(--surface);
+  text-align: center;
+  color: var(--text3);
+  transition: transform 0.18s, box-shadow 0.18s, border-color 0.18s;
+}
+
+.badge[data-earned="true"] {
+  border-color: color-mix(in srgb, var(--text) 12%, transparent);
+  box-shadow: var(--shadow);
+}
+
+.badge[data-earned="true"]:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadowLift);
+}
+
+.badgeName {
+  font-size: 0.9375rem;
+  font-weight: 550;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.badge[data-earned="false"] .badgeName { color: var(--text2); }
+
+.badgeDesc {
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: var(--text3);
+}
+
+.badgeWhen {
+  font-size: 0.75rem;
+  font-weight: 550;
+  color: var(--done);
+}
+
+/* ── Next-badge hint ─────────────────────────────────────────── */
+
+.badgeNext {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  padding: 1.35rem;
+  border: 1.5px dashed var(--lineStrong);
+  border-radius: var(--radiusLg);
+  margin-bottom: 2rem;
+}
+
+.badgeNextBody { flex: 1; min-width: 0; }
+
+.badgeNextLabel {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin: 0 0 0.25rem;
+}
+
+.badgeNextName {
+  font-size: 1.0625rem;
+  font-weight: 550;
+  margin: 0 0 0.6rem;
+}

@@ -2,6 +2,9 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser, LEARN_REQUIRES_GOOGLE_ERROR } from "@/lib/server/auth";
 import { checkAnswer, getTrackStageCount } from "@/lib/server/quiz-registry";
+import { creditLesson } from "@/lib/server/learn-state";
+import { validLesson } from "@/lib/server/validate";
+import { XP_PER_LESSON } from "@/lib/learn/catalog";
 
 const POINTS_PER_STAGE = 10;
 
@@ -15,12 +18,12 @@ export async function POST(req: Request) {
   }
 
   const body = await req.json().catch(() => ({}));
-  const trackId = String(body.trackId || "").trim();
-  const stage = Number(body.stage);
+  const lesson = validLesson(body.trackId, body.stage);
   const selectedIndex = Number(body.selectedIndex);
-  if (!trackId || Number.isNaN(stage) || Number.isNaN(selectedIndex)) {
-    return NextResponse.json({ error: "trackId, stage and selectedIndex are required" }, { status: 400 });
+  if (!lesson || !Number.isInteger(selectedIndex) || selectedIndex < 0) {
+    return NextResponse.json({ error: "Unknown track, lesson or answer" }, { status: 400 });
   }
+  const { trackId, stage } = lesson;
 
   const result = checkAnswer(trackId, stage, selectedIndex);
   if (!result) {
@@ -55,5 +58,20 @@ export async function POST(req: Request) {
     },
   });
 
-  return NextResponse.json({ correct: true, explanation: result.explanation, enrollment: updated });
+  // XP and the daily streak are credited once per lesson — re-answering a
+  // stage you've already passed replays the explanation but pays nothing.
+  const credited = alreadyPassed
+    ? null
+    : await creditLesson(user.id, XP_PER_LESSON);
+
+  return NextResponse.json({
+    correct: true,
+    explanation: result.explanation,
+    enrollment: updated,
+    awardedXp: credited?.awarded ?? 0,
+    xp: credited?.xp ?? null,
+    streak: credited?.streak ?? null,
+    courseCompleted: allDone,
+    newBadges: credited?.newBadges ?? [],
+  });
 }

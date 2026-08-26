@@ -1,0 +1,648 @@
+/* ================================================================
+   Landing — the signed-out front door.
+   Quiet, wide, and alive. One decision on screen at a time.
+   ================================================================ */
+
+.page {
+  position: relative;
+  min-height: 100vh;
+  overflow-x: clip;
+  background: var(--bg);
+}
+
+/* ── Ambient field ───────────────────────────────────────────────
+   Three very low-opacity washes that drift on long cycles. At this
+   opacity you never catch them moving; you only notice the page isn't
+   dead. */
+
+.field {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(72px);
+  opacity: 0.72;
+  will-change: transform;
+}
+
+.orbA {
+  width: 620px; height: 620px;
+  top: -220px; left: -160px;
+  background: radial-gradient(circle, rgba(255, 117, 0, 0.30) 0%, transparent 68%);
+  animation: driftA 26s ease-in-out infinite;
+}
+
+.orbB {
+  width: 560px; height: 560px;
+  top: -120px; right: -180px;
+  background: radial-gradient(circle, rgba(108, 92, 231, 0.28) 0%, transparent 68%);
+  animation: driftB 32s ease-in-out infinite;
+}
+
+.orbC {
+  width: 500px; height: 500px;
+  top: 46%; left: 38%;
+  background: radial-gradient(circle, rgba(232, 93, 158, 0.20) 0%, transparent 68%);
+  animation: driftC 38s ease-in-out infinite;
+}
+
+@keyframes driftA {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50%      { transform: translate3d(70px, 50px, 0) scale(1.1); }
+}
+@keyframes driftB {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50%      { transform: translate3d(-60px, 70px, 0) scale(1.08); }
+}
+@keyframes driftC {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50%      { transform: translate3d(50px, -60px, 0) scale(0.92); }
+}
+
+/* A whisper of grain stops the gradients from banding on wide screens. */
+.grain {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.028;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.content { position: relative; z-index: 2; }
+
+/* ── Hero ────────────────────────────────────────────────────── */
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  gap: clamp(2.5rem, 5vw, 5rem);
+  align-items: center;
+  max-width: 1340px;
+  margin: 0 auto;
+  padding: clamp(8rem, 16vh, 11rem) clamp(1.25rem, 4vw, 3.5rem) clamp(5rem, 10vh, 8rem);
+}
+
+@media (max-width: 940px) {
+  .hero {
+    grid-template-columns: minmax(0, 1fr);
+    text-align: center;
+    padding-top: 7rem;
+  }
+}
+
+.title {
+  font-family: var(--font-display, inherit);
+  font-size: clamp(2.75rem, 6.4vw, 5rem);
+  font-weight: 600;
+  letter-spacing: -0.045em;
+  line-height: 0.98;
+  margin: 0 0 1.75rem;
+  max-width: 11ch;
+  text-wrap: balance;
+}
+
+@media (max-width: 940px) {
+  .title { max-width: none; margin-inline: auto; }
+}
+
+.sub {
+  font-size: clamp(1.0625rem, 1.5vw, 1.25rem);
+  font-weight: 400;
+  line-height: 1.55;
+  color: var(--text2);
+  margin: 0 0 2.5rem;
+  max-width: 38ch;
+}
+
+@media (max-width: 940px) {
+  .sub { margin-inline: auto; }
+}
+
+/* One button. A second one beside it only ever splits the decision. */
+.cta {
+  display: inline-grid;
+  place-items: center;
+  height: 62px;
+  padding: 0 2.5rem;
+  border: none;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  font-family: inherit;
+  font-size: 1.125rem;
+  font-weight: 550;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  text-decoration: none;
+  box-shadow:
+    0 1px 2px rgba(255, 117, 0, 0.28),
+    0 14px 34px -12px rgba(255, 117, 0, 0.62);
+  transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.3, 1), box-shadow 0.28s, filter 0.2s;
+}
+
+.cta:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.04);
+  box-shadow:
+    0 1px 2px rgba(255, 117, 0, 0.3),
+    0 22px 46px -14px rgba(255, 117, 0, 0.72);
+}
+
+.cta:active { transform: translateY(0); }
+
+.proof {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.75rem;
+  margin-top: 2.5rem;
+  font-size: 0.9375rem;
+  color: var(--text3);
+}
+
+@media (max-width: 940px) {
+  .proof {
+    justify-content: center;
+    /* Stacked on one item per row, 1.75rem of gap turns three short lines
+       into half a screen. */
+    gap: 0.85rem 1.5rem;
+    margin-top: 2rem;
+  }
+}
+
+.proofItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Entrance: each line arrives a beat after the one above it. */
+.rise { animation: rise 0.85s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.rise1 { animation-delay: 0.05s; }
+.rise2 { animation-delay: 0.16s; }
+.rise3 { animation-delay: 0.27s; }
+.rise4 { animation-delay: 0.38s; }
+.rise5 { animation-delay: 0.5s; }
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ── Demo card ───────────────────────────────────────────────── */
+
+.demoWrap {
+  position: relative;
+  animation: rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
+}
+
+.demo {
+  position: relative;
+  padding: clamp(1.5rem, 2.5vw, 2.25rem);
+  border-radius: 32px;
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  border: 1px solid color-mix(in srgb, var(--text) 7%, transparent);
+  backdrop-filter: saturate(150%) blur(18px);
+  box-shadow:
+    0 2px 6px rgba(20, 18, 15, 0.04),
+    0 30px 70px -28px rgba(20, 18, 15, 0.26);
+  /* A slow bob so the card reads as floating rather than pasted on. */
+  animation: bob 8s ease-in-out infinite;
+}
+
+@keyframes bob {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-9px); }
+}
+
+.demoBar {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 1.75rem;
+}
+
+.demoSeg {
+  flex: 1;
+  height: 8px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--text) 8%, transparent);
+  overflow: hidden;
+}
+
+.demoSegFill {
+  display: block;
+  height: 100%;
+  width: 0;
+  border-radius: 999px;
+  background: var(--done);
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.demoSeg[data-on="true"] .demoSegFill { width: 100%; }
+
+.demoEyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  background: var(--accentSoft);
+  color: var(--accent);
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.demoQ {
+  font-family: var(--font-display, inherit);
+  font-size: clamp(1.0625rem, 1.6vw, 1.3125rem);
+  font-weight: 550;
+  letter-spacing: -0.022em;
+  line-height: 1.4;
+  margin: 0 0 1.5rem;
+  text-align: left;
+  min-height: 2.8em;
+}
+
+.demoCode {
+  padding: 0.1em 0.4em;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--text) 7%, transparent);
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.86em;
+  font-weight: 450;
+}
+
+.demoOpts {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.demoOpt {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.95rem 1.1rem;
+  border: 2px solid color-mix(in srgb, var(--text) 8%, transparent);
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--surface) 60%, transparent);
+  font-size: 0.9875rem;
+  text-align: left;
+  transition:
+    border-color 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    background 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.35s cubic-bezier(0.2, 0.8, 0.3, 1);
+}
+
+.demoOpt[data-state="picked"] {
+  border-color: var(--accent);
+  background: var(--accentSoft);
+  transform: translateX(5px);
+}
+
+.demoOpt[data-state="right"] {
+  border-color: var(--done);
+  background: color-mix(in srgb, var(--done) 11%, transparent);
+  transform: translateX(5px);
+}
+
+.demoKey {
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  border: 2px solid color-mix(in srgb, var(--text) 10%, transparent);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text3);
+  transition: border-color 0.3s, background 0.3s, color 0.3s;
+}
+
+.demoOpt[data-state="picked"] .demoKey { border-color: var(--accent); color: var(--accent); }
+.demoOpt[data-state="right"] .demoKey {
+  border-color: var(--done);
+  background: var(--done);
+  color: #fff;
+}
+
+/* The cursor that "answers" the question, so the loop reads as someone
+   using the product rather than as a slideshow. */
+.cursor {
+  position: absolute;
+  z-index: 3;
+  pointer-events: none;
+  filter: drop-shadow(0 3px 6px rgba(20, 18, 15, 0.3));
+  transition: transform 0.9s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s;
+}
+
+.xpPop {
+  position: absolute;
+  right: clamp(-10px, -1vw, 0px);
+  bottom: -18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1.15rem;
+  border-radius: 999px;
+  background: var(--xp);
+  color: #14120F;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  box-shadow: 0 12px 30px -10px rgba(123, 198, 45, 0.75);
+  animation: xpPop 0.7s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+}
+
+@keyframes xpPop {
+  0%   { opacity: 0; transform: translateY(14px) scale(0.8); }
+  55%  { opacity: 1; transform: translateY(-4px) scale(1.08); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Streak and league chips that orbit the card — proof the app has a life
+   outside this one question. */
+.chip {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.6rem 1rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
+  border: 1px solid color-mix(in srgb, var(--text) 7%, transparent);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 10px 26px -12px rgba(20, 18, 15, 0.3);
+  font-size: 0.9375rem;
+  font-weight: 550;
+  white-space: nowrap;
+}
+
+.chipStreak {
+  top: -26px;
+  left: -34px;
+  animation: floatA 7s ease-in-out infinite;
+}
+
+.chipLeague {
+  top: -30px;
+  right: -28px;
+  animation: floatB 9s ease-in-out infinite;
+}
+
+@media (max-width: 1180px) {
+  .chipStreak { left: -8px; }
+  .chipLeague { right: -6px; }
+}
+
+/* Below the two-column breakpoint the card is centred and the chips have
+   nowhere to go without covering it. */
+@media (max-width: 940px) {
+  .chipStreak, .chipLeague { display: none; }
+}
+
+@keyframes floatA {
+  0%, 100% { transform: translateY(0) rotate(-1.5deg); }
+  50%      { transform: translateY(-12px) rotate(1deg); }
+}
+@keyframes floatB {
+  0%, 100% { transform: translateY(0) rotate(1.5deg); }
+  50%      { transform: translateY(-10px) rotate(-1deg); }
+}
+
+/* ── Feature rows ────────────────────────────────────────────── */
+
+.section {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: clamp(3rem, 7vh, 5.5rem) clamp(1.25rem, 4vw, 3.5rem);
+}
+
+.rowGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(2rem, 5vw, 4.5rem);
+  align-items: center;
+}
+
+@media (max-width: 880px) {
+  .rowGrid { grid-template-columns: minmax(0, 1fr); gap: 2rem; }
+}
+
+.rowFlip > *:first-child { order: 2; }
+@media (max-width: 880px) { .rowFlip > *:first-child { order: 0; } }
+
+.rowArt {
+  display: grid;
+  place-items: center;
+  padding: clamp(2rem, 4vw, 3.5rem);
+  border-radius: 32px;
+  background: color-mix(in srgb, var(--text) 3.5%, transparent);
+  min-height: 280px;
+}
+
+.rowTitle {
+  font-family: var(--font-display, inherit);
+  font-size: clamp(1.625rem, 3vw, 2.25rem);
+  font-weight: 600;
+  letter-spacing: -0.033em;
+  line-height: 1.12;
+  margin: 0 0 1rem;
+  text-wrap: balance;
+}
+
+.rowBody {
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  color: var(--text2);
+  margin: 0;
+  max-width: 44ch;
+}
+
+/* ── Closing ─────────────────────────────────────────────────── */
+
+.closing {
+  position: relative;
+  text-align: center;
+  padding: clamp(4rem, 9vh, 7rem) 1.5rem clamp(4rem, 8vh, 6rem);
+}
+
+.closingTitle {
+  font-family: var(--font-display, inherit);
+  font-size: clamp(2rem, 4.5vw, 3.25rem);
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+  margin: 0 auto 1.25rem;
+  max-width: 16ch;
+  text-wrap: balance;
+}
+
+.closingSub {
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: var(--text2);
+  margin: 0 auto 2.5rem;
+  max-width: 40ch;
+}
+
+/* ── Footer ──────────────────────────────────────────────────── */
+
+.footer {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 2.5rem clamp(1.25rem, 4vw, 3.5rem) 4rem;
+  border-top: 1px solid color-mix(in srgb, var(--text) 8%, transparent);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.footerLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.75rem;
+}
+
+.footerLink {
+  font-size: 0.9375rem;
+  color: var(--text2);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.footerLink:hover { color: var(--text); }
+
+.copy {
+  font-size: 0.875rem;
+  color: var(--text3);
+}
+
+/* ── Motion off ──────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .orb, .demo, .chipStreak, .chipLeague { animation: none !important; }
+  .rise, .demoWrap { animation: none !important; opacity: 1 !important; transform: none !important; }
+  .cursor { display: none; }
+}
+
+:global(html[data-reduce-motion]) .orb,
+:global(html[data-reduce-motion]) .demo,
+:global(html[data-reduce-motion]) .chipStreak,
+:global(html[data-reduce-motion]) .chipLeague {
+  animation: none !important;
+}
+
+:global(html[data-reduce-motion]) .rise,
+:global(html[data-reduce-motion]) .demoWrap {
+  animation: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+:global(html[data-reduce-motion]) .cursor { display: none; }
+
+/* ── Tile-drop demo ──────────────────────────────────────────────
+   Blanks in an expression, a bank of tiles below, and a cursor that
+   fills them in. This is the teaching model, so the front door shows
+   it working rather than describing it. */
+
+.expr {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  padding: clamp(1.5rem, 3vw, 2.25rem) 1rem;
+  border-radius: 20px;
+  border: 1.5px solid color-mix(in srgb, var(--text) 7%, transparent);
+  background: color-mix(in srgb, var(--surface) 55%, transparent);
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: clamp(0.95rem, 1.7vw, 1.25rem);
+  line-height: 1.9;
+  margin-bottom: 1rem;
+}
+
+.token { color: var(--text); }
+.tokenDim { color: var(--text3); }
+
+/* An empty slot is a dashed well; a filled one is a solid tile. The two
+   share a size so nothing reflows when a tile lands. */
+.slot {
+  display: inline-grid;
+  place-items: center;
+  min-width: 60px;
+  height: 40px;
+  padding: 0 0.6rem;
+  border-radius: 11px;
+  border: 2px dashed color-mix(in srgb, var(--text) 22%, transparent);
+  background: transparent;
+  color: transparent;
+  transition:
+    border-color 0.3s ease,
+    background 0.3s ease,
+    color 0.2s ease 0.1s,
+    transform 0.4s cubic-bezier(0.2, 1.4, 0.4, 1);
+}
+
+.slot[data-filled="true"] {
+  border-style: solid;
+  border-color: var(--done);
+  background: color-mix(in srgb, var(--done) 14%, transparent);
+  color: var(--text);
+  transform: scale(1.06);
+}
+
+/* The scale bump settles a beat after the fill, so the drop has weight. */
+.slot[data-settled="true"] { transform: scale(1); }
+
+.bank {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.55rem;
+  padding: 0.85rem;
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--text) 4%, transparent);
+}
+
+.tile {
+  display: inline-grid;
+  place-items: center;
+  min-width: 60px;
+  height: 40px;
+  padding: 0 0.65rem;
+  border-radius: 11px;
+  border: 1.5px solid color-mix(in srgb, var(--text) 10%, transparent);
+  background: var(--surface);
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: clamp(0.875rem, 1.4vw, 1.0625rem);
+  font-weight: 500;
+  color: var(--text);
+  box-shadow: 0 1px 2px rgba(20, 18, 15, 0.05);
+  transition: opacity 0.3s, transform 0.3s cubic-bezier(0.2, 0.8, 0.3, 1);
+}
+
+/* A used tile leaves a hole in the bank rather than reflowing the row. */
+.tile[data-used="true"] {
+  opacity: 0.25;
+  border-style: dashed;
+  box-shadow: none;
+  color: transparent;
+}
+
+.tile[data-lifting="true"] {
+  transform: translateY(-6px) scale(1.06);
+  box-shadow: 0 10px 22px -8px rgba(20, 18, 15, 0.35);
+}

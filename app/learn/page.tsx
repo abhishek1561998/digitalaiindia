@@ -1,27 +1,24 @@
 import { Metadata } from "next";
-import { LearnLanding } from "@/components/dai/learn-landing";
-import { getCurrentUser } from "@/lib/server/auth";
-
+import { LearnHomeScreen } from "@/components/dai/learn-app/LearnHomeScreen";
 export const metadata: Metadata = {
-  title: "Learn to Code Free — JavaScript, DSA, MERN, AI & UI/UX | DigitalAIIndia Learn",
+  title: "Learn to Code — JavaScript, DSA & Generative AI | DigitalAIIndia Learn",
   description:
-    "Free, project-based tracks with a real certificate on completion — JavaScript, DSA, MERN stack, AI engineering, UI/UX, system design, and project building. Learn by building, not watching.",
+    "Seven project-based tracks with interactive lessons, daily streaks, XP, badges and weekly leagues — JavaScript, Python, data structures & algorithms, and a four-course generative AI path.",
   keywords: [
-    "learn to code free",
-    "free coding certificate",
-    "JavaScript course free",
-    "learn JavaScript India",
+    "learn to code",
+    "interactive coding course",
+    "free coding course",
+    "JavaScript course",
     "DSA course",
-    "MERN stack course",
-    "AI engineering course",
-    "UI UX design course",
-    "project based learning",
-  ],
+        "generative AI course",
+    "GenAI course",
+    "learn RAG",
+          ],
   alternates: { canonical: "https://learn.digitalaiindia.com" },
   openGraph: {
-    title: "Learn to Code Free, Earn a Real Certificate — DigitalAIIndia Learn",
+    title: "Learn by building — DigitalAIIndia Learn",
     description:
-      "Project-based tracks in JavaScript, DSA, MERN, AI engineering, UI/UX, system design, and project building. Build real things, pass real quizzes, earn a real certificate.",
+      "Interactive tracks in JavaScript, data structures & algorithms, and generative AI. Build real things, keep a streak, climb the league.",
     url: "https://learn.digitalaiindia.com",
     siteName: "DigitalAIIndia Learn",
     type: "website",
@@ -29,13 +26,12 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Learn to Code Free, Earn a Real Certificate — DigitalAIIndia Learn",
-    description: "Project-based tracks in JavaScript, DSA, MERN, AI engineering, UI/UX, and more.",
+    title: "Learn by building — DigitalAIIndia Learn",
+    description: "Interactive tracks in JavaScript, DSA and generative AI.",
     images: ["https://digitalaiindia.com/banner.png"],
   },
 };
 
 export default async function LearnPage() {
-  const user = await getCurrentUser();
-  return <LearnLanding isLoggedIn={Boolean(user)} userName={user?.name ?? null} />;
+  return <LearnHomeScreen />;
 }

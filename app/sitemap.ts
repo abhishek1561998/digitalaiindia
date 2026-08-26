@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { COURSES } from "@/lib/learn/catalog";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
@@ -12,14 +13,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: "https://platform.digitalaiindia.com", lastModified: now, changeFrequency: "weekly", priority: 0.8 },
 
     { url: "https://learn.digitalaiindia.com", lastModified: now, changeFrequency: "weekly", priority: 0.9 },
-    { url: "https://learn.digitalaiindia.com/javascript", lastModified: now, changeFrequency: "weekly", priority: 0.9 },
-    { url: "https://learn.digitalaiindia.com/dsa", lastModified: now, changeFrequency: "weekly", priority: 0.9 },
-    { url: "https://learn.digitalaiindia.com/mern", lastModified: now, changeFrequency: "weekly", priority: 0.9 },
-    { url: "https://learn.digitalaiindia.com/ai", lastModified: now, changeFrequency: "weekly", priority: 0.9 },
-    { url: "https://learn.digitalaiindia.com/system-design", lastModified: now, changeFrequency: "weekly", priority: 0.9 },
-    { url: "https://learn.digitalaiindia.com/project-building", lastModified: now, changeFrequency: "weekly", priority: 0.9 },
-    { url: "https://learn.digitalaiindia.com/ui-ux", lastModified: now, changeFrequency: "weekly", priority: 0.9 },
-    { url: "https://learn.digitalaiindia.com/aws", lastModified: now, changeFrequency: "weekly", priority: 0.9 },
+    { url: "https://learn.digitalaiindia.com/courses", lastModified: now, changeFrequency: "weekly", priority: 0.8 },
+    { url: "https://learn.digitalaiindia.com/premium", lastModified: now, changeFrequency: "monthly", priority: 0.7 },
+
+    // Derived from the catalog so shipping a ninth track doesn't need a
+    // second edit here to be indexable.
+    ...COURSES.map((course) => ({
+      url: `https://learn.digitalaiindia.com/${course.slug}`,
+      lastModified: now,
+      changeFrequency: "weekly" as const,
+      priority: 0.9,
+    })),
 
     { url: "https://blog.digitalaiindia.com", lastModified: now, changeFrequency: "daily", priority: 0.7 },
   ];

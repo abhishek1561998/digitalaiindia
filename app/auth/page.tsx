@@ -30,12 +30,12 @@ function AuthPageInner() {
         badge: "Free to learn",
         titleTop: "Start building",
         titleAccent: "real skills today",
-        sub: "Eight project-based tracks — JavaScript, DSA, MERN, AI engineering, AWS, UI/UX, system design and project building. Every one ends with a real certificate.",
+        sub: "Seven project-based tracks — JavaScript, Python, DSA, and a four-course generative AI path. Every lesson ends with something you build.",
         points: [
-          { icon: "🧭", label: "8 tracks, all free to learn" },
+          { icon: "🧭", label: "One lesson a day, free forever" },
           { icon: "🛠️", label: "Real projects, not just videos" },
           { icon: "✅", label: "Quizzes that check you understood" },
-          { icon: "📜", label: "A certificate with your name on it" },
+          { icon: "🔥", label: "Streaks, XP, badges and weekly leagues" },
         ],
       }
     : {

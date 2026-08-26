@@ -1,0 +1,585 @@
+/* About — a long-form page, so it reads at a wider measure than the app
+   screens but never wider than about 70 characters of running text. */
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding: 5.5rem 1.5rem 6rem;
+  text-align: center;
+  background:
+    radial-gradient(90% 70% at 20% 0%, rgba(240, 180, 41, 0.16) 0%, transparent 60%),
+    radial-gradient(90% 70% at 80% 6%, rgba(232, 93, 158, 0.13) 0%, transparent 58%),
+    radial-gradient(70% 60% at 50% 100%, rgba(108, 92, 231, 0.14) 0%, transparent 60%);
+}
+
+.eyebrow {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin: 0 0 1.1rem;
+}
+
+.heroTitle {
+  font-family: var(--font-display, inherit);
+  font-size: clamp(2rem, 5.5vw, 3.5rem);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1.08;
+  margin: 0 auto 1.5rem;
+  max-width: 16ch;
+}
+
+.heroSub {
+  font-size: clamp(1.0625rem, 2vw, 1.25rem);
+  line-height: 1.6;
+  color: var(--text2);
+  margin: 0 auto;
+  max-width: 54ch;
+}
+
+.heroArt {
+  display: grid;
+  place-items: center;
+  margin-top: 3rem;
+}
+
+/* ── Sections ────────────────────────────────────────────────── */
+
+.section {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 4.5rem 1.5rem;
+}
+
+.sectionSplit {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 3.5rem;
+  align-items: start;
+}
+
+@media (max-width: 860px) {
+  .sectionSplit { grid-template-columns: minmax(0, 1fr); gap: 2.25rem; }
+}
+
+.h2 {
+  font-family: var(--font-display, inherit);
+  font-size: clamp(1.625rem, 3.2vw, 2.125rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  margin: 0 0 1.25rem;
+}
+
+.body {
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  color: var(--text2);
+  margin: 0 0 1.1rem;
+  max-width: 62ch;
+}
+
+.body strong { color: var(--text); font-weight: 550; }
+
+/* ── Pull quote ──────────────────────────────────────────────── */
+
+.quoteBand {
+  padding: 3.5rem 1.5rem;
+  background: var(--surfaceAlt);
+  text-align: center;
+}
+
+.quote {
+  font-family: var(--font-display, inherit);
+  font-size: clamp(1.375rem, 3.4vw, 2rem);
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  line-height: 1.35;
+  margin: 0 auto;
+  max-width: 24ch;
+}
+
+/* A hand-drawn underline: two skewed strokes, so it reads as marked-up text
+   rather than as a border. */
+.mark {
+  position: relative;
+  white-space: nowrap;
+}
+
+.mark::after {
+  content: "";
+  position: absolute;
+  left: -2px;
+  right: -2px;
+  bottom: 0.02em;
+  height: 0.38em;
+  border-radius: 999px;
+  background: var(--markColor, rgba(240, 180, 41, 0.42));
+  transform: rotate(-0.8deg);
+  z-index: -1;
+}
+
+/* ── Numbers ─────────────────────────────────────────────────── */
+
+.numbers {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 1.25rem;
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 0 1.5rem 4.5rem;
+}
+
+.number {
+  padding: 1.75rem 1.5rem;
+  border: 1.5px solid var(--line);
+  border-radius: var(--radiusLg);
+  background: var(--surface);
+}
+
+.numberValue {
+  font-family: var(--font-display, inherit);
+  font-size: 2.5rem;
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.numberLabel {
+  font-size: 0.9375rem;
+  line-height: 1.45;
+  color: var(--text2);
+  margin-top: 0.6rem;
+}
+
+/* ── Price comparison ────────────────────────────────────────── */
+
+.bars {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  margin-top: 0.5rem;
+}
+
+.bar {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.45rem;
+}
+
+.barHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.9375rem;
+}
+
+.barName { color: var(--text2); }
+
+.barValue {
+  font-weight: 550;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.barTrack {
+  height: 12px;
+  border-radius: 999px;
+  background: var(--surfaceAlt);
+  overflow: hidden;
+}
+
+.barFill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--lineStrong);
+}
+
+.barFillOurs {
+  background: linear-gradient(90deg, #6C5CE7, #E85D9E 55%, #F0B429);
+}
+
+.barNote {
+  font-size: 0.875rem;
+  color: var(--text3);
+  margin: 1rem 0 0;
+}
+
+/* ── Principles ──────────────────────────────────────────────── */
+
+.principles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.25rem;
+}
+
+.principle {
+  padding: 1.75rem;
+  border: 1.5px solid var(--line);
+  border-radius: var(--radiusLg);
+  background: var(--surface);
+}
+
+.principleNum {
+  font-family: var(--font-display, inherit);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  margin: 0 0 0.75rem;
+}
+
+.principleTitle {
+  font-size: 1.125rem;
+  font-weight: 550;
+  letter-spacing: -0.015em;
+  margin: 0 0 0.5rem;
+}
+
+.principleBody {
+  font-size: 0.9875rem;
+  line-height: 1.6;
+  color: var(--text2);
+  margin: 0;
+}
+
+/* ── Track wall ──────────────────────────────────────────────── */
+
+.wall {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1rem;
+}
+
+.wallItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 1.25rem 0.75rem;
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  text-decoration: none;
+  color: inherit;
+  text-align: center;
+  transition: transform 0.16s, border-color 0.16s;
+}
+
+.wallItem:hover { transform: translateY(-2px); border-color: var(--lineStrong); }
+
+.wallName {
+  font-size: 0.9375rem;
+  font-weight: 500;
+}
+
+/* ── Closing CTA ─────────────────────────────────────────────── */
+
+.closing {
+  padding: 4.5rem 1.5rem 6rem;
+  text-align: center;
+  background: var(--surfaceAlt);
+}
+
+.closingActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+/* ── Landing (signed out) ────────────────────────────────────── */
+
+.landingHero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 3.5rem;
+  align-items: center;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 4.5rem 2rem 5rem;
+}
+
+@media (max-width: 900px) {
+  .landingHero {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2.5rem;
+    padding: 2.5rem 1.25rem 3rem;
+    text-align: center;
+  }
+}
+
+.landingTitle {
+  font-family: var(--font-display, inherit);
+  font-size: clamp(2.25rem, 5.5vw, 3.75rem);
+  font-weight: 600;
+  letter-spacing: -0.038em;
+  line-height: 1.05;
+  margin: 0 0 1.25rem;
+  max-width: 13ch;
+}
+
+@media (max-width: 900px) {
+  .landingTitle { max-width: none; margin-inline: auto; }
+}
+
+.landingSub {
+  font-size: clamp(1.0625rem, 1.8vw, 1.1875rem);
+  line-height: 1.6;
+  color: var(--text2);
+  margin: 0 0 2rem;
+  max-width: 44ch;
+}
+
+@media (max-width: 900px) {
+  .landingSub { margin-inline: auto; }
+}
+
+.landingActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+}
+
+@media (max-width: 900px) {
+  .landingActions { justify-content: center; }
+}
+
+.ctaBig {
+  display: inline-grid;
+  place-items: center;
+  height: 56px;
+  padding: 0 2rem;
+  border: none;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  font-family: inherit;
+  font-size: 1.0625rem;
+  font-weight: 550;
+  cursor: pointer;
+  text-decoration: none;
+  box-shadow: 0 3px 0 color-mix(in srgb, var(--accent) 65%, #000);
+  transition: filter 0.15s, transform 0.1s, box-shadow 0.1s;
+}
+
+.ctaBig:hover { filter: brightness(1.06); }
+.ctaBig:active { transform: translateY(3px); box-shadow: none; }
+
+.ctaQuiet {
+  display: inline-grid;
+  place-items: center;
+  height: 56px;
+  padding: 0 1.75rem;
+  border: 2px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 1.0625rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  transition: border-color 0.16s;
+}
+
+.ctaQuiet:hover { border-color: var(--lineStrong); }
+
+.landingProof {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-top: 2.25rem;
+  font-size: 0.9375rem;
+  color: var(--text3);
+}
+
+@media (max-width: 900px) {
+  .landingProof { justify-content: center; }
+}
+
+.landingProofItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+/* The hero's right half: a real lesson card, shrunk. Showing the product
+   beats describing it. */
+.peek {
+  position: relative;
+  padding: 1.75rem;
+  border: 1.5px solid var(--line);
+  border-radius: 28px;
+  background: var(--surface);
+  box-shadow: var(--shadowLift, 0 18px 40px -16px rgba(20, 18, 15, 0.18));
+}
+
+.peekBar {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 1.5rem;
+}
+
+.peekSeg {
+  flex: 1;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--surfaceAlt);
+}
+
+.peekSeg[data-on="true"] { background: #00A97F; }
+
+.peekQ {
+  font-family: var(--font-display, inherit);
+  font-size: 1.1875rem;
+  font-weight: 550;
+  letter-spacing: -0.02em;
+  line-height: 1.35;
+  margin: 0 0 1.25rem;
+  text-align: left;
+}
+
+.peekOpts {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.peekOpt {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 1rem;
+  border: 2px solid var(--line);
+  border-radius: 14px;
+  font-size: 0.9375rem;
+  text-align: left;
+}
+
+.peekOpt[data-right="true"] {
+  border-color: #00A97F;
+  background: color-mix(in srgb, #00A97F 10%, transparent);
+}
+
+.peekKey {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 7px;
+  border: 2px solid var(--line);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text3);
+}
+
+.peekOpt[data-right="true"] .peekKey {
+  border-color: #00A97F;
+  background: #00A97F;
+  color: #fff;
+}
+
+.peekXp {
+  position: absolute;
+  right: -14px;
+  bottom: -14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.55rem 1rem;
+  border-radius: 999px;
+  background: #7BC62D;
+  color: #14120F;
+  font-size: 1rem;
+  font-weight: 600;
+  box-shadow: 0 10px 24px -8px rgba(123, 198, 45, 0.7);
+}
+
+/* ── Feature rows ────────────────────────────────────────────── */
+
+.feature {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 3.5rem;
+  align-items: center;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 3.5rem 2rem;
+}
+
+@media (max-width: 860px) {
+  .feature { grid-template-columns: minmax(0, 1fr); gap: 2rem; padding: 2.5rem 1.25rem; }
+}
+
+.featureFlip > *:first-child { order: 2; }
+
+@media (max-width: 860px) {
+  .featureFlip > *:first-child { order: 0; }
+}
+
+.featureArt {
+  display: grid;
+  place-items: center;
+  padding: 2.5rem 1.5rem;
+  border-radius: 28px;
+  background: var(--surfaceAlt);
+  min-height: 260px;
+}
+
+.featureTitle {
+  font-family: var(--font-display, inherit);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  margin: 0 0 0.9rem;
+}
+
+.featureBody {
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  color: var(--text2);
+  margin: 0;
+  max-width: 46ch;
+}
+
+/* ── Landing footer ──────────────────────────────────────────── */
+
+.landingFoot {
+  padding: 2.5rem 2rem 3.5rem;
+  border-top: 1.5px solid var(--line);
+  max-width: 1240px;
+  margin: 3rem auto 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.landingFootLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.landingCopy {
+  font-size: 0.875rem;
+  color: var(--text3);
+}
+
+.footerLink {
+  font-size: 0.9375rem;
+  color: var(--text2);
+  text-decoration: none;
+}
+
+.footerLink:hover { color: var(--text); }
