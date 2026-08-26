@@ -12,7 +12,10 @@
     "prisma:status": "node scripts/with-env.mjs npx prisma migrate status",
     "prisma:studio": "node scripts/with-env.mjs npx prisma studio",
     "prisma:push": "node scripts/with-env.mjs npx prisma db push",
-    "check:samples": "node scripts/check-code-samples.mjs"
+    "check:samples": "node scripts/check-code-samples.mjs",
+    "prod:env": "vercel env pull .env.production.local --environment=production",
+    "prod:db:diff": "node scripts/with-env.mjs --env .env.production.local --direct-db npx prisma migrate diff --from-schema-datasource prisma/schema.prisma --to-schema-datamodel prisma/schema.prisma --script",
+    "prod:db:push": "node scripts/with-env.mjs --env .env.production.local --direct-db npx prisma db push"
   },
   "dependencies": {
     "@clerk/clerk-react": "^5.24.0",

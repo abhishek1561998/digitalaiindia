@@ -38,10 +38,19 @@ export function proxy(req: NextRequest) {
     if (rewritten) return rewritten;
   }
 
-  const isPlatformRoute =
-    pathname.startsWith("/dashboard") ||
-    pathname.startsWith("/auth") ||
-    pathname.startsWith("/api/auth");
+  // Only the dashboard is platform-specific now.
+  //
+  // /auth and /api/auth used to be here, from when the main domain was the
+  // marketing site and signing in meant signing in to the platform. The main
+  // domain leads with Learn today, so sending its sign-in to the platform
+  // subdomain moved the OAuth flow's origin — and the callback faithfully
+  // returned people to platform.digitalaiindia.com instead of where they
+  // started.
+  //
+  // Safe to drop because the session cookie is scoped to
+  // .digitalaiindia.com (see cookieDomainFor), so a session created on any
+  // host works on all of them.
+  const isPlatformRoute = pathname.startsWith("/dashboard");
 
   if (isMainDomain && isPlatformRoute) {
     const target = new URL(req.url);
