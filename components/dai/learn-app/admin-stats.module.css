@@ -1,0 +1,146 @@
+/* Admin stats. Deliberately plain — this is an instrument panel, not a
+   page anyone is meant to enjoy looking at. */
+
+.wrap {
+  min-height: 100vh;
+  padding: 2.5rem 1.5rem 5rem;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body, ui-sans-serif, system-ui, sans-serif);
+}
+
+.inner { max-width: 1100px; margin: 0 auto; }
+
+.title {
+  font-family: var(--font-display, inherit);
+  font-size: 1.875rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  margin: 0 0 0.35rem;
+}
+
+.sub { font-size: 0.9375rem; color: var(--text2); margin: 0 0 2.25rem; }
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2.25rem;
+}
+
+.card {
+  padding: 1.35rem;
+  border: 1.5px solid var(--line);
+  border-radius: var(--radiusLg);
+  background: var(--surface);
+}
+
+.cardValue {
+  font-family: var(--font-display, inherit);
+  font-size: 2.125rem;
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.cardLabel { font-size: 0.875rem; color: var(--text2); margin-top: 0.5rem; }
+.cardNote { font-size: 0.75rem; color: var(--text3); margin-top: 0.35rem; }
+
+.section { margin-bottom: 2.25rem; }
+
+.sectionTitle {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin: 0 0 1rem;
+}
+
+/* ── Bar chart ───────────────────────────────────────────────── */
+
+.chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 160px;
+  padding: 1.25rem;
+  border: 1.5px solid var(--line);
+  border-radius: var(--radiusLg);
+  background: var(--surface);
+}
+
+.bar {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 100%;
+  border-radius: 3px 3px 0 0;
+  position: relative;
+}
+
+.barFill {
+  border-radius: 3px 3px 0 0;
+  background: var(--accent);
+  min-height: 2px;
+  transition: opacity 0.15s;
+}
+
+/* An all-zero day still gets a visible tick, so a gap reads as "no activity"
+   rather than as a rendering failure. */
+.barFill[data-zero="true"] { background: var(--line); }
+
+.bar:hover .barFill { opacity: 0.75; }
+
+.chartAxis {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.6875rem;
+  color: var(--text3);
+  margin-top: 0.5rem;
+  padding: 0 1.25rem;
+}
+
+/* ── Table ───────────────────────────────────────────────────── */
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1.5px solid var(--line);
+  border-radius: var(--radiusLg);
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.table th,
+.table td {
+  padding: 0.85rem 1.1rem;
+  text-align: left;
+  font-size: 0.9375rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.table th {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text3);
+}
+
+.table tbody tr:last-child td { border-bottom: none; }
+.num { text-align: right; font-variant-numeric: tabular-nums; }
+
+.note {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--text2);
+  padding: 1.1rem 1.25rem;
+  border-left: 3px solid var(--accent);
+  background: var(--surfaceAlt);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  margin-top: 1rem;
+}

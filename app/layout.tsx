@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { CelebrationConfetti } from "@/components/dai/CelebrationConfetti";
 import { ContentProtection } from "@/components/dai/ContentProtection";
+import { Analytics } from "@vercel/analytics/next";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://digitalaiindia.com"),
@@ -66,6 +67,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ContentProtection />
         <CelebrationConfetti />
         {children}
+        {/* Anonymous page views and visitors. The database can only ever see
+            signed-in learners, so this is the half that counts everyone who
+            arrives and leaves without an account. */}
+        <Analytics />
       </body>
     </html>
   );
